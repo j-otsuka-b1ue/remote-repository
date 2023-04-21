@@ -1,46 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>HTML総合課題</title>
-    </head>
-    <header>
-        <h1>HTML総合課題</h1>
-        <nav>
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTML総合課題</title>
+</head>
+<header>
+    <h1>HTML総合課題</h1>
+    <nav>
         <ul>
             <li>メニュー1</li>
             <li>メニュー2</li>
         </ul>
-        </nav>
-    </header>
-    <body>
-        <h2>個人情報入力</h2>
-        <h3>お名前</h3>
-        <form action="" method="post">
-            <input type="text" placeholder="性">
-            <br>
-            <input type="text" placeholder="名">
-        </form>
-        <h3>自己紹介</h3>
-        <form action "" method="post">
-            <p><textarea></textarea></p>
-        </form>
-        <h3>血液型</h3>
-        <form>
-            <label for="blood-type"></label> 
-            <select name ="blood-type">
-                <option value="">血液型</option>
-            </select>       
-        </form>
-        <h3>性別</h3>
-        <form>
-           <input type="radio" name="gender" value="男">男
-           <input type="radio" name="gender" value="女">女
-        </form>
-        <button disabled>キャンセル</button>
-        <button>送信</button>
-    </body>
-    <footer>
-        
-    </footer>
+    </nav>
+</header>
+
+<body>
+    <h2>個人情報入力</h2>
+    <h3>お名前</h3>
+    <form action="" method="post">
+        <input type="text" placeholder="性">
+        <br>
+        <input type="text" placeholder="名">
+    </form>
+    <h3>自己紹介</h3>
+    <form action "" method="post">
+        <p><textarea></textarea></p>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>aaa</th>
+                <th>aaa</th>
+                <th>aaa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>aaa</td>
+                <td>aaa</td>
+                <td>aaa</td>
+            </tr>
+            <tr>
+                <td>aaa</td>
+                <td>aaa</td>
+                <td>aaa</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>血液型</h3>
+    <form>
+        <label for="blood-type"></label>
+        <select name="blood-type">
+            <option value="">血液型</option>
+        </select>
+    </form>
+    <h3>性別</h3>
+    <form>
+        <input type="radio" id="man" name="gender" value="男"><label for="man">男</label>
+        <input type="radio" id="woman" name="gender" value="女"><label for="woman">女</label>
+    </form>
+    <button disabled>キャンセル</button>
+    <button type="submit">送信</button>
+</body>
+<footer>
+
+</footer>
+
 </html>
