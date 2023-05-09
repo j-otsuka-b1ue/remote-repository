@@ -5,13 +5,15 @@
     <title>if_01</title>
   </head>
   <body>
-    <form>
+    <form action="javascript:void(0)">
       <p>名前</p>
         <input type="text" name="name" id="fullName">
+      <p id = "errorCreate01"></p>
       <p>お問い合わせ内容</p>
         <textarea id="inquiry"></textarea>
-      <br>
+      <p id = "errorCreate02"></p>
       <input type="submit" value="送信する" id="btn">
+      <p id = "submitSuccess"></p>
     </form>
     <script src="../js/if_01.js"></script>
   </body>
