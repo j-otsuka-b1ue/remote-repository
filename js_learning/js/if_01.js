@@ -1,15 +1,13 @@
-
-//ボタン押下時の挙動
-let btn = document.getElementById('btn');
-btn.addEventListener('click',function(){
-  const inputArea01 = document.getElementById('fullName');
-  const inputArea02 = document.getElementById('inquiry');
+const btn = document.getElementById('btn');
+const inputArea01 = document.getElementById('fullName');
+const inputArea02 = document.getElementById('inquiry');
+btn.addEventListener('click', clickEvent, false);
+function clickEvent () {
   if (inputArea01.value === "") {
-    alert("名前が入力されていません！");
+    errorCreate01.innerHTML = "名前が入力されていません";
   } else if (inputArea02.value === "") {
-      alert("お問い合わせ内容が入力されていません！");
-    } else {
-      alert("投稿しました");
-    }
+    errorCreate02.innerHTML = "お問い合わせ内容が入力されていません";
+  } else {
+    submitSuccess.innerHTML = "投稿しました";
   }
-);
+};
