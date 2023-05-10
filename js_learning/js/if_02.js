@@ -1,15 +1,17 @@
-let judge = document.getElementById('judge');
-judge.addEventListener('click',function() {
-  const score = document.getElementById('score');
-  if(score.value < 59) {
-    alert('あなたの成績は不可です');
-  } else if(score.value >= 60 && score.value <= 69) {
-    alert('あなたの成績は可です');
-  } else if(score.value >= 70 && score.value <= 79) {
-    alert('あなたの成績は良です');
-  } else if(score.value >= 80 && score.value <= 89) {
-    alert('あなたの成績は優です'); 
+const judge = document.getElementById('judge');
+const score = document.getElementById('score');
+judge.addEventListener('click', judgeResult, false);
+function judgeResult () {
+  if (score.value === "") {
+    result.innerHTML = "点数が入力されていません！";
+  } else if (score.value < 59) {
+    result.innerHTML = "あなたの成績は不可です";
+  } else if (60 <= score.value && score.value <= 69) {
+    result.innerHTML = "あなたの成績は可です";
+  } else if (70 <= score.value && score.value <= 79) {
+    result.innerHTML = "あなたの成績は良です";
+  } else if (80 <= score.value && score.value <= 89) {
+    result.innerHTML = "あなたの成績は優です";
   } else {
-    alert('あなたの成績は秀です');
-  }
-});
+    result.innerHTML = "あなたの成績は秀です";
+  }};
