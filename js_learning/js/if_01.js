@@ -14,8 +14,8 @@ const clickSubmit = () => {
     errorCreate02.innerHTML = "お問い合わせ内容が入力されていません";
   } else {
     submitSuccess.innerHTML = "投稿しました";
+    fullName.value = "";
+    inquiry.value = "";
   }
-  fullName.value = "";
-  inquiry.value = "";
 };
 btn.addEventListener('click', clickSubmit, false);
