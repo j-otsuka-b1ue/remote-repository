@@ -8,11 +8,11 @@ const participant =[
   {name:'lil',age:34,address:'広島県広島市'},
   {name:'peep',age:33,address:'埼玉県大宮'},
   {name:'curt',age:29,address:'北海道札幌市'},
- ]
- const btn = document.getElementById('btn');
- const tableElem = document.getElementById('sample-table');
- const tbodyElem = tableElem.createTBody();
- const clickDisplayTable = () => {
+ ];
+const btn = document.getElementById('btn');
+const tableElem = document.getElementById('sample-table');
+const tbodyElem = tableElem.createTBody();
+const clickDisplayTable = () => {
   for(let i = 0;i < participant.length;i++){
     const trElem = tbodyElem.insertRow(-1);
     const tdNumber = trElem.insertCell(-1);
@@ -25,5 +25,5 @@ const participant =[
     tdAddress.appendChild(document.createTextNode(participant[i].address));
   }
   btn.remove();
- }
+ };
  btn.addEventListener('click', clickDisplayTable, false);
