@@ -15,7 +15,7 @@ class Callapi {
   }
 }
 const clickGetData = document.getElementById('click');
-document.addEventListener('click', () => {
+display.addEventListener('click', () => {
   const getdata = new Callapi();
   const displaydogimage = new Callapi();
   getdata.getData();
