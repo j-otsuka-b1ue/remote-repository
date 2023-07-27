@@ -4,11 +4,20 @@ class Callapi {
     this.url = url;
   }
   async getData (){
-    const data = await fetch('https://dog.ceo/api/breeds/image/random')
-    const res = await response.json();
+    const data = await fetch('https://dog.ceo/api/breeds/image/random');
+    const res = await data.json();
+  }
+  displayDogimage () {
+    const dogImage = document.createElement("img");
+    document.body.appendChild(dogImage);
+    dogImage.id = 'image';
+    dogImage.src = 'https://dog.ceo/api/breeds/image/random';
   }
 }
+const clickGetData = document.getElementById('click');
 document.addEventListener('click', () => {
-  //ここに取得してきた犬の画像を表示させるプログラムが必要なのですが、思いつきません…。
-  //innerHTMLかもと思って調べたのですが、どのサイトにもローカルに保存してある画像ファイルを参照するやり方しか書いてありませんでした…。
-})
+  const getdata = new Callapi();
+  const displaydogimage = new Callapi();
+  getdata.getData();
+  displaydogimage.displayDogimage();
+}, false);
