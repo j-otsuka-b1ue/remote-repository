@@ -12,7 +12,7 @@ class Callapi {
   }
 }
 const clickGetData = document.getElementById('click');
-display.addEventListener('click', () => {
+clickGetData.addEventListener('click', () => {
   const getdata = new Callapi('https://dog.ceo/api/breeds/image/random/', '3');
   getdata.getData();
 }, false);
