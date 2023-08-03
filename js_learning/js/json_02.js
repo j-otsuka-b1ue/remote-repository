@@ -15,6 +15,7 @@ class Callapi {
 }
 const clickGetData = document.getElementById('click');
 display.addEventListener('click', () => {
-  const getdata = new Callapi('https://dog.ceo/api/breeds/image/random/', 3);
+  const numberOfPictures = 3;
+  const getdata = new Callapi('https://dog.ceo/api/breeds/image/random/', numberOfPictures);
   getdata.getData();
 }, false);
