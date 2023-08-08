@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../../css_learning/css/general.css">
+  <title>JS総合課題</title>
+</head>
+<body>
+  <form onsubmit="return false;">
+    <h1>新規投稿</h1>
+    <p>タイトル</p>
+     <input type="text" size="35" placeholder="タイトルを入力してください。" id="title">
+     <!--↓↓タイトル未入力時のメッセージ↓↓-->
+     <p class="error" id="errorCreate01"></p>
+    <p>内容</p>
+     <textarea cols="35" rows="5" placeholder="投稿内容を入力してください。" id="submitContent"></textarea>
+     <!--↓↓投稿内容未入力時のメッセージ↓↓-->
+     <p class="error" id="errorCreate02"></p>
+    <button type="submit" class="submitBtn" id="submitBtn">投稿する</button>
+    <p id="statusMessage"></p>
+  </form>
+  <h1>投稿済みの記事一覧</h1>
+   <div class="frame">
+     <h2>タイトル</h2>
+      <ul id="title_list"></ul>
+     <h2>記事内容</h2>
+      <ul id="post_list">
+      </ul>
+      <div class="function_btns">
+       <button type="button" class="edit_btn" id="edit_btn">編集する</button>
+       <button type="button" class="delete_btn" id="edit_btn">削除する</button>
+      </div>
+   </div>
+  <script src="../js/general.js"></script>
+</body>
+</html>
