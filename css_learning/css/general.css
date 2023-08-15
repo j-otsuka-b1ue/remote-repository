@@ -10,13 +10,22 @@
   margin-bottom: 20px;
   border: 1px solid black;
   background-color: #99ff99;
+  display: block;
+}
+
+.editFrame {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid black;
+  background-color: #99ff99;
+  display: none;
 }
 
 .function_btns {
   text-align: right;
 }
 
-.edit_btn {
+.editBtn {
   padding: 5px 10px;
   background-color: #ffbf7f;
   border-radius: 5px;
@@ -24,7 +33,7 @@
   margin-right: 10px;
 }
 
-.delete_btn {
+.deleteBtn {
   padding: 5px 10px;
   background-color: #ff7f7f;
   border-radius: 5px;
@@ -34,4 +43,66 @@
 
 .error {
   color: red;
+}
+
+.updateBtn {
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 0 0 gray;
+  margin-right: 10px;
+  background-color: #7fbfff;
+}
+
+.cancelBtn {
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 0 0 gray;
+  margin-right: 10px;
+  background-color: #7fbfff;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  height:100dvh;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-inner {
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-contnet {
+  background-color: #f4f4f4;
+  width: 50%;
+  box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
+  animation-name: modalopen;
+  animation-duration: 1s;
+}
+
+.modal-body {
+  padding: 10px 20px;
+  color: black;
+}
+
+.modalClose {
+  font-size: 2rem;
+}
+
+.modalBtn {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 0 0 gray;
+  margin-right: 10px;
+  background-color: #0079c2;
 }
