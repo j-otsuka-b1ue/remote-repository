@@ -20,17 +20,40 @@
     <p id="statusMessage"></p>
   </form>
   <h1>投稿済みの記事一覧</h1>
-   <div class="frame">
+   <div class="frame" id="frame">
      <h2>タイトル</h2>
       <ul id="title_list"></ul>
      <h2>記事内容</h2>
-      <ul id="post_list">
-      </ul>
-      <div class="function_btns">
-       <button type="button" class="edit_btn" id="edit_btn">編集する</button>
-       <button type="button" class="delete_btn" id="edit_btn">削除する</button>
+      <ul id="content_list"></ul>
+      <div class="function_btns01">
+       <button type="button" class="editBtn" id="editBtn">編集する</button>
+       <button type="button" class="deleteBtn" id="deleteBtn">削除する</button>
       </div>
    </div>
+   <div class="editFrame" id="editFrame">
+    <h2>タイトル</h2>
+     <ul id="title_list"></ul>
+      <input type="text" size="35" id="titleEdit" class="titleEdit">
+    <h2>記事内容</h2>
+     <ul id="content_list"></ul>
+     <textarea cols="40" rows="5" id="contentEdit" class="contentEdit"></textarea>
+     <div class="function_btns02">
+      <button type="button" class="updateBtn" id="updateBtn">更新する</button>
+      <button type="button" class="cancelBtn" id="cancelBtn">キャンセル</button>
+     </div>
+  </div>
+  <div class="modal">
+    <div class="modal-inner">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modalClose">×</span>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="modalBtn" id="modalBtn">OK!</button>
+      </div>
+    </div>
+    </div>
+ </div>
   <script src="../js/general.js"></script>
 </body>
 </html>
