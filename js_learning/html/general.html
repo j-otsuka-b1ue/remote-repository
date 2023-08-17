@@ -34,25 +34,54 @@
     <h2>タイトル</h2>
      <ul id="title_list"></ul>
       <input type="text" size="35" id="titleEdit" class="titleEdit">
+      <p class="error" id="errorCreate03"></p>
     <h2>記事内容</h2>
      <ul id="content_list"></ul>
      <textarea cols="40" rows="5" id="contentEdit" class="contentEdit"></textarea>
+     <p class="error" id="errorCreate04"></p>
      <div class="function_btns02">
       <button type="button" class="updateBtn" id="updateBtn">更新する</button>
+      <!--↑更新ボタンを押すとモーダルウィンドウを表示↑-->
       <button type="button" class="cancelBtn" id="cancelBtn">キャンセル</button>
      </div>
-  </div>
-  <div class="modal">
-    <div class="modal-inner">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modalClose">×</span>
-      </div>
-      <div class="modal-body">
-        <button type="button" class="modalBtn" id="modalBtn">OK!</button>
+   </div>
+   <div class="modal_div">
+    <div class="modal-container">
+      <div class="modal-content">
+        <div class="closeModalBtn01" id="closeModalBtn01">
+          <span>×</span>
+        </div>
+        <p>タイトル</p>
+        <ul id="updateTitle"></ul>
+        <p>内容</p>
+        <ul id="updateContent"></ul>
+        <div class="modal-close02">
+          <span>
+            <button type="button" class="closeModalBtn02" id="closeModalBtn02">OK</button>
+          </span>
+        </div>
       </div>
     </div>
+   </div>
+   <div class="modal_div_delete">
+    <div class="modal-container_delete">
+      <div class="modal-content_delete">
+        <div class="closeModalBtn03" id="closeModalBtn03">
+          <span>×</span>
+        </div>
+        <p>タイトル</p>
+        <ul id="deleteTitle"></ul>
+        <p>内容</p>
+        <ul id="deleteContent"></ul>
+        <div class="modal-close04">
+          <span>
+            <button type="button" class="closeModalBtn04" id="closeModalBtn04">OK</button>
+          </span>
+        </div>
+      </div>
     </div>
+   </div>
+
  </div>
   <script src="../js/general.js"></script>
 </body>
