@@ -5,6 +5,8 @@ class Blog {
     this.cancelEditBtn = document.getElementById('cancelBtn');
     this.title = document.getElementById('title');
     this.titleVal = document.getElementById('title');
+    this.getTitle = document.getElementById('title');
+    this.content = document.getElementById('submitContent');
     this.submitContent = document.getElementById('submitContent');
     this.contentVal = document.getElementById('submitContent');
     this.statusMessage = document.getElementById('statusMessage');
@@ -32,7 +34,6 @@ class Blog {
     this.editBtn.addEventListener('click', this.editPost.bind(this));
     this.cancelEditBtn.addEventListener('click', this.cancelEditMode.bind(this));
     this.updateBtn.addEventListener('click',this.openUpdateModal.bind(this));
-    this.updateBtn.addEventListener('click',this.patchPost.bind(this));
     this.closeModalBtn01.addEventListener('click', this.closeUpdateModal.bind(this));
     this.closeModalBtn02.addEventListener('click', this.closeUpdateModal.bind(this));
     this.closeModalBtn03.addEventListener('click', this.closeDeleteModal.bind(this));
@@ -44,7 +45,7 @@ class Blog {
     this.inputTitleVal.addEventListener('change', this.openUpdateModal.bind(this));
     this.inputContentVal.addEventListener('change', this.openUpdateModal.bind(this));
     this.validateForm01();
-    //this.openUpdateModal();
+    this.checkSubmitBtnState();
   }
 
   async createPost() {
@@ -66,20 +67,20 @@ class Blog {
       });
 
       if (response.status === 201) {
-        this.statusMessage.innerHTML = "投稿に成功しました(status:201)"
-        this.title.value = "";
-        this.submitContent.value = "";
-        errorCreate01.innerHTML = "";
-        errorCreate02.innerHTML = "";
-        //取得したデータをHTMLに出力する
         const displayData = await fetch('https://jsonplaceholder.typicode.com/posts');
         const data = await displayData.json();
         const displayTitle = document.getElementById('title_list');
         const displayContent = document.getElementById('content_list');
-        const dataIndex = 0;//取得してくる配列のインデックス番号を指定
-        displayTitle.innerHTML = data[dataIndex].title;
-        displayContent.innerHTML = data[dataIndex].body;
+        this.statusMessage.innerHTML = "投稿に成功しました(status:201)"
+        displayTitle.innerHTML = this.getTitle.value;
+        displayContent.innerHTML = this.content.value;
+        this.title.value = "";
+        this.submitContent.value = "";
+        this.errorCreate01.innerHTML = "";
+        this.errorCreate02.innerHTML = "";
         this.submitBtn.disabled = true;
+        sessionStorage.setItem('submitBtnDisabled', 'true');
+        this.checkSubmitBtnState();
       } else {
         console.error("投稿に失敗しました" + response.status);
       }
@@ -87,6 +88,13 @@ class Blog {
       console.error("エラーが発生しました" + error);
     }
   }
+
+    checkSubmitBtnState() {
+      const storedState = sessionStorage.getItem('submitBtnDisabled');
+    if (storedState === 'true') {
+      this.submitBtn.disabled = true;
+      }
+    }
 
     validateForm01 () {
     this.statusMessage.innerHTML = "";
@@ -110,6 +118,7 @@ class Blog {
       errorCreate01.innerHTML = "";
       errorCreate02.innerHTML = "";
       this.submitBtn.disabled = false;
+      this.checkSubmitBtnState();
     }
   }
 
@@ -119,17 +128,19 @@ class Blog {
     this.editFrame.style.display = "block";
     const displayData = await fetch('https://jsonplaceholder.typicode.com/posts');
     const data = await displayData.json();
-    const dataIndex = 0;//取得してくる配列のインデックス番号を指定
-    this.inputTitle.value = data[dataIndex].title;
-    this.inputContent.innerHTML = data[dataIndex].body;
+    const disTitleToEdit = document.getElementById('titleEdit');
+    const disContentToEdit = document.getElementById('contentEdit');
+    const getTitleToEdit = document.getElementById('title_list');
+    const getContentToEdit = document.getElementById('content_list');
+    disTitleToEdit.value = getTitleToEdit.textContent;
+    disContentToEdit.value = getContentToEdit.textContent;
   }
 
-  //更新機能
   openUpdateModal () {
     const updateModal = document.querySelector('.modal_div');
-    const disUpdateTitle = document.getElementById('updateTitle');
+    const disUpdateTitle = document.getElementById('updatedTitle');
+    const disUpdateContent = document.getElementById('updatedContent');
     const updatedTitle = document.getElementById('titleEdit');
-    const disUpdateContent = document.getElementById('updateContent');
     const updatedContent = document.getElementById('contentEdit');
     const errorCreate03 = document.getElementById('errorCreate03');
     const errorCreate04 = document.getElementById('errorCreate04');
@@ -159,9 +170,14 @@ class Blog {
 
   closeUpdateModal() {
     const updateModal = document.querySelector('.modal_div');
+    const refUpdatedTitle = document.getElementById('updatedTitle');
+    const refUpdatedContent = document.getElementById('updatedContent');
     updateModal.classList.remove('is-active');
+    this.titleDis.innerHTML = refUpdatedTitle.textContent;
+    this.contentDis.innerHTML = refUpdatedContent.textContent;
     this.frame.style.display = "block";
     this.editFrame.style.display = "none";
+
   }
   
   cancelEditMode () {
@@ -169,6 +185,7 @@ class Blog {
     this.editFrame.style.display = "none";
   }
 
+  //更新機能
   async patchPost () {
     const postId = 1;
     const url = `https:jsonplaceholder.typicode.com/posts/${postId}`;
@@ -193,44 +210,6 @@ class Blog {
     } catch (error) {
       console.error("エラーが発生しました" + error);
     }
-  }
-  openUpdateModal () {
-    const updateModal = document.querySelector('.modal_div');
-    const disUpdateTitle = document.getElementById('updateTitle');
-    const updatedTitle = document.getElementById('titleEdit');
-    const disUpdateContent = document.getElementById('updateContent');
-    const updatedContent = document.getElementById('contentEdit');
-    const errorCreate03 = document.getElementById('errorCreate03');
-    const errorCreate04 = document.getElementById('errorCreate04');
-    errorCreate03.innerHTML = "";
-    errorCreate04.innerHTML = "";
-    if (updatedTitle.value === "" && updatedContent.value === "") {
-      errorCreate03.innerHTML = "↑更新内容が入力されていません";
-      errorCreate04.innerHTML = "↑更新内容が入力されていません";
-      this.updateBtn.disabled = true;
-    } else if (updatedTitle.value === "") {
-      errorCreate03.innerHTML = "↑更新内容が入力されていません";
-      errorCreate04.innerHTML = "";
-      this.updateBtn.disabled = true;
-    } else if (updatedContent.value === "") {
-      errorCreate03.innerHTML = "";
-      errorCreate04.innerHTML = "↑更新内容が入力されていません";
-      this.updateBtn.disabled = true;
-    } else {
-      errorCreate03.innerHTML = "";
-      errorCreate04.innerHTML = "";
-      this.updateBtn.disabled = false;
-      updateModal.classList.add('is-active');
-      disUpdateTitle.innerHTML = updatedTitle.value;
-      disUpdateContent.innerHTML = updatedContent.value;
-    }
-  }
-
-  closeUpdateModal() {
-    const updateModal = document.querySelector('.modal_div');
-    updateModal.classList.remove('is-active');
-    this.frame.style.display = "block";
-    this.editFrame.style.display = "none";
   }
 
   //削除機能
@@ -257,16 +236,17 @@ class Blog {
     deleteModal.classList.add('is-active');
     disDeleteTitle.innerHTML = deletedTitle.textContent;
     disDeleteContent.innerHTML =  deletedContent.textContent;
-    deletedTitle.textContent = "";
-    deletedContent.textContent = "";
   }
 
   closeDeleteModal() {
     const deleteModal = document.querySelector('.modal_div_delete');
+    const deletedTitle = document.getElementById('title_list');
+    const deletedContent = document.getElementById('content_list');
     deleteModal.classList.remove('is-active');
+    deletedTitle.textContent = "";
+    deletedContent.textContent = "";
     this.frame.style.display = "block";
     this.editFrame.style.display = "none";
   }
 }
 const blog = new Blog();
-//blog.checkFlag();
