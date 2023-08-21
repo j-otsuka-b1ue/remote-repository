@@ -5,6 +5,14 @@
   box-shadow: 5px 5px 0 0 gray;
 }
 
+.responseResult {
+  padding-left: 0;
+}
+
+.posted {
+  list-style: none;
+}
+
 .frame {
   padding: 10px;
   margin-bottom: 20px;
