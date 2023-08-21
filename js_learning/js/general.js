@@ -10,6 +10,7 @@ class Blog {
     this.submitContent = document.getElementById('submitContent');
     this.contentVal = document.getElementById('submitContent');
     this.statusMessage = document.getElementById('statusMessage');
+    this.responseResult = document.getElementById('responseResult');
     this.titleDis = document.getElementById('title_list');
     this.contentDis = document.getElementById('content_list');
     this.titleEdit = document.getElementById('titleEdit');
@@ -34,12 +35,11 @@ class Blog {
     this.editBtn.addEventListener('click', this.editPost.bind(this));
     this.cancelEditBtn.addEventListener('click', this.cancelEditMode.bind(this));
     this.updateBtn.addEventListener('click',this.openUpdateModal.bind(this));
-    this.closeModalBtn01.addEventListener('click', this.closeUpdateModal.bind(this));
-    this.closeModalBtn02.addEventListener('click', this.closeUpdateModal.bind(this));
-    this.closeModalBtn03.addEventListener('click', this.closeDeleteModal.bind(this));
-    this.closeModalBtn04.addEventListener('click', this.closeDeleteModal.bind(this));
+    this.closeModalBtn01.addEventListener('click', this.closeUpdateModal_x.bind(this));
+    this.closeModalBtn02.addEventListener('click', this.closeUpdateModal_Ok.bind(this));
+    this.closeModalBtn03.addEventListener('click', this.closeDeleteModal_x.bind(this));
+    this.closeModalBtn04.addEventListener('click', this.closeDeleteModal_Ok.bind(this));
     this.deleteBtn.addEventListener('click', this.openDeleteModal.bind(this));
-    this.deleteBtn.addEventListener('click', this.deletePost.bind(this));
     this.titleVal.addEventListener('change', this.validateForm01.bind(this));
     this.contentVal.addEventListener('change', this.validateForm01.bind(this));
     this.inputTitleVal.addEventListener('change', this.openUpdateModal.bind(this));
@@ -71,7 +71,13 @@ class Blog {
         const data = await displayData.json();
         const displayTitle = document.getElementById('title_list');
         const displayContent = document.getElementById('content_list');
+        const postedTitle = document.getElementById('responseTitle');
+        const postedContent = document.getElementById('responseContent');
+        const postedId = document.getElementById('responseId');
         this.statusMessage.innerHTML = "投稿に成功しました(status:201)"
+        postedTitle.innerHTML = (`Title  :  ${newPost.title}`);
+        postedContent.innerHTML = (`Content  :  ${newPost.body}`);
+        postedId.innerHTML = (`Id  :  ${newPost.userId}`);
         displayTitle.innerHTML = this.getTitle.value;
         displayContent.innerHTML = this.content.value;
         this.title.value = "";
@@ -136,8 +142,44 @@ class Blog {
     disContentToEdit.value = getContentToEdit.textContent;
   }
 
-  openUpdateModal () {
+  async patchPost () {
+    const postId = 1;
+    const url = `https:jsonplaceholder.typicode.com/posts/${postId}`;
+    const title = document.getElementById('titleEdit').value;
+    const body = document.getElementById('contentEdit').value;
+    const updateData = {
+      id: Number(postId),
+      title: title,
+      body: body
+    };
+
+    try {
+      const responseFetch = await fetch(url, {
+        method:'PATCH',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(updateData)
+      });
+      if (responseFetch.status === 200) {
+        this.statusMessage.innerHTML = "投稿を更新しました(status:200)"
+        const patchedTitle = document.getElementById('responseTitle');
+        const patchedContent = document.getElementById('responseContent');
+        const patchedId = document.getElementById('responseId');
+        patchedTitle.innerHTML = (`Title : ${updateData.title}`);
+        patchedContent.innerHTML = (`Content : ${updateData.body}`);
+        patchedId.innerHTML = "";
+      } else {
+        console.error("投稿の更新に失敗しました" + response.status);
+      }
+    } catch (error) {
+      console.error("エラーが発生しました" + error);
+    }
+  }
+
+  openUpdateModal (event) {
     const updateModal = document.querySelector('.modal_div');
+    const clickedElement = event.target;
     const disUpdateTitle = document.getElementById('updatedTitle');
     const disUpdateContent = document.getElementById('updatedContent');
     const updatedTitle = document.getElementById('titleEdit');
@@ -162,13 +204,15 @@ class Blog {
       errorCreate03.innerHTML = "";
       errorCreate04.innerHTML = "";
       this.updateBtn.disabled = false;
-      updateModal.classList.add('is-active');
-      disUpdateTitle.innerHTML = updatedTitle.value;
-      disUpdateContent.innerHTML = updatedContent.value;
+        if (clickedElement === this.updateBtn) {
+          updateModal.classList.add('is-active');
+          disUpdateTitle.innerHTML = updatedTitle.value;
+          disUpdateContent.innerHTML = updatedContent.value;
+        }
     }
   }
 
-  closeUpdateModal() {
+  closeUpdateModal_Ok() {
     const updateModal = document.querySelector('.modal_div');
     const refUpdatedTitle = document.getElementById('updatedTitle');
     const refUpdatedContent = document.getElementById('updatedContent');
@@ -177,39 +221,17 @@ class Blog {
     this.contentDis.innerHTML = refUpdatedContent.textContent;
     this.frame.style.display = "block";
     this.editFrame.style.display = "none";
-
+    this.patchPost();
   }
   
+  closeUpdateModal_x() {
+    const updateModal = document.querySelector('.modal_div');
+    updateModal.classList.remove('is-active');
+  }
+
   cancelEditMode () {
     this.frame.style.display = "block";
     this.editFrame.style.display = "none";
-  }
-
-  //更新機能
-  async patchPost () {
-    const postId = 1;
-    const url = `https:jsonplaceholder.typicode.com/posts/${postId}`;
-    const body = document.getElementById('contentEdit');
-    const updateData = {
-      id: Number(postId),
-      title: title,
-      body: body
-    };
-
-    try {
-      const responseFetch = await fetch(url, {
-        method:'PATCH',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(updateData)
-      });
-      if (responseFetch.status === 200) {
-        console.log("投稿の更新に成功しました" + responseFetch.status);
-      } 
-    } catch (error) {
-      console.error("エラーが発生しました" + error);
-    }
   }
 
   //削除機能
@@ -221,7 +243,13 @@ class Blog {
         method: 'DELETE'
       });
       if (deleteResponse.status === 200) {
-        console.log('投稿が削除されました');
+        this.statusMessage.innerHTML = "投稿を削除しました(status:200)"
+        const deleteTitle = document.getElementById('responseTitle');
+        const deleteContent = document.getElementById('responseContent');
+        const deleteId = document.getElementById('responseId');
+        deleteTitle.textContent = "";
+        deleteContent.textContent = "";
+        deleteId.textContent = "";
       } 
     } catch (error) {
       console.error('エラーが発生しました' + error);
@@ -238,7 +266,7 @@ class Blog {
     disDeleteContent.innerHTML =  deletedContent.textContent;
   }
 
-  closeDeleteModal() {
+  closeDeleteModal_Ok() {
     const deleteModal = document.querySelector('.modal_div_delete');
     const deletedTitle = document.getElementById('title_list');
     const deletedContent = document.getElementById('content_list');
@@ -247,6 +275,12 @@ class Blog {
     deletedContent.textContent = "";
     this.frame.style.display = "block";
     this.editFrame.style.display = "none";
+    this.deletePost();
+  }
+
+  closeDeleteModal_x() {
+    const deleteModal = document.querySelector('.modal_div_delete');
+    deleteModal.classList.remove('is-active');
   }
 }
 const blog = new Blog();
