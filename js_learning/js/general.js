@@ -54,21 +54,21 @@ class Blog {
     const newPost = {
       title: title,
       body: content,
-      userId: 1
+      userID: 1
     };
 
     try {
       const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
         method: "POST",
+        body: JSON.stringify(newPost),
         headers: {
           'Content-Type':"application/json"
         },
-        body: JSON.stringify(newPost)
-      });
+      })
 
       if (response.status === 201) {
-        const displayData = await fetch('https://jsonplaceholder.typicode.com/posts');
-        const data = await displayData.json();
+        const json = await response.json();
+        console.log(json);
         const displayTitle = document.getElementById('title_list');
         const displayContent = document.getElementById('content_list');
         const postedTitle = document.getElementById('responseTitle');
@@ -77,7 +77,7 @@ class Blog {
         this.statusMessage.innerHTML = "投稿に成功しました(status:201)"
         postedTitle.innerHTML = (`Title  :  ${newPost.title}`);
         postedContent.innerHTML = (`Content  :  ${newPost.body}`);
-        postedId.innerHTML = (`Id  :  ${newPost.userId}`);
+        postedId.innerHTML = (`Id  :  ${newPost.userID}`);
         displayTitle.innerHTML = this.getTitle.value;
         displayContent.innerHTML = this.content.value;
         this.title.value = "";
@@ -148,7 +148,6 @@ class Blog {
     const title = document.getElementById('titleEdit').value;
     const body = document.getElementById('contentEdit').value;
     const updateData = {
-      id: Number(postId),
       title: title,
       body: body
     };
@@ -162,6 +161,8 @@ class Blog {
         body: JSON.stringify(updateData)
       });
       if (responseFetch.status === 200) {
+        const json = await responseFetch.json();
+        console.log(json);
         this.statusMessage.innerHTML = "投稿を更新しました(status:200)"
         const patchedTitle = document.getElementById('responseTitle');
         const patchedContent = document.getElementById('responseContent');
@@ -238,11 +239,20 @@ class Blog {
   async deletePost () {
     const postIdToDelete = 1;
     const url = `https://jsonplaceholder.typicode.com/posts/${postIdToDelete}`;
+    const title = this.titleDis.value;
+    const content = this.contentDis.value;
+    const deletePost = {
+      title: title,
+      content: content
+    }
     try {
       const deleteResponse = await fetch(url, {
-        method: 'DELETE'
+        method: 'DELETE',
+        body: JSON.stringify(deletePost)
       });
       if (deleteResponse.status === 200) {
+        const json = await deleteResponse.json();
+        console.log(json);
         this.statusMessage.innerHTML = "投稿を削除しました(status:200)"
         const deleteTitle = document.getElementById('responseTitle');
         const deleteContent = document.getElementById('responseContent');
