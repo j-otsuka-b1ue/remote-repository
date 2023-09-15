@@ -1,5 +1,6 @@
+import { Form } from "./pages/form/Form";
 import { paths } from "./utils/paths";
-import { Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, NavLink } from "react-router-dom";
 
 // 開発環境の時だけmswのモックサーバーが動くようにしている
 if (process.env.NODE_ENV === "development") {
@@ -13,7 +14,7 @@ function App() {
       <h1 className="font-bold text-black-300 mb-9">ようこそReact課題へ！</h1>
       <nav className="leading-10">
         <li>
-          <Link to={paths.form}>Reactフォーム課題</Link>
+          <Link to={paths.form}>Reactフォーム課題</Link>  
         </li>
         <li>
           <Link to={paths.blackJack}>Reactブラックジャック課題</Link>

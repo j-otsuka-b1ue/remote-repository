@@ -1,12 +1,12 @@
 import React from "react";
 
-type Props = {
+interface ButtonProps {
   name: string;
   onClick: () => void;
   isDisabled?: boolean;
-};
+}
 
-export const Button: React.FC<Props> = ({ name, onClick, isDisabled = false }) => {
+export const Button = ({ name, onClick, isDisabled = false }: ButtonProps) => {
   const className = isDisabled
     ? "text-white bg-blue-600 rounded w-full py-1 opacity-50"
     : "text-white bg-blue-600 rounded w-full py-1";

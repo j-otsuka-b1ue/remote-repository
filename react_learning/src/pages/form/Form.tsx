@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-const Form: React.FC = () => {
+export const Form = () => {
   const [formData, setFormData] = useState({
     realName: '',
     userName: '',
@@ -9,7 +9,6 @@ const Form: React.FC = () => {
     password: '',
     passwordConfirm: '',
     zipcode: '',
-    searchBtn: '',
     prefectures: '',
     city: '',
     houseNumber: ''
@@ -22,7 +21,6 @@ const Form: React.FC = () => {
     password: '',
     passwordConfirm: '',
     zipcode: '',
-    searchBtn: '',
     prefectures: '',
     city: '',
     houseNumber: ''
@@ -30,7 +28,7 @@ const Form: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let valid = true;
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
@@ -42,59 +40,65 @@ const Form: React.FC = () => {
       password: '',
       passwordConfirm: '',
       zipcode: '',
-      searchBtn: '',
       prefectures: '',
       city: '',
       houseNumber: ''
     }
+    //郵便番号検索ボタンのバリデーション
+    const isSearchBtnValid = () => {
+      return (
+        formData.zipcode !== '' && newErrors.zipcode === ''
+      )
+    }
 
-    if (formData.realName === '') {
+    if (name === 'realName' && value === '') {
       valid = false;
       newErrors.realName = '入力してください';
     }
 
-    if (formData.mailAddress === '') {
+    if (name === 'mailAddress' && value === '') {
       valid = false;
       newErrors.mailAddress = '入力してください';
-    } else if (!validateEmail(formData.mailAddress)){
+    } else if (name === 'mailAddress' && !validateEmail(value)) {
       valid = false;
       newErrors.mailAddress = '正しいメールアドレスを入力してください';
     }
 
-    if (formData.password === '') {
+    if (name === 'password' && value === '') {
       valid = false;
       newErrors.password = '入力してください';
-    } else if (formData.password.length < 4) {
+    } else if (name === 'password' && value.length < 4) {
       valid = false;
       newErrors.password = '4文字以上で入力してください';
     }
 
-    if (formData.passwordConfirm === '') {
+    if (name === 'passwordConfirm' && value === '') {
       valid = false;
       newErrors.passwordConfirm = '入力してください';
-    } else if (formData.passwordConfirm !== formData.password) {
+    } else if (name === 'passwordConfirm' && value !== formData.password) {
       valid = false;
       newErrors.passwordConfirm = 'パスワードが一致しません';
     }
 
-    if (formData.zipcode === '') {
+    if (name === 'zipcode' && value === '') {
       valid = false;
       newErrors.zipcode = '入力してください';
-    } else if (!validateZipcode(formData.zipcode)){
+    } else if (name === 'zipcode' && !validateZipcode(value)) {
+      valid = false;
       newErrors.zipcode = 'ハイフンなしの半角数字7桁を入力してください';
     }
 
-    if (formData.prefectures === '') {
+    if (name === 'prefectures' && value === '') {
       valid = false;
       newErrors.prefectures = '入力してください';
     }
 
-    if (formData.city === '') {
+    if (name === 'city' && value === '') {
       valid = false;
       newErrors.city = '入力してください';
     }
 
-    if (formData.houseNumber === '') {
+    if (name === 'houseNumber' && value === '') {
       valid = false;
       newErrors.houseNumber = '入力してください';
     }
@@ -103,14 +107,21 @@ const Form: React.FC = () => {
 
   //メールアドレス形式バリデーション
   const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
     return emailRegex.test(email);
   };
 
   //郵便番号形式バリデーション
   const validateZipcode = (zipcode: string) => {
-    const zipcodeRegex = /^\d{7}$/;
-    return zipcodeRegex.test(zipcode);
+    const zipcodeWithOutHyphenRegex = /^[0-9]{7}$/;
+    return zipcodeWithOutHyphenRegex.test(zipcode);
+  }
+
+  const isZipcodeFormValid = (errors: typeof formErrors) => {
+    return (
+      formData.zipcode !== '' &&
+      errors.zipcode === ''
+    )
   }
 
   //郵便番号検索API
@@ -119,7 +130,7 @@ const Form: React.FC = () => {
       const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${formData.zipcode}`);
       const data = await response.json();
 
-      if(data.status === 200 && data.results) {
+      if (data.status === 200 && data.results) {
         const addressData = data.results[0];
         setFormData(prevState => ({
           ...prevState,
@@ -128,21 +139,21 @@ const Form: React.FC = () => {
         }));
         setFormErrors(prevErrors => ({
           ...prevErrors,
-          searchBtn: '',
+          zipcode: '',
         }));
-      } else if(formData.zipcode === '') {
+      } else if (formData.zipcode === '') {
         setFormErrors(prevErrors => ({
           ...prevErrors,
-          searchBtn: '郵便番号を入力してください',
+          zipcode: '郵便番号を入力してください',
         }));
       } else {
-          setFormErrors(prevErrors => ({
-            ...prevErrors,
-            searchBtn: '存在しない郵便番号です',
-          }));
-        }
-      } catch(error){
-        console.error('郵便番号の検索に失敗しました');
+        setFormErrors(prevErrors => ({
+          ...prevErrors,
+          zipcode: '存在しない郵便番号です',
+        }));
+      }
+    } catch (error) {
+      console.error('郵便番号の検索に失敗しました');
     }
   }
 
@@ -155,14 +166,14 @@ const Form: React.FC = () => {
       formData.zipcode !== '' &&
       formData.prefectures !== '' &&
       formData.city !== '' &&
-      formData.houseNumber !== '' 
+      formData.houseNumber !== ''
     );
   };
 
   //登録ボタン押下時のイベント
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if(isFormValid()){
+    if (isFormValid()) {
       console.log('登録が完了しました');
       setFormData({
         realName: '',
@@ -171,7 +182,6 @@ const Form: React.FC = () => {
         password: '',
         passwordConfirm: '',
         zipcode: '',
-        searchBtn: '',
         prefectures: '',
         city: '',
         houseNumber: ''
@@ -179,132 +189,136 @@ const Form: React.FC = () => {
     };
   }
 
-
-
   return (
     <>
-    <form onSubmit = {handleSubmit}>
-    <div className = "formContainer">
-      <div className = "uiForm">
-        <div className = "form-field">
-          <label className ="form-label">名前</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "名前" 
-          name = "realName" 
-          value = {formData.realName}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.realName}</div>
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">ユーザー名(任意)</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "ユーザー名(任意)" 
-          name = "userName" 
-          value = {formData.userName}
-          onChange = {(event) => handleChange(event)}
-          />
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">メールアドレス</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "メールアドレス" 
-          name = "mailAddress" 
-          value = {formData.mailAddress}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.mailAddress}</div>
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">パスワード</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "パスワード" 
-          name = "password" 
-          value = {formData.password}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.password}</div>
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">パスワード(確認)</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "パスワード(確認)" 
-          name = "passwordConfirm" 
-          value = {formData.passwordConfirm}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.passwordConfirm}</div>
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">郵便番号</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "0123456" 
-          name = "zipcode" 
-          value = {formData.zipcode}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.zipcode}</div>
-          <div>
-            <button className="btn" onClick = {handleSearch} name="searchBtn" type="button">検索</button>
-            <div className = "text-red-600 font-bold">{formErrors.searchBtn}</div>
+      <form onSubmit={handleSubmit}>
+        <div className="formContainer">
+          <div className="uiForm">
+            <div className="form-field">
+              <label className="form-label">名前</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="名前"
+                name="realName"
+                value={formData.realName}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.realName}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">ユーザー名(任意)</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="ユーザー名(任意)"
+                name="userName"
+                value={formData.userName}
+                onChange={(event) => handleChange(event)}
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">メールアドレス</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="メールアドレス"
+                name="mailAddress"
+                value={formData.mailAddress}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.mailAddress}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">パスワード</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="パスワード"
+                name="password"
+                value={formData.password}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.password}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">パスワード(確認)</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="パスワード(確認)"
+                name="passwordConfirm"
+                value={formData.passwordConfirm}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.passwordConfirm}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">郵便番号</label>
+              <div className = "zip-parts">
+                <input
+                  type="text"
+                  className="form-field-input"
+                  placeholder="0123456"
+                  name="zipcode"
+                  value={formData.zipcode}
+                  // maxLength={7}
+                  onChange={(event) => handleChange(event)}
+                />
+                <div>
+                  <button
+                    className="search-btn"
+                    onClick={handleSearch}
+                    name="zipcode"
+                    type="button"
+                    disabled={!isZipcodeFormValid(formErrors)}>検索</button>
+                </div>
+              </div>
+              <div className="error-msg">{formErrors.zipcode}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">都道府県</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="都道府県"
+                name="prefectures"
+                value={formData.prefectures}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.prefectures}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">市区町村</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="市区町村"
+                name="city"
+                value={formData.city}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.city}</div>
+            </div>
+            <div className="form-field">
+              <label className="form-label">番地</label>
+              <input
+                type="text"
+                className="form-field-input"
+                placeholder="番地"
+                name="houseNumber"
+                value={formData.houseNumber}
+                onChange={(event) => handleChange(event)}
+              />
+              <div className="error-msg">{formErrors.houseNumber}</div>
+            </div>
+            <div className="btn-field">
+              <button className="submit-btn" type="submit" disabled={!isFormValid()}>登録</button>
+            </div>
           </div>
         </div>
-        <div className = "form-field">
-          <label className ="form-label">都道府県</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "都道府県" 
-          name = "prefectures" 
-          value = {formData.prefectures}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.prefectures}</div>
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">市区町村</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "市区町村" 
-          name = "city"
-          value = {formData.city}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.city}</div>
-        </div>
-        <div className = "form-field">
-          <label className ="form-label">番地</label>
-          <input 
-          type = "text" 
-          className="form-field-input" 
-          placeholder = "番地" 
-          name = "houseNumber" 
-          value = {formData.houseNumber}
-          onChange = {(event) => handleChange(event)}
-          />
-          <div className = "text-red-600 font-bold">{formErrors.houseNumber}</div>
-        </div>
-        <div className = "form-field">
-          <button className="btn" type = "submit" disabled={!isFormValid()}>登録</button>
-        </div>
-      </div>
-    </div>
-    </form>
+      </form>
     </>
   );
 }
 
-export default Form;

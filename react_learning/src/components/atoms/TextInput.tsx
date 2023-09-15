@@ -1,19 +1,16 @@
 import React from "react";
 
-type Props = {
+type TextInputProps = {
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
 };
-export const TextInput: React.FC<Props> = ({
-  value,
-  placeholder,
-  onChange,
-}) => {
+
+export const TextInput = ({ value, placeholder, onChange }: TextInputProps) => {
   return (
     <input
-      className="border border-gray rounded-sm w-full"
-      type={"text"}
+      className="form-field-input"
+      type="text"
       value={value}
       placeholder={placeholder}
       onChange={(e) => {
@@ -22,3 +19,5 @@ export const TextInput: React.FC<Props> = ({
     />
   );
 };
+
+export default TextInput;
