@@ -23,7 +23,7 @@
   }
 
   .submit-btn {
-    @apply bg-blue-600 hover:bg-blue-500 text-white rounded px-4 py-1 mb-3 mt-10;
+    @apply text-white bg-blue-600 rounded w-9/12 py-1;
   }
 
   .search-btn {

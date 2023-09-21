@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorMessage, Textarea } from "../atoms";
+import { ErrorMsg, Textarea } from "../atoms";
 
 type Props = {
   labelTitle: string;
@@ -21,7 +21,7 @@ export const LabelAndTextArea: React.FC<Props> = ({
           <Textarea {...props} />
         </div>
       </label>
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {errorMessage && <ErrorMsg>{errorMessage}</ErrorMsg>}
     </>
   );
 };

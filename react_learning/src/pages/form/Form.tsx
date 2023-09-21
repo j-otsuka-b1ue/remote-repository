@@ -1,7 +1,12 @@
 import React from "react";
 import { useState } from "react";
+import { Button, TextInput, Textarea, ErrorMsg } from "../../components/atoms/index"
 
 export const Form = () => {
+  const styles = {
+    textColor: "white",
+    backgroundColor: "blue"
+  }
   const [formData, setFormData] = useState({
     realName: '',
     userName: '',
@@ -26,6 +31,7 @@ export const Form = () => {
     houseNumber: ''
   })
 
+  //フォーム入力値の更新を行う関数
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let valid = true;
     const { name, value } = e.target;
@@ -230,7 +236,7 @@ export const Form = () => {
               <div className="error-msg">{formErrors.mailAddress}</div>
             </div>
             <div className="form-field">
-              <label className="form-label">パスワード</label>
+              <label style={styles}>パスワード</label>
               <input
                 type="text"
                 className="form-field-input"
@@ -266,12 +272,11 @@ export const Form = () => {
                   onChange={(event) => handleChange(event)}
                 />
                 <div>
-                  <button
-                    className="search-btn"
-                    onClick={handleSearch}
-                    name="zipcode"
-                    type="button"
-                    disabled={!isZipcodeFormValid(formErrors)}>検索</button>
+                  <Button 
+                    name = "検索" 
+                    onClick = {handleSearch} 
+                    isDisabled = {!isZipcodeFormValid(formErrors)}
+                  />
                 </div>
               </div>
               <div className="error-msg">{formErrors.zipcode}</div>
@@ -313,7 +318,9 @@ export const Form = () => {
               <div className="error-msg">{formErrors.houseNumber}</div>
             </div>
             <div className="btn-field">
-              <button className="submit-btn" type="submit" disabled={!isFormValid()}>登録</button>
+              <Button 
+                name = "登録" 
+                isDisabled = {!isFormValid()}/>
             </div>
           </div>
         </div>
@@ -321,4 +328,3 @@ export const Form = () => {
     </>
   );
 }
-

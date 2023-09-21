@@ -1,5 +1,6 @@
 import React from "react";
-import { TextInput, ErrorMessage } from "../atoms";
+import { TextInput, ErrorMsg } from "../atoms";
+
 type Props = {
   labelTitle: string;
   errorMessage?: string;
@@ -7,11 +8,7 @@ type Props = {
 
 type TextInputProps = React.ComponentProps<typeof TextInput>;
 
-export const LabelAndTextInput: React.FC<Props> = ({
-  labelTitle,
-  errorMessage,
-  ...props
-}) => {
+export const LabelAndTextInput = ({labelTitle, errorMessage, ...props}:Props) => {
   return (
     <>
       <label>
@@ -20,7 +17,7 @@ export const LabelAndTextInput: React.FC<Props> = ({
           <TextInput {...props} />
         </div>
       </label>
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {errorMessage && <ErrorMsg>{errorMessage}</ErrorMsg>}
     </>
   );
 };
