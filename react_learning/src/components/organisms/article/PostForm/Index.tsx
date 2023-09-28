@@ -75,9 +75,8 @@ export const PostForm: React.FC = () => {
                 title: value,
               },
             });
-          }}
-          errorMessage={shouldShowError ? title.errorMessage : undefined}
-        />
+          } }
+          errorMessage={shouldShowError ? title.errorMessage : undefined}       />
       </div>
 
       <div className="mb-5">

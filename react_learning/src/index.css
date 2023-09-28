@@ -1,6 +1,6 @@
-/* @tailwind base; */
-/*@tailwind components;*/
-/*@tailwind utilities;*/
+@tailwind base; 
+@tailwind components;
+@tailwind utilities;
 
 @layer components {
   .form-field {
@@ -11,7 +11,7 @@
   }
 
   .zip-parts {
-    @apply flex flex-row items-center;
+    @apply flex flex-row items-stretch;
   }
 
   .form-label {
@@ -19,7 +19,7 @@
   }
 
   .btn-field {
-    @apply flex justify-center items-center;
+    @apply w-screen py-2 items-center;
   }
 
   .submit-btn {
@@ -27,7 +27,7 @@
   }
 
   .search-btn {
-    @apply bg-blue-600 hover:bg-blue-500 text-white rounded px-4 py-1 mb-3;
+    @apply bg-blue-600 hover:bg-blue-500 text-white rounded px-4 py-1 mb-2;
   }
 
   .error-msg {

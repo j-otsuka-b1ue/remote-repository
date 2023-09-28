@@ -8,11 +8,7 @@ type Props = {
 
 type TextareaProps = React.ComponentProps<typeof Textarea>;
 
-export const LabelAndTextArea: React.FC<Props> = ({
-  labelTitle,
-  errorMessage,
-  ...props
-}) => {
+export const LabelAndTextArea = ({labelTitle, errorMessage, ...props}:Props)=> {
   return (
     <>
       <label>

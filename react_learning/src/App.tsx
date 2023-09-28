@@ -1,4 +1,4 @@
-import { Form } from "./pages/form/Form";
+import { FormPage } from "./pages/form/Form";
 import { paths } from "./utils/paths";
 import { BrowserRouter, Route, Link, NavLink } from "react-router-dom";
 
