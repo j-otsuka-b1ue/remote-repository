@@ -1,7 +1,5 @@
 import React from "react";
-import { useState } from "react";
-import { Button, TextInput, Textarea, ErrorMsg } from "../../components/atoms/index"
-import { RegisterForm } from "../../components/organisms/member_register"
+import { RegisterForm } from "../../components/organisms/memberRegister"
 
 export const FormPage = () => {
   return (

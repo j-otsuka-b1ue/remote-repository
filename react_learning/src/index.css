@@ -1,21 +1,20 @@
 @tailwind base; 
 @tailwind components;
 @tailwind utilities;
-
+/*
 @layer components {
   .form-field {
     @apply flex flex-col w-9/12;
   }
   .form-field-input {
     @apply border rounded p-2 mb-3 border-solid;
+  } 
+  .form-label {
+    @apply mb-3 font-bold;
   }
 
   .zip-parts {
     @apply flex flex-row items-stretch;
-  }
-
-  .form-label {
-    @apply mb-3 font-bold;
   }
 
   .btn-field {
@@ -34,4 +33,5 @@
     @apply text-red-600 font-bold;
   }
 }
+*/
 

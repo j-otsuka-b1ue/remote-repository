@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { Button, TextInput, Textarea, ErrorMsg } from "../atoms/index"
+import { Button, ErrorMsg } from "../atoms/index"
+import { LabelAndTextInput } from "../molecules";
 
 export const RegisterForm = () => {
   const styles = {
@@ -32,6 +33,9 @@ export const RegisterForm = () => {
   })
 
   //フォーム入力値の更新を行う関数
+  const handleInputChange = (name: string) => (value: string) => {
+    handleChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
+  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let valid = true;
     const { name, value } = event.target;
@@ -50,6 +54,7 @@ export const RegisterForm = () => {
       city: '',
       houseNumber: ''
     }
+  
     //郵便番号検索ボタンのバリデーション
     const isSearchBtnValid = () => {
       return (
@@ -201,76 +206,65 @@ export const RegisterForm = () => {
         <div className="formContainer">
           <div className="uiForm">
             <div className="form-field">
-              <label className="form-label">名前</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="名前"
-                name="realName"
-                value={formData.realName}
-                onChange={(value) => handleChange(value)}
-              />
-              <ErrorMsg>{formErrors.realName}</ErrorMsg>
-            </div>
-            <div className="form-field">
-              <label className="form-label">ユーザー名(任意)</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="ユーザー名(任意)"
-                name="userName"
-                value={formData.userName}
-                onChange={(event) => handleChange(event)}
+              <LabelAndTextInput 
+               labelTitle = "名前"
+               errorMessage = {formErrors.realName}
+               placeholder = "名前"
+               value = {formData.realName}
+               name = "realName"
+               onChange={handleInputChange('realName')}
               />
             </div>
             <div className="form-field">
-              <label className="form-label">メールアドレス</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="メールアドレス"
-                name="mailAddress"
-                value={formData.mailAddress}
-                onChange={(event) => handleChange(event)}
+              <LabelAndTextInput 
+               labelTitle = "ユーザー名(任意)"
+               errorMessage = {formErrors.userName}
+               placeholder = "ユーザー名(任意)"
+               value = {formData.userName}
+               name = "userName"
+               onChange={handleInputChange('userName')}
               />
-              <ErrorMsg>{formErrors.mailAddress}</ErrorMsg>
             </div>
             <div className="form-field">
-              <label className = "form-label">パスワード</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="パスワード"
-                name="password"
-                value={formData.password}
-                onChange={(event) => handleChange(event)}
+              <LabelAndTextInput 
+               labelTitle = "メールアドレス"
+               errorMessage = {formErrors.mailAddress}
+               placeholder = "sample@example.com"
+               value = {formData.mailAddress}
+               name = "userName"
+               onChange={handleInputChange('mailAddress')}
               />
-               <ErrorMsg>{formErrors.password}</ErrorMsg>
             </div>
             <div className="form-field">
-              <label className="form-label">パスワード(確認)</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="パスワード(確認)"
-                name="passwordConfirm"
-                value={formData.passwordConfirm}
-                onChange={(event) => handleChange(event)}
+               <LabelAndTextInput 
+               labelTitle = "パスワード"
+               errorMessage = {formErrors.password}
+               placeholder = "パスワード"
+               value = {formData.password}
+               name = "password"
+               onChange={handleInputChange('password')}
               />
-               <ErrorMsg>{formErrors.passwordConfirm}</ErrorMsg>
             </div>
             <div className="form-field">
-              <label className="form-label">郵便番号</label>
+            <LabelAndTextInput 
+               labelTitle = "パスワード(確認)"
+               errorMessage = {formErrors.passwordConfirm}
+               placeholder = "パスワード(確認)"
+               value = {formData.passwordConfirm}
+               name = "password"
+               onChange={handleInputChange('passwordConfirm')}
+              />
+            </div>
+            <div className="form-field">
               <div className = "zip-parts">
-                <input
-                  type="text"
-                  className="form-field-input"
-                  placeholder="0123456"
-                  name="zipcode"
-                  value={formData.zipcode}
-                  // maxLength={7}
-                  onChange={(event) => handleChange(event)}
-                />
+              <LabelAndTextInput 
+                labelTitle = "郵便番号"
+                errorMessage = {formErrors.zipcode}
+                placeholder = "0123456"
+                value = {formData.zipcode}
+                name = "zipcode"
+                onChange={handleInputChange('zipcode')}
+              />
                <div>
                  <Button 
                    name = "検索" 
@@ -279,43 +273,36 @@ export const RegisterForm = () => {
                  />
                </div>
               </div>
-              <ErrorMsg>{formErrors.zipcode}</ErrorMsg>
             </div>
             <div className="form-field">
-              <label className="form-label">都道府県</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="都道府県"
-                name="prefectures"
-                value={formData.prefectures}
-                onChange={(event) => handleChange(event)}
+              <LabelAndTextInput 
+               labelTitle = "都道府県"
+               errorMessage = {formErrors.prefectures}
+               placeholder = "都道府県"
+               value = {formData.prefectures}
+               name = "prefectures"
+               onChange={handleInputChange('prefectures')}
               />
-               <ErrorMsg>{formErrors.prefectures}</ErrorMsg>
             </div>
             <div className="form-field">
-              <label className="form-label">市区町村</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="市区町村"
-                name="city"
-                value={formData.city}
-                onChange={(event) => handleChange(event)}
+            <LabelAndTextInput 
+               labelTitle = "市区町村"
+               errorMessage = {formErrors.city}
+               placeholder = "市区町村"
+               value = {formData.city}
+               name = "city"
+               onChange={handleInputChange('city')}
               />
-               <ErrorMsg>{formErrors.city}</ErrorMsg>
             </div>
             <div className="form-field">
-              <label className="form-label">番地</label>
-              <input
-                type="text"
-                className="form-field-input"
-                placeholder="番地"
-                name="houseNumber"
-                value={formData.houseNumber}
-                onChange={(event) => handleChange(event)}
+              <LabelAndTextInput 
+               labelTitle = "番地"
+               errorMessage = {formErrors.houseNumber}
+               placeholder = "番地"
+               value = {formData.houseNumber}
+               name = "houseNumber"
+               onChange={handleInputChange('houseNumber')}
               />
-              <ErrorMsg>{formErrors.houseNumber}</ErrorMsg>
               <div className="btn-field">
                <Button 
                 name = "登録" 
