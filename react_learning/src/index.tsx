@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { paths } from "./utils/paths";
-import { Form } from "./pages/form/Form";
+import { FormPage } from "./pages/form/Form";
 import { BlackJack } from "./pages/blackJack/BlackJack";
 import { General } from "./pages/general/general";
 import { ArticleAdd } from "./pages/general/articles/Add";
@@ -16,7 +16,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path={paths.top} element={<App />} />
-        <Route path={paths.form} element={<Form />} />
+        <Route path={paths.form} element={<FormPage />} />
         <Route path={paths.blackJack} element={<BlackJack />} />
         <Route path={paths.general} element={<General />} />
         <Route path={paths.article.add} element={<ArticleAdd />} />

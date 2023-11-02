@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorMessage, Textarea } from "../atoms";
+import { ErrorMsg, Textarea } from "../atoms";
 
 type Props = {
   labelTitle: string;
@@ -8,11 +8,7 @@ type Props = {
 
 type TextareaProps = React.ComponentProps<typeof Textarea>;
 
-export const LabelAndTextArea: React.FC<Props> = ({
-  labelTitle,
-  errorMessage,
-  ...props
-}) => {
+export const LabelAndTextArea = ({labelTitle, errorMessage, ...props}:Props)=> {
   return (
     <>
       <label>
@@ -21,7 +17,7 @@ export const LabelAndTextArea: React.FC<Props> = ({
           <Textarea {...props} />
         </div>
       </label>
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {errorMessage && <ErrorMsg>{errorMessage}</ErrorMsg>}
     </>
   );
 };

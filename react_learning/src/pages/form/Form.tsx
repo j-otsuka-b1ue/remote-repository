@@ -1,9 +1,8 @@
 import React from "react";
+import { RegisterForm } from "../../components/organisms/memberRegister"
 
-export const Form: React.FC = () => {
+export const FormPage = () => {
   return (
-    <div className="App">
-      <h1 className="font-bold text-blue-300">ようこそReactフォーム課題へ！</h1>
-    </div>
-  );
-};
+    <RegisterForm />
+  )
+}

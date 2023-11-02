@@ -6,7 +6,7 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-export const Textarea: React.FC<Props> = ({ value, placeholder, onChange }) => {
+export const Textarea = ({ value, placeholder, onChange }: Props) => {
   return (
     <textarea
       className="border border-gray rounded-sm w-full"

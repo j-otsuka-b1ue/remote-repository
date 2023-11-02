@@ -4,12 +4,9 @@ type Props = {
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
+  name?: string;
 };
-export const TextInput: React.FC<Props> = ({
-  value,
-  placeholder,
-  onChange,
-}) => {
+export const TextInput = ({ value, placeholder, onChange }: Props) => {
   return (
     <input
       className="border border-gray rounded-sm w-full"
