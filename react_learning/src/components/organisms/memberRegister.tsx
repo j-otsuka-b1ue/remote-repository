@@ -1,13 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { Button, ErrorMsg } from "../atoms/index"
+import { Button } from "../atoms/index"
 import { LabelAndTextInput } from "../molecules";
 
 export const RegisterForm = () => {
-  const styles = {
-    textColor: "white",
-    backgroundColor: "blue"
-  }
   const [formData, setFormData] = useState({
     realName: '',
     userName: '',
@@ -37,7 +33,7 @@ export const RegisterForm = () => {
     handleChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let valid = true;
+    // let valid = true;
     const { name, value } = event.target;
     setFormData({
       ...formData,
@@ -56,61 +52,43 @@ export const RegisterForm = () => {
     }
   
     //郵便番号検索ボタンのバリデーション
-    const isSearchBtnValid = () => {
-      return (
-        formData.zipcode !== '' && newErrors.zipcode === ''
-      )
-    }
-
     if (name === 'realName' && value === '') {
-      valid = false;
       newErrors.realName = '入力してください';
     }
 
     if (name === 'mailAddress' && value === '') {
-      valid = false;
       newErrors.mailAddress = '入力してください';
     } else if (name === 'mailAddress' && !validateEmail(value)) {
-      valid = false;
       newErrors.mailAddress = '正しいメールアドレスを入力してください';
     }
 
     if (name === 'password' && value === '') {
-      valid = false;
       newErrors.password = '入力してください';
     } else if (name === 'password' && value.length < 4) {
-      valid = false;
       newErrors.password = '4文字以上で入力してください';
     }
 
     if (name === 'passwordConfirm' && value === '') {
-      valid = false;
       newErrors.passwordConfirm = '入力してください';
     } else if (name === 'passwordConfirm' && value !== formData.password) {
-      valid = false;
       newErrors.passwordConfirm = 'パスワードが一致しません';
     }
 
     if (name === 'zipcode' && value === '') {
-      valid = false;
       newErrors.zipcode = '入力してください';
     } else if (name === 'zipcode' && !validateZipcode(value)) {
-      valid = false;
       newErrors.zipcode = 'ハイフンなしの半角数字7桁を入力してください';
     }
 
     if (name === 'prefectures' && value === '') {
-      valid = false;
       newErrors.prefectures = '入力してください';
     }
 
     if (name === 'city' && value === '') {
-      valid = false;
       newErrors.city = '入力してください';
     }
 
     if (name === 'houseNumber' && value === '') {
-      valid = false;
       newErrors.houseNumber = '入力してください';
     }
     setFormErrors(newErrors);

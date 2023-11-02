@@ -14,4 +14,15 @@ const config = {
   }
 }
 
-module.exports = config
+module.exports = {
+  //...
+  module: {
+    rules: [
+      //...
+      { test: /\.json$/, type: 'json' },
+    ],
+  }
+  //...
+}
+
+// module.exports = config
