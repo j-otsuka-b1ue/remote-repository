@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button {
+  @apply bg-transparent px-2 py-2;
+}
+.button:hover {
+  @apply transform duration-300 scale-110 text-gray-400;
+}

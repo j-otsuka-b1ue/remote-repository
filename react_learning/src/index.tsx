@@ -10,6 +10,7 @@ import { BlackJack } from "./pages/blackJack/BlackJack";
 import { General } from "./pages/general/general";
 import { ArticleAdd } from "./pages/general/articles/Add";
 import { Detail } from "./pages/general/articles/Detail";
+import { NotFound } from "./pages/general/articles/NotFound";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,6 +21,7 @@ ReactDOM.render(
         <Route path={paths.blackJack} element={<BlackJack />} />
         <Route path={paths.general} element={<General />} />
         <Route path={paths.article.add} element={<ArticleAdd />} />
+        <Route path={"*"} element={<NotFound />} />
         <Route path={paths.articles.index + "/:id"} element={<Detail />} />
       </Routes>
     </BrowserRouter>

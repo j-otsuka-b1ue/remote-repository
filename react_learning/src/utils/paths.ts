@@ -5,7 +5,8 @@ export const paths = {
   general: "/general",
 
   article: {
-    add: "/general/article/add",
+    add: "/general/articles/add",
+    notfound: "/general/articles/NotFound"
   },
   articles: {
     index: "/general/articles",
