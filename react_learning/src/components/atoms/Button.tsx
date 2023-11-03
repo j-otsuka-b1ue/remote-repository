@@ -1,18 +1,19 @@
 import React from "react";
 
-type Props = {
+interface ButtonProps {
   name: string;
-  onClick: () => void;
+  className?: string;
+  onClick?: () => void;
   isDisabled?: boolean;
-};
+}
 
-export const Button: React.FC<Props> = ({ name, onClick, isDisabled = false }) => {
+export const Button = ({ name, onClick, isDisabled = false }: ButtonProps) => {
   const className = isDisabled
-    ? "text-white bg-blue-600 rounded w-full py-1 opacity-50"
-    : "text-white bg-blue-600 rounded w-full py-1";
+    ? "text-white bg-blue-600 rounded w-full p-2 px-4 py-2 opacity-50"
+    : "text-white bg-blue-600 rounded w-full p-2 px-4 py-2";
 
   return (
-    <button className={className} onClick={onClick} disabled={isDisabled}>
+    <button className = {className} onClick={onClick} disabled={isDisabled}>
       {name}
     </button>
   );

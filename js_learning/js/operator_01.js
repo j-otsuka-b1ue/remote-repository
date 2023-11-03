@@ -1,0 +1,20 @@
+const NATIONAL_LANGUAGE_SCORE = 100, 
+      ARITHMETIC_SCORE = 50, 
+      SCIENCE_SCORE = 40, 
+      SOCIETY_SCORE = 70.
+      ENGLISH_SCORE = 80;
+
+const TOTAL_SCORE = NATIONAL_LANGUAGE_SCORE + ARITHMETIC_SCORE + SCIENCE_SCORE + SOCIETY_SCORE + ENGLISH_SCORE;
+console.log(TOTAL_SCORE);
+
+
+
+
+
+
+
+// - 国語 100
+// - 算数 50
+// - 理科 40
+// - 社会 70
+// - 英語 80

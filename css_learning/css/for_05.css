@@ -1,0 +1,5 @@
+.age {background-color: #f84f50;}
+.address {background-color: #fa954f;}
+th {width:115px; margin:10px;}
+th:first-child {width:25px;}
+tr {text-align:center;}
