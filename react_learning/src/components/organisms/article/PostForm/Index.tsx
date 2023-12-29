@@ -7,7 +7,7 @@ import { reducer } from "./modules/reducer";
 import type { InputForm, RequestBody } from "./modules/types";
 
 
-export const requiredError = "必須入力です";
+export const requiredError = "入力が必須の項目です。";
 export const initialState: InputForm = {
     shouldShowError: false,
     title: {
@@ -65,7 +65,7 @@ export const PostForm: React.FC = () => {
     <div>
       <div className="mb-5 w-1/2">
         <LabelAndTextInput
-          labelTitle="タイトル"
+          labelTitle=""
           value={title.value}
           placeholder="タイトル"
           onChange={(value) => {
@@ -83,7 +83,7 @@ export const PostForm: React.FC = () => {
         <LabelAndTextArea
           labelTitle="投稿内容"
           value={description.value}
-          placeholder=""
+          placeholder="投稿する内容を入力してください。"
           onChange={(value) => {
             dispatch({
               type: "changeArticleDescription",
@@ -96,7 +96,7 @@ export const PostForm: React.FC = () => {
         />
       </div>
 
-      <div className="w-3/12 float-right">
+      <div className="submit-btn">
         <Button
           name="投稿する"
           onClick={clickPostButton}

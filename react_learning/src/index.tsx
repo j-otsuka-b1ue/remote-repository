@@ -11,9 +11,14 @@ import { General } from "./pages/general/general";
 import { ArticleAdd } from "./pages/general/articles/Add";
 import { Detail } from "./pages/general/articles/Detail";
 import { NotFound } from "./pages/general/articles/NotFound";
+import { Login } from "./pages/general/articles/Login";
+import { TopPage } from "./pages/general/articles/TopPage";
+import { Provider } from "react-redux";
+import store from "./utils/store";
 
 ReactDOM.render(
   <React.StrictMode>
+    <Provider store = {store}>
     <BrowserRouter>
       <Routes>
         <Route path={paths.top} element={<App />} />
@@ -21,10 +26,14 @@ ReactDOM.render(
         <Route path={paths.blackJack} element={<BlackJack />} />
         <Route path={paths.general} element={<General />} />
         <Route path={paths.article.add} element={<ArticleAdd />} />
+        <Route path={paths.article.loginform} element={<Login />} />
+        <Route path={paths.article.toppage} element={<TopPage />} />
         <Route path={"*"} element={<NotFound />} />
         <Route path={paths.articles.index + "/:id"} element={<Detail />} />
+
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

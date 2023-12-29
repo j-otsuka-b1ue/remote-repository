@@ -16,7 +16,7 @@ export const NotFoundMsg = () => {
           <p>Oops, We couldn't find that page.</p>
         </div>
       </div>
-      <img src = {DogImage} alt = "困った犬の画像"></img>
+      <img src = {DogImage} alt = "困った犬の画像" className = "pointer-events-none"></img>
     </div>
     </>
   );

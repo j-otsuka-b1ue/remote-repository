@@ -7,8 +7,9 @@ export const ArticleAdd: React.FC = () => {
   return (
     <>
     <Header />
-    <div className="mx-6 max-w-md md:mx-auto">
+    <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20">
       <Title>新規投稿画面</Title>
+      <br></br>
       <PostForm />
     </div>
     </>
