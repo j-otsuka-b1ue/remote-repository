@@ -5,10 +5,11 @@ type Props = {
   labelTitle: string;
   errorMessage?: string;
   name?: string;
+  type?: string;
 } & TextInputProps;
 
 type TextInputProps = React.ComponentProps<typeof TextInput>;
-export const LabelAndTextInput = ({labelTitle, errorMessage, name, ...props}:Props) => {
+export const LabelAndTextInput = ({labelTitle, errorMessage, name, type, ...props}:Props) => {
   return (
     <>
       <label>

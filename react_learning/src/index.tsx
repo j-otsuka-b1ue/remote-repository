@@ -13,6 +13,7 @@ import { Detail } from "./pages/general/articles/Detail";
 import { NotFound } from "./pages/general/articles/NotFound";
 import { Login } from "./pages/general/articles/Login";
 import { TopPage } from "./pages/general/articles/TopPage";
+import { Registration } from "./pages/general/articles/Registration";
 import { Provider } from "react-redux";
 import store from "./utils/store";
 
@@ -26,8 +27,9 @@ ReactDOM.render(
         <Route path={paths.blackJack} element={<BlackJack />} />
         <Route path={paths.general} element={<General />} />
         <Route path={paths.article.add} element={<ArticleAdd />} />
-        <Route path={paths.article.loginform} element={<Login />} />
-        <Route path={paths.article.toppage} element={<TopPage />} />
+        <Route path={paths.mainRoutes.loginform} element={<Login />} />
+        <Route path={paths.mainRoutes.toppage} element={<TopPage />} />
+        <Route path={paths.mainRoutes.registration} element={<Registration />} />
         <Route path={"*"} element={<NotFound />} />
         <Route path={paths.articles.index + "/:id"} element={<Detail />} />
 
@@ -37,7 +39,10 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
+if (process.env.NODE_ENV === 'development') {
+  const { worker } = require('./mocks/browser');
+  worker.start();
+}
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

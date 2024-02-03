@@ -7,23 +7,39 @@ import { Button } from "../../../components/atoms/Button";
 import { useNavigate } from "react-router-dom";
 import topImg from "../../../images/kinemaPAR513702320_TP_V4.jpg";
 import { setLoggedIn } from "../../../utils/authSlice";
+import { login, logout } from "../../../utils/authSlice";
 
 export const TopPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const isLoggedIn = sessionStorage.getItem("is-authenticated") === "true";
   useEffect(() => {
     // ローカルストレージからログイン状態を読み込む
     const savedLoginStatus = localStorage.getItem("isLoggedIn");
     if (savedLoginStatus === "true") {
       dispatch(setLoggedIn(true));
     } else {
-      dispatch(setLoggedIn(false)); // ログイン状態がない場合は明示的に false を設定
+      dispatch(setLoggedIn(false)); 
     }
   }, [dispatch]);
   const loginNavigate = () => {
-    navigate("/general/articles/Login");
+    navigate("/general/Login");
   }
+  const registrationNavigate = () => {
+    navigate("/general/Registration");
+  }
+  const checkAuthentication = () => {
+    const isAuthenticated = sessionStorage.getItem("is-authenticated") === "true";
+    if (isAuthenticated && !isLoggedIn) {
+      dispatch(login());
+    } else if (!isAuthenticated && isLoggedIn) {
+      dispatch(logout());
+    }
+  };
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
 
   return (
     <>
@@ -43,7 +59,7 @@ export const TopPage = () => {
       />
       <Button
         name="会員登録"
-        onClick={loginNavigate}
+        onClick={registrationNavigate}
         additionalClasses="bg-gray-500 hover:bg-gray-700 text-white px-6 py-2 rounded mx-2"
       />
       </div>

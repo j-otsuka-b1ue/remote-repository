@@ -25,9 +25,6 @@ export const General: React.FC = () => {
         <li>
           <Link to={paths.articles.detail("hoge")}>記事詳細画面(ダミー)</Link>
         </li>
-        <li>
-          <Link to={paths.article.notfound}>NotFound(確認用)</Link>
-        </li>
       </nav>
     </div>
   );

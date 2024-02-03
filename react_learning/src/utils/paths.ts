@@ -4,11 +4,15 @@ export const paths = {
   blackJack: "/blackJack",
   general: "/general",
 
+  mainRoutes: {
+    toppage: "/general/TopPage",
+    loginform: "/general/Login",
+    notfound: "/general/articles/NotFound",
+    registration: "/general/Registration",
+    // 他のメインルート...
+  },
   article: {
     add: "/general/articles/add",
-    notfound: "/general/articles/NotFound",
-    loginform: "/general/articles/Login",
-    toppage: "/general/articles/TopPage",
   },
   articles: {
     index: "/general/articles",

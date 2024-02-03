@@ -3,12 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-    "@craco/craco": "^6.4.3",
-=======
     "@craco/craco": "^7.1.0",
     "@reduxjs/toolkit": "^1.9.7",
->>>>>>> 0b7b6c9 (first_commit_loggedInPage)
     "@storybook/builder-webpack5": "6.5.13",
     "@storybook/manager-webpack5": "6.5.13",
     "@tailwindcss/postcss7-compat": "^2.2.17",
@@ -21,21 +17,16 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^9.8.8",
-<<<<<<< HEAD
-    "history": "^5.3.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-=======
     "axios": "^1.6.3",
     "history": "^5.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^8.1.3",
->>>>>>> 0b7b6c9 (first_commit_loggedInPage)
     "react-router-dom": "^6.15.0",
     "react-scripts": "^5.0.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "typescript": "^4.1.2",
+    "uuid": "^9.0.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -62,6 +53,7 @@
     "last 1 safari version"
   ],
   "devDependencies": {
+    "@types/uuid": "^9.0.7",
     "html-webpack-plugin": "^5.5.3",
     "msw": "^0.40.0",
     "postcss": "^8.4.29",
