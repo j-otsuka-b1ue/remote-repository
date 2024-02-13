@@ -5,7 +5,7 @@ export const paths = {
   general: "/general",
 
   mainRoutes: {
-    toppage: "/general/TopPage",
+    toppage: "/general",
     loginform: "/general/Login",
     notfound: "/general/articles/NotFound",
     registration: "/general/Registration",

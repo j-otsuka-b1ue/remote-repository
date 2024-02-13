@@ -1,5 +1,6 @@
 import React from "react";
 import DogImage from "../../../src/images/p330_resize.png"
+import { CallImage } from "./callImage";
 
 export const NotFoundMsg = () => {
   return (
@@ -16,7 +17,9 @@ export const NotFoundMsg = () => {
           <p>Oops, We couldn't find that page.</p>
         </div>
       </div>
-      <img src = {DogImage} alt = "困った犬の画像" className = "pointer-events-none"></img>
+      <div className = "pointer-events-none">
+        <CallImage src = {DogImage} alt = "困った犬の画像"/>    
+      </div>
     </div>
     </>
   );

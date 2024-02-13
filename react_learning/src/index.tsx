@@ -7,12 +7,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { paths } from "./utils/paths";
 import { FormPage } from "./pages/form/Form";
 import { BlackJack } from "./pages/blackJack/BlackJack";
-import { General } from "./pages/general/general";
 import { ArticleAdd } from "./pages/general/articles/Add";
 import { Detail } from "./pages/general/articles/Detail";
 import { NotFound } from "./pages/general/articles/NotFound";
 import { Login } from "./pages/general/articles/Login";
-import { TopPage } from "./pages/general/articles/TopPage";
+import { General } from "./pages/general/general";
 import { Registration } from "./pages/general/articles/Registration";
 import { Provider } from "react-redux";
 import store from "./utils/store";
@@ -25,10 +24,9 @@ ReactDOM.render(
         <Route path={paths.top} element={<App />} />
         <Route path={paths.form} element={<FormPage />} />
         <Route path={paths.blackJack} element={<BlackJack />} />
-        <Route path={paths.general} element={<General />} />
         <Route path={paths.article.add} element={<ArticleAdd />} />
         <Route path={paths.mainRoutes.loginform} element={<Login />} />
-        <Route path={paths.mainRoutes.toppage} element={<TopPage />} />
+        <Route path={paths.mainRoutes.toppage} element={<General />} />
         <Route path={paths.mainRoutes.registration} element={<Registration />} />
         <Route path={"*"} element={<NotFound />} />
         <Route path={paths.articles.index + "/:id"} element={<Detail />} />

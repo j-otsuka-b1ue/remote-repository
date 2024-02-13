@@ -74,10 +74,10 @@ export const MemberRegist = () => {
     try {
       const response = await axios.post("http://localhost:3000/login", {email, password});
       const accessToken = response.data.access_token;
-      localStorage.setItem("access_Token", accessToken);
+      localStorage.setItem("access_token", accessToken);
       sessionStorage.setItem("is-authenticated", "true");
       dispatch(setLoggedIn(true));
-      navigate("/general/TopPage");
+      navigate("/general");
       console.log(response.data);
     } //ログイン失敗時
       catch(error) {
@@ -85,7 +85,13 @@ export const MemberRegist = () => {
     }
   }
 
-  const isButtonDisabled = emailError !== "" || passwordError !== "" || !email || !password;
+  const isButtonDisabled = emailError !== "" 
+  || passwordError !== "" 
+  || nicknameError !== "" 
+  || !email 
+  || !password
+  || !nickname
+  ;
 
   const handleImageClick = () => {
     if (fileInputRef.current)

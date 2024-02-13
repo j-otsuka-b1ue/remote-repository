@@ -6,7 +6,6 @@ import { useState } from "react";
 import { setLoggedIn } from "../../utils/authSlice";
 import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
-import { v4 as uuidv4 } from 'uuid';
 
 
 //メールアドレスの形式を確認する。
@@ -61,7 +60,8 @@ export const LoginForm = () => {
       localStorage.setItem("last_login_timeStamp", timeStamp);
 
       setTimeout(() => {
-      navigate("/general/TopPage");
+      //マイページ実装完了後はマイページに遷移実装予定
+      navigate("/general");
       console.log(response.data);
       }, 250);
     } //ログイン失敗時

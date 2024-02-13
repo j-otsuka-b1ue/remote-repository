@@ -3,7 +3,7 @@ import { Title } from "../../../components/organisms/Title";
 import { PostForm } from "../../../components/organisms/article/PostForm/Index";
 import { Header } from "../../../components/organisms/Header";
 
-export const ArticleAdd: React.FC = () => {
+export const ArticleAdd = () => {
   return (
     <>
     <Header />
