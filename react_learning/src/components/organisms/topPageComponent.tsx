@@ -1,19 +1,17 @@
-import React, { useState, useEffect} from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../utils/store';
+import { useEffect, useCallback } from "react";
+import { useDispatch } from 'react-redux';
 import { Title } from "../../components/organisms/Title";
 import { Button } from "../../components/atoms/Button";
 import { useNavigate } from "react-router-dom";
 import topImg from "../../images/kinemaPAR513702320_TP_V4.jpg"
-import { setLoggedIn } from "../../utils/authSlice";
 import { login, logout } from "../../utils/authSlice";
-import { CallImage } from "./callImage";
+import { CallImage } from "../atoms/callImage";
 
 export const TopPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = useSelector((state: RootState) => state.auth.token);
   const isLoggedIn = localStorage.getItem("access_token") !== null;
+  const isAuthenticated = sessionStorage.getItem("is-authenticated") === "true";
 
   const loginNavigate = () => {
     navigate("/general/Login");
@@ -23,18 +21,18 @@ export const TopPage = () => {
     navigate("/general/Registration");
   }
 
-  const checkAuthentication = () => {
-    const isAuthenticated = sessionStorage.getItem("is-authenticated") === "true";
+  const checkAuthentication = useCallback(() => {
     if (!isAuthenticated && !isLoggedIn) {
       dispatch(login());
     } else if (isAuthenticated && isLoggedIn) {
       dispatch(logout());
     }
-  };
+  }, [dispatch, isAuthenticated, isLoggedIn]); 
+
   //レンダリングされる度にログイン状態をチェック
   useEffect(() => {
     checkAuthentication();
-  }, []);
+  }, [checkAuthentication]);
 
   return (
     <>

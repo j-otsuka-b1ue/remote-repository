@@ -1,6 +1,6 @@
 import React from "react";
 import DogImage from "../../../src/images/p330_resize.png"
-import { CallImage } from "./callImage";
+import { CallImage } from "../atoms/callImage";
 
 export const NotFoundMsg = () => {
   return (

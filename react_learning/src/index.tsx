@@ -13,6 +13,7 @@ import { NotFound } from "./pages/general/articles/NotFound";
 import { Login } from "./pages/general/articles/Login";
 import { General } from "./pages/general/general";
 import { Registration } from "./pages/general/articles/Registration";
+import { MyPage } from "./pages/general/articles/MyPage";
 import { Provider } from "react-redux";
 import store from "./utils/store";
 
@@ -30,7 +31,7 @@ ReactDOM.render(
         <Route path={paths.mainRoutes.registration} element={<Registration />} />
         <Route path={"*"} element={<NotFound />} />
         <Route path={paths.articles.index + "/:id"} element={<Detail />} />
-
+        <Route path={paths.mainRoutes.mypage} element={<MyPage/>} />
       </Routes>
       </BrowserRouter>
     </Provider>

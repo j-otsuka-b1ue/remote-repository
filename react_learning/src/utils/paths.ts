@@ -9,6 +9,7 @@ export const paths = {
     loginform: "/general/Login",
     notfound: "/general/articles/NotFound",
     registration: "/general/Registration",
+    mypage: "/general/MyPage",
     // 他のメインルート...
   },
   article: {

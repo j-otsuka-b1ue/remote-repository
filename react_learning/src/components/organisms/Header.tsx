@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useCallback } from "react";
+import { useDispatch } from 'react-redux';
 import { login, logout } from "../../utils/authSlice";
-import { RootState } from "../../utils/store";
 import unknownImg from "../../images/icons8-ブロガー-48.png"
-import { Navigate, useNavigate } from "react-router-dom";
-import { CallImage } from "./callImage";
+import { useNavigate } from "react-router-dom";
+import { CallImage } from "../atoms/callImage";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -16,16 +15,16 @@ export const Header = () => {
     navigate("/general")
   }
 
-  const checkAuthentication = () => {
+  const checkAuthentication = useCallback(() => {
     if (!isAuthenticated && !isLoggedIn) {
       dispatch(login());
     } else if (isAuthenticated && isLoggedIn) {
       dispatch(logout());
     }
-  };
+  }, [dispatch, isAuthenticated, isLoggedIn]); 
 
   // ログイン後の経過時間をチェック
-  const checkPassedTime = () => {
+  const checkPassedTime = useCallback(() => {
     const storedTimestamp = localStorage.getItem("last_login_timeStamp");
     const now = new Date();
     if (storedTimestamp) {
@@ -38,7 +37,8 @@ export const Header = () => {
         dispatch(logout());
       }
     }
-  };
+  }, [dispatch]); 
+
 
   const handleLoginLogout = () => {
     if (isLoggedIn) {
@@ -53,12 +53,20 @@ export const Header = () => {
       navigate("/general/Login");
     }
   };
+
+  // マイページ押下時の遷移処理
+  const handleMypageNavigate = () => {
+    setTimeout(() => {
+      navigate("/general/Mypage");
+    }, 250);
+  }
+
   useEffect(() => {
     checkAuthentication();
-  }, []);
+  }, [checkAuthentication]);
   useEffect(() => {
     checkPassedTime();
-  }, []);
+  }, [checkPassedTime]);
 
   return (
       <div className="flex justify-evenly items-center p-4 bg-teal-300">
@@ -81,7 +89,7 @@ export const Header = () => {
             </button>
           )}
           {isLoggedIn && (
-            <button className="button">
+            <button className="button" onClick={handleMypageNavigate}>
               マイページ
             </button>
           )}

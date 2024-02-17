@@ -1,4 +1,3 @@
-import React, { ChangeEvent } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -18,9 +17,9 @@ export const LoginForm = () => {
   const[password, setPassword] = useState("");
   const[emailError, setEmailError] = useState("");
   const[passwordError, setPasswordError] = useState("");
-  const[timeStamp, setTimeStamp] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleEmailChange = (value: string) => {
     setEmail(value);
     if(!mailAddressRegex.test(value)) {
@@ -60,14 +59,13 @@ export const LoginForm = () => {
       localStorage.setItem("last_login_timeStamp", timeStamp);
 
       setTimeout(() => {
-      //マイページ実装完了後はマイページに遷移実装予定
-      navigate("/general");
+      navigate("/general/Mypage");
       console.log(response.data);
       }, 250);
     } //ログイン失敗時
       catch(error) {
       console.error(error);
-    }
+    } 
   }
 
   const isButtonDisabled = emailError !== "" || passwordError !== "" || !email || !password;

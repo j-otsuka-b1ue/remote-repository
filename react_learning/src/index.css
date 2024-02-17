@@ -32,12 +32,4 @@
 .topPageBtn-box {
   @apply flex justify-center mt-5;
 }
-/*ログインボタン
-.loginNav-btn {
-  @apply mx-10 py-2;
-}
-/*会員登録ボタン
-.registNav-btn {
-  @apply bg-gray-400 text-black mx-10 py-2 rounded;
-}
-*/
+

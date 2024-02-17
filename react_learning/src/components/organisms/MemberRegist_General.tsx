@@ -1,12 +1,11 @@
-import React, { ChangeEvent, useRef } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useRef } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { setLoggedIn } from "../../utils/authSlice";
 import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
 import unknownImg from "../../images/img_1705691905.png"
+import { CallImage } from "../atoms/callImage";
 
 
 //メールアドレスの形式を確認する。
@@ -16,7 +15,7 @@ const passwordRegex = /^[A-Za-z0-9]{8,}$/;
 //ニックネームの形式を確認する
 const nicknameRegex = /^[A-Za-z0-9\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]{8,}$/;
 // ユーザーアイコン画像の拡張子を確認する
-const imgTypeRegex = /\.(jpg|jpeg)$/;
+// const imgTypeRegex = /\.(jpg|jpeg)$/;
 
 export const MemberRegist = () => {
   const[email, setEmail] = useState("");
@@ -28,11 +27,11 @@ export const MemberRegist = () => {
   const[nicknameError, setNicknameError] = useState("");
   // パスワード一致確認
   const[passwordMatchError, setPasswordMatchError] = useState("");
-  const[userIconError, setIconError] = useState("");
+  // const[userIconError, setIconError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -70,18 +69,10 @@ export const MemberRegist = () => {
   }
 
   const handleRegister = async () => {
-    // ログイン成功時
+    // 会員登録成功時
     try {
-      const response = await axios.post("http://localhost:3000/login", {email, password});
-      const accessToken = response.data.access_token;
-      localStorage.setItem("access_token", accessToken);
-      sessionStorage.setItem("is-authenticated", "true");
-      dispatch(setLoggedIn(true));
-      navigate("/general");
-      console.log(response.data);
-    } //ログイン失敗時
+    } // 会員登録失敗時
       catch(error) {
-      console.error(error);
     }
   }
 
@@ -147,10 +138,10 @@ export const MemberRegist = () => {
         ref={fileInputRef}
         onChange={(e) => console.log(e.target.files)}
       />
-      <div className = "rounded-full cursor-pointer justify-center items-center flex"> 
-        <img 
-        src = {unknownImg}
-        onClick = {handleImageClick}
+      <div className = "rounded-full cursor-pointer justify-center items-center flex" onClick = {handleImageClick}> 
+        <CallImage 
+          src = {unknownImg}
+          alt = "ユーザーアイコン画像"
         />
       </div>
     </div>
