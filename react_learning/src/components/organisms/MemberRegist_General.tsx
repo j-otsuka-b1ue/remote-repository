@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { ChangeEvent, useRef } from "react";
 // import { useNavigate } from "react-router-dom";
 // import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -14,8 +14,6 @@ const mailAddressRegex = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Z
 const passwordRegex = /^[A-Za-z0-9]{8,}$/;
 //ニックネームの形式を確認する
 const nicknameRegex = /^[A-Za-z0-9\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]{8,}$/;
-// ユーザーアイコン画像の拡張子を確認する
-// const imgTypeRegex = /\.(jpg|jpeg)$/;
 
 export const MemberRegist = () => {
   const[email, setEmail] = useState("");
@@ -25,6 +23,9 @@ export const MemberRegist = () => {
   const[emailError, setEmailError] = useState("");
   const[passwordError, setPasswordError] = useState("");
   const[nicknameError, setNicknameError] = useState("");
+  const[fileTypeError, setFileTypeError] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>(unknownImg);
+  const [base64String, setBase64String] = useState<string>("");
   // パスワード一致確認
   const[passwordMatchError, setPasswordMatchError] = useState("");
   // const[userIconError, setIconError] = useState("");
@@ -68,26 +69,71 @@ export const MemberRegist = () => {
     }
   }
 
-  const handleRegister = async () => {
-    // 会員登録成功時
-    try {
-    } // 会員登録失敗時
-      catch(error) {
+  const handleImageClick = () => {
+    if (fileInputRef.current)
+    fileInputRef.current.click();
+  }
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if(file) {
+      const fileName = file.name;
+      const extension = fileName.split(".").pop()?.toLowerCase();
+      if(extension !== "jpg" && extension !== "jpeg") {
+        setFileTypeError("ファイル形式はjpgもしくはjpegにしてください");
+      } else {
+        setFileTypeError("");
+        setFileTypeError("");
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          setSelectedImage(result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  const handleSubmit = async () => {
+    const requestBody = {
+      email: email,
+      password: password,
+      nickname: nickname,
+      image: base64String
+    };
+    if (selectedImage !== unknownImg) {
+      try {
+        const response = await fetch(selectedImage);
+        const blob = await response.blob();
+        
+        const base64String = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const result = reader.result as string;
+            resolve(result);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+  
+        setBase64String(base64String);
+        // ここにAPI呼び出しなどの処理を追加することができます
+      } catch (error) {
+        console.error("Error handling submit:", error);
+      }
     }
   }
 
   const isButtonDisabled = emailError !== "" 
   || passwordError !== "" 
   || nicknameError !== "" 
+  || fileTypeError !== ""
   || !email 
   || !password
   || !nickname
+  || !fileInputRef.current?.value;
   ;
 
-  const handleImageClick = () => {
-    if (fileInputRef.current)
-    fileInputRef.current.click();
-  }
 
   return (
     <>
@@ -136,19 +182,20 @@ export const MemberRegist = () => {
         type="file"
         style={{ display: 'none' }}
         ref={fileInputRef}
-        onChange={(e) => console.log(e.target.files)}
+        onChange={handleFileChange}
       />
       <div className = "rounded-full cursor-pointer justify-center items-center flex" onClick = {handleImageClick}> 
         <CallImage 
-          src = {unknownImg}
+          src = {selectedImage}
           alt = "ユーザーアイコン画像"
         />
       </div>
+      {fileTypeError && <span className="text-sm text-red-400 mt-1">{fileTypeError}</span>}
     </div>
      <div className = "login-btn">
      <Button 
      name = "登録"
-     onClick = {handleRegister}
+     onClick = {handleSubmit}
      isDisabled = {isButtonDisabled}
      additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
      />
