@@ -1,6 +1,7 @@
 import { ChangeEvent, useRef } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { useDispatch } from "react-redux";
+import axios from "axios";
 import { useState } from "react";
 import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
@@ -25,7 +26,8 @@ export const MemberRegist = () => {
   const[nicknameError, setNicknameError] = useState("");
   const[fileTypeError, setFileTypeError] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<string>(unknownImg);
-  const [base64String, setBase64String] = useState<string>("");
+  const [base64String, setBase64String] = useState<string | null>(null);
+  const navigate = useNavigate();
   // パスワード一致確認
   const[passwordMatchError, setPasswordMatchError] = useState("");
   // const[userIconError, setIconError] = useState("");
@@ -76,53 +78,43 @@ export const MemberRegist = () => {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if(file) {
+    if (file) {
       const fileName = file.name;
       const extension = fileName.split(".").pop()?.toLowerCase();
-      if(extension !== "jpg" && extension !== "jpeg") {
+      if (extension !== "jpg" && extension !== "jpeg") {
         setFileTypeError("ファイル形式はjpgもしくはjpegにしてください");
       } else {
-        setFileTypeError("");
         setFileTypeError("");
         const reader = new FileReader();
         reader.onload = () => {
           const result = reader.result as string;
           setSelectedImage(result);
+          setBase64String(result); // 画像のBase64文字列を設定
         };
         reader.readAsDataURL(file);
       }
     }
-  }
+  };
 
   const handleSubmit = async () => {
     const requestBody = {
+      name: nickname,
       email: email,
       password: password,
-      nickname: nickname,
-      image: base64String
+      password_confirm: matchPassword,
+      representative_image: base64String
     };
-    if (selectedImage !== unknownImg) {
-      try {
-        const response = await fetch(selectedImage);
-        const blob = await response.blob();
-        
-        const base64String = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const result = reader.result as string;
-            resolve(result);
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-  
-        setBase64String(base64String);
-        // ここにAPI呼び出しなどの処理を追加することができます
-      } catch (error) {
-        console.error("Error handling submit:", error);
-      }
+    try {
+      await axios.post('http://localhost:3000/user', requestBody, {
+        headers: { 'Content-Type': 'application/json' },
+      });  
+      navigate("/general/Login");
+    } catch (error) {
+      console.error("Internal Server Error: 500");
+      alert("サーバーエラーが起きました。TOPページに遷移します。(500)");
+      setTimeout(() => navigate("/general"), 1000);
     }
-  }
+  };
 
   const isButtonDisabled = emailError !== "" 
   || passwordError !== "" 
@@ -131,7 +123,6 @@ export const MemberRegist = () => {
   || !email 
   || !password
   || !nickname
-  || !fileInputRef.current?.value;
   ;
 
 

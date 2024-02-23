@@ -40,6 +40,7 @@ export const LoginForm = () => {
     // ログイン成功時
     try {
       const response = await axios.post("http://localhost:3000/login", {email, password});
+      console.log(response);
       const accessToken = response.data.access_token;
       localStorage.setItem("access_token", accessToken)
       sessionStorage.setItem("is-authenticated", "true");

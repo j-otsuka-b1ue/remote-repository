@@ -41,4 +41,9 @@ export const handlers = [
       })
     );
   }),
+  rest.post("/user", (req, res, ctx) => {
+    return res(
+      ctx.status(201),
+    );
+  }),
 ];
