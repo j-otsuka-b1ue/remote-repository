@@ -11,6 +11,10 @@ export const handlers = [
     return res(
       // Respond with a 200 status code
       ctx.status(200),
+      ctx.status(400),
+      ctx.status(401),
+      ctx.status(404),
+      ctx.status(500),
       ctx.json({ 
         access_token: loginToken,
         userInfo: {

@@ -122,12 +122,33 @@ export const MemberRegist = () => {
       });  
       // ログインページに遷移
       navigate("/general/Login");
-    } catch (error) {
-      console.error("Internal Server Error: 500");
-      alert("サーバーエラーが起きました。TOPページに遷移します。(500)");
-      // 1秒後にトップページに遷移
-      setTimeout(() => navigate("/general"), 1000);
-    }
+    } catch(error) {
+      if(axios.isAxiosError(error)) {
+        const statusCode = error.response ? error.response.status : null;
+        switch (statusCode) {
+          case 400:
+            console.error("Bad Request:400 サーバーがリクエストを処理できませんでした。");
+            break;
+          case 401:
+            setTimeout(() => navigate("/general/Login"), 250);
+            alert("アクセス権限がありません。ログインしていない場合は、ログインしてください。")
+            break;
+          case 404:
+            navigate("/general/articles/NotFound")
+            break;
+          case 500:
+            console.error("Internal Server Error: 500");
+            alert("サーバーエラーが起きました。TOPページに遷移します。(500)");
+            // 1秒後にトップページに遷移
+            setTimeout(() => navigate("/general"), 1000);
+            break;
+          default:
+            console.error("予期せぬエラーが発生しました。");
+        }
+      } else {
+        console.error("エラーが発生しました。", error);
+      }
+  } 
   };
 
   // バリデーションエラーが発生している場合 もしくは 画像以外の項目が未入力の場合は「登録」ボタン非活性

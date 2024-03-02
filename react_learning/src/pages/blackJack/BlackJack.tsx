@@ -1,11 +1,15 @@
 import React from "react";
+import { Button } from "../../components/atoms/Button";
+import { ReturnImages } from "../../components/organisms/ImportAllTrumpImages";
 
-export const BlackJack: React.FC = () => {
+export const BlackJack = () => {
   return (
-    <div className="App">
-      <h1 className="font-bold text-green-300">
-        ようこそReactブラックジャック課題へ！
-      </h1>
+    <>
+    <div>
+      <ReturnImages></ReturnImages>
+      <Button name={"ゲームスタート"} additionalClasses="bg-blue-600 text-white font-bold" />
+      <Button name={"リセット"} additionalClasses="bg-red-600 text-white font-bold" />
     </div>
-  );
-};
+    </>
+  )
+}
