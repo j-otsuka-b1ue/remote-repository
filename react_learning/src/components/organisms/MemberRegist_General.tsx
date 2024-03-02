@@ -17,114 +17,127 @@ const passwordRegex = /^[A-Za-z0-9]{8,}$/;
 const nicknameRegex = /^[A-Za-z0-9\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]{8,}$/;
 
 export const MemberRegist = () => {
-  const[email, setEmail] = useState("");
-  const[password, setPassword] = useState("");
-  const[matchPassword, setMatchPassword] = useState("");
-  const[nickname, setNickname] = useState("");
-  const[emailError, setEmailError] = useState("");
-  const[passwordError, setPasswordError] = useState("");
-  const[nicknameError, setNicknameError] = useState("");
-  const[fileTypeError, setFileTypeError] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<string>(unknownImg);
-  const [base64String, setBase64String] = useState<string | null>(null);
+
+  const [formState, setFormState] = useState<{
+    email: string,
+    password: string,
+    matchPassword: string,
+    nickname: string,
+    emailError: string,
+    passwordError: string,
+    passwordMatchError: string,
+    nicknameError: string,
+    fileTypeError: string,
+    selectedImage: string,
+    base64String: string | null,
+  }>({
+    email: " ",
+    password: " ",
+    matchPassword: " ",
+    nickname: " ",
+    emailError: " ",
+    passwordError: " ",
+    passwordMatchError: " ",
+    nicknameError: " ",
+    fileTypeError: " ",
+    selectedImage: unknownImg,
+    base64String: null,
+  });
+
   const navigate = useNavigate();
-  // パスワード一致確認
-  const[passwordMatchError, setPasswordMatchError] = useState("");
-  // const[userIconError, setIconError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
-
   const handleEmailChange = (value: string) => {
-    setEmail(value);
-    if(!mailAddressRegex.test(value)) {
-      setEmailError("メールアドレスの形式で入力してください");
-    } else {
-      setEmailError("");
-    }
+    setFormState(prevState => ({
+      ...prevState,
+    email: value,
+    emailError: !mailAddressRegex.test(value) ? "メールアドレスの形式で入力してください" : "",
+    }));
   }
+
   const handlePasswordChange = (value: string) => {
-    setPassword(value);
-    if(!passwordRegex.test(value)) {
-      setPasswordError("8文字以上で入力してください");
-    } else {
-      setPasswordError("");
-    }
+    setFormState(prevState => ({
+      ...prevState,
+      password: value,
+      passwordError: !passwordRegex.test(value) ? "8文字以上で入力してください" : "", 
+    }));
   }
 
   const handlePasswordMatchChange = (value: string) => {
-    setMatchPassword(value);
-    if(value !== password) {
-      setPasswordMatchError("入力されたパスワードが一致しません");
-    } else {
-      setPasswordMatchError("");
-    }
-  }
-
+    setFormState(prevState => ({
+      ...prevState,
+      matchPassword: value,
+      passwordMatchError: value !== prevState.password ? "入力されたパスワードが一致しません" : "",
+    }));
+  };
+  
   const handleNickNameChange = (value: string) => {
-    setNickname(value);
-    if(!nicknameRegex.test(value)) {
-      setNicknameError("ニックネームは8文字以上で入力してください");
-    } else {
-      setNicknameError("");
-    }
-  }
+    setFormState(prevState => ({
+      ...prevState,
+      nickname: value,
+      nicknameError: !nicknameRegex.test(value) ? "ニックネームは8文字以上で入力してください" : "",
+    }));
+  };
 
   const handleImageClick = () => {
     if (fileInputRef.current)
     fileInputRef.current.click();
   }
-
+  
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const fileName = file.name;
       const extension = fileName.split(".").pop()?.toLowerCase();
-      if (extension !== "jpg" && extension !== "jpeg") {
-        setFileTypeError("ファイル形式はjpgもしくはjpegにしてください");
-      } else {
-        setFileTypeError("");
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result as string;
-          setSelectedImage(result);
-          setBase64String(result); // 画像のBase64文字列を設定
-        };
-        reader.readAsDataURL(file);
-      }
+      const fileTypeError = extension !== "jpg" && extension !== "jpeg" ? "ファイル形式はjpgもしくはjpegにしてください" : "";
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        setFormState(prevState => ({
+          ...prevState,
+          selectedImage: result,
+          base64String: result,
+          fileTypeError: fileTypeError,
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
+  
 
+  // 「登録」ボタン押下時の処理
   const handleSubmit = async () => {
+    // リクエストボディーを設定
     const requestBody = {
-      name: nickname,
-      email: email,
-      password: password,
-      password_confirm: matchPassword,
-      representative_image: base64String
+      name: formState.nickname,
+      email: formState.email,
+      password: formState.password,
+      password_confirm: formState.matchPassword,
+      representative_image: formState.base64String?.replace(/^data:image\/jpeg;base64,/, "") ?? null
+
     };
     try {
       await axios.post('http://localhost:3000/user', requestBody, {
         headers: { 'Content-Type': 'application/json' },
       });  
+      // ログインページに遷移
       navigate("/general/Login");
     } catch (error) {
       console.error("Internal Server Error: 500");
       alert("サーバーエラーが起きました。TOPページに遷移します。(500)");
+      // 1秒後にトップページに遷移
       setTimeout(() => navigate("/general"), 1000);
     }
   };
 
-  const isButtonDisabled = emailError !== "" 
-  || passwordError !== "" 
-  || nicknameError !== "" 
-  || fileTypeError !== ""
-  || !email 
-  || !password
-  || !nickname
-  ;
-
+  // バリデーションエラーが発生している場合 もしくは 画像以外の項目が未入力の場合は「登録」ボタン非活性
+  const isButtonDisabled = formState.emailError !== "" 
+  || formState.passwordError !== "" 
+  || formState.nicknameError !== "" 
+  || formState.fileTypeError !== ""
+  || !formState.email 
+  || !formState.password
+  || !formState.nickname;
 
   return (
     <>
@@ -132,18 +145,18 @@ export const MemberRegist = () => {
     <LabelAndTextInput
       labelTitle="ログインID(メールアドレス)"
       placeholder=""
-      value={email}
+      value={formState.email}
       onChange = {handleEmailChange}
-      errorMessage = {emailError}
+      errorMessage = {formState.emailError}
      />
     </div>
     <div className = "my-5">
       <LabelAndTextInput
         labelTitle="パスワード(英数字8文字以上)"
         placeholder=""
-        value={password}
+        value={formState.password}
         onChange = {handlePasswordChange}
-        errorMessage = {passwordError}
+        errorMessage = {formState.passwordError}
         type = "password"
       />
     </div>
@@ -151,9 +164,9 @@ export const MemberRegist = () => {
       <LabelAndTextInput
       labelTitle="パスワード(確認)"
       placeholder=""
-      value={matchPassword}
+      value={formState.matchPassword}
       onChange = {handlePasswordMatchChange}
-      errorMessage = {passwordMatchError}
+      errorMessage = {formState.passwordMatchError}
       type = "password"
       />
     </div>
@@ -161,9 +174,9 @@ export const MemberRegist = () => {
       <LabelAndTextInput
       labelTitle="ニックネーム(8文字以上)"
       placeholder=""
-      value={nickname}
+      value={formState.nickname}
       onChange = {handleNickNameChange}
-      errorMessage = {nicknameError}
+      errorMessage = {formState.nicknameError}
       type = "password"
       />
     </div>
@@ -177,11 +190,11 @@ export const MemberRegist = () => {
       />
       <div className = "rounded-full cursor-pointer justify-center items-center flex" onClick = {handleImageClick}> 
         <CallImage 
-          src = {selectedImage}
+          src = {formState.selectedImage}
           alt = "ユーザーアイコン画像"
         />
       </div>
-      {fileTypeError && <span className="text-sm text-red-400 mt-1">{fileTypeError}</span>}
+      {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
     </div>
      <div className = "login-btn">
      <Button 

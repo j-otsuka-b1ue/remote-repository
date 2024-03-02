@@ -11,7 +11,13 @@ export const handlers = [
     return res(
       // Respond with a 200 status code
       ctx.status(200),
-      ctx.json({ access_token: loginToken })
+      ctx.json({ 
+        access_token: loginToken,
+        userInfo: {
+          email: "react.tarou@example.com",
+          password: "react12tarou",
+        }
+      })
     );
   }),
   rest.post("/logout", (req, res, ctx) => {

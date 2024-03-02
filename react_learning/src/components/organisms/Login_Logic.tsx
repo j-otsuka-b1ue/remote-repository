@@ -36,14 +36,21 @@ export const LoginForm = () => {
       setPasswordError("");
     }
   }
+
   const handleLogin = async () => {
     // ログイン成功時
     try {
       const response = await axios.post("http://localhost:3000/login", {email, password});
-      console.log(response);
+      const responseUserInfo = response.data.userInfo;
+      const convertResponseUserInfo = JSON.stringify(responseUserInfo);
       const accessToken = response.data.access_token;
-      localStorage.setItem("access_token", accessToken)
+      // ローカルストレージにアクセストークンを設定
+      localStorage.setItem("access_token", accessToken);
+      // ローカスストレージにレスポンスデータを設定
+      localStorage.setItem("userInfo", convertResponseUserInfo);
+      // セッションストレージ内のキー "is-authenticated" を "true" に設定
       sessionStorage.setItem("is-authenticated", "true");
+
       dispatch(setLoggedIn(true));
 
       // ログイン時のタイムスタンプを記録
@@ -59,9 +66,9 @@ export const LoginForm = () => {
       // ローカルストレージにタイムスタンプを記録
       localStorage.setItem("last_login_timeStamp", timeStamp);
 
+      // マイページへ遷移時に遅延を発生させる
       setTimeout(() => {
       navigate("/general/Mypage");
-      console.log(response.data);
       }, 250);
     } //ログイン失敗時
       catch(error) {
@@ -69,6 +76,7 @@ export const LoginForm = () => {
     } 
   }
 
+  // バリデーションエラーが発生している場合 もしくは　　項目が未入力の場合、ログインボタンは非活性
   const isButtonDisabled = emailError !== "" || passwordError !== "" || !email || !password;
 
   return (

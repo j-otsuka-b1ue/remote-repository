@@ -47,6 +47,7 @@ export const Header = () => {
       }, 250);
       localStorage.removeItem("access_token");
       localStorage.removeItem("last_login_timeStamp");
+      localStorage.removeItem("userInfo");
       sessionStorage.setItem("is-authenticated", "false");
       dispatch(logout());
     } else {
@@ -61,6 +62,11 @@ export const Header = () => {
     }, 250);
   }
 
+  // ログアウト状態でヘッダーの会員登録ボタンをクリックした場合の挙動
+  const handleRegistrationPageNavigate = () => {
+    navigate("/general/Registration")
+  }
+
   useEffect(() => {
     checkAuthentication();
   }, [checkAuthentication]);
@@ -70,9 +76,15 @@ export const Header = () => {
 
   return (
       <div className="flex justify-evenly items-center p-4 bg-teal-300">
-        <div className="rounded-full cursor-pointer" onClick={handleNavTop}>
-          <CallImage src = {unknownImg} alt = "ブログアイコン"/>
-        </div>
+          {isLoggedIn ? 
+            <div className="rounded-full cursor-pointer" onClick={handleNavTop}>
+            <CallImage src = {unknownImg} alt = "ブログアイコン"/>
+            </div>
+            : 
+            <button className="button" onClick={handleRegistrationPageNavigate}>
+              会員登録
+            </button>
+          }
           {isLoggedIn && (
             <button className="button">
               新規投稿画面
