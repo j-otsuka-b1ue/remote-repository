@@ -7,10 +7,12 @@ import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
 import unknownImg from "../../images/img_1705691905.png"
 import { CallImage } from "../atoms/callImage";
+import { useDispatch } from "react-redux";
+import { setRegisterInfo } from "../../utils/authSlice";
 
 
 //メールアドレスの形式を確認する。
-const mailAddressRegex = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
+const mailAddressRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 //パスワードの形式を確認する
 const passwordRegex = /^[A-Za-z0-9]{8,}$/;
 //ニックネームの形式を確認する
@@ -31,20 +33,21 @@ export const MemberRegist = () => {
     selectedImage: string,
     base64String: string | null,
   }>({
-    email: " ",
-    password: " ",
-    matchPassword: " ",
-    nickname: " ",
-    emailError: " ",
-    passwordError: " ",
-    passwordMatchError: " ",
-    nicknameError: " ",
-    fileTypeError: " ",
+    email: "",
+    password: "",
+    matchPassword: "",
+    nickname: "",
+    emailError: "",
+    passwordError: "",
+    passwordMatchError: "",
+    nicknameError: "",
+    fileTypeError: "",
     selectedImage: unknownImg,
     base64String: null,
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleEmailChange = (value: string) => {
@@ -108,20 +111,21 @@ export const MemberRegist = () => {
   // 「登録」ボタン押下時の処理
   const handleSubmit = async () => {
     // リクエストボディーを設定
-    const requestBody = {
+    const registerRequestBody = {
       name: formState.nickname,
       email: formState.email,
       password: formState.password,
       password_confirm: formState.matchPassword,
       representative_image: formState.base64String?.replace(/^data:image\/jpeg;base64,/, "") ?? null
-
     };
     try {
-      await axios.post('http://localhost:3000/user', requestBody, {
+      await axios.post('http://localhost:3000/user', registerRequestBody, {
         headers: { 'Content-Type': 'application/json' },
       });  
       // ログインページに遷移
       navigate("/general/Login");
+      // Reduxストアを更新
+      dispatch(setRegisterInfo(registerRequestBody));
     } catch(error) {
       if(axios.isAxiosError(error)) {
         const statusCode = error.response ? error.response.status : null;

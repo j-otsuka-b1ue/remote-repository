@@ -5,7 +5,8 @@ import { useState } from "react";
 import { setLoggedIn } from "../../utils/authSlice";
 import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../utils/store";
 
 //メールアドレスの形式を確認する。
 const mailAddressRegex = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
@@ -19,6 +20,8 @@ export const LoginForm = () => {
   const[passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const registrationInfo = useSelector((state: RootState) => state.user.registrationInfo);
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -40,13 +43,23 @@ export const LoginForm = () => {
   const handleLogin = async () => {
     // ログイン成功時
     try {
-      const response = await axios.post("http://localhost:3000/login", {email, password});
-      const responseUserInfo = response.data.userInfo;
+      // ログイン成功時に新たに設定するリクエストボディー
+      const loginRequestBody = {
+        email: email,
+        password: password,
+      }
+      // 会員登録時に作成したリクエストボディーとログイン成功時に作成したリクエストボディーを合わせる
+      const requestBody = {
+        ...registrationInfo,
+        ...loginRequestBody,
+      }
+      const response = await axios.post("http://localhost:3000/login", requestBody);
+      const responseUserInfo = response.data.user;
       const convertResponseUserInfo = JSON.stringify(responseUserInfo);
-      const accessToken = response.data.access_token;
+      const accessToken = response.data.user.token;
       // ローカルストレージにアクセストークンを設定
       localStorage.setItem("access_token", accessToken);
-      // ローカスストレージにレスポンスデータを設定
+      // ローカルストレージにレスポンスデータを設定
       localStorage.setItem("userInfo", convertResponseUserInfo);
       // セッションストレージ内のキー "is-authenticated" を "true" に設定
       sessionStorage.setItem("is-authenticated", "true");

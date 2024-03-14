@@ -7,7 +7,18 @@ export const handlers = [
   rest.post("/login", (req, res, ctx) => {
     // Persist user's authentication in the session
     sessionStorage.setItem("is-authenticated", "true");
-    const loginToken = uuidv4();
+    const requestBody = req.body as {
+      name: string,
+      email: string,
+      password: string,
+      password_confirmation: string,
+      representative_image: string | null,
+    };
+    // ログイントークンとユーザーIDを生成する
+    const accessToken = uuidv4(), userId = uuidv4();
+
+    const getDate = new Date();
+    
     return res(
       // Respond with a 200 status code
       ctx.status(200),
@@ -15,11 +26,17 @@ export const handlers = [
       ctx.status(401),
       ctx.status(404),
       ctx.status(500),
-      ctx.json({ 
-        access_token: loginToken,
-        userInfo: {
-          email: "react.tarou@example.com",
-          password: "react12tarou",
+      ctx.json({
+        user: {
+          user_id: userId,
+          name: requestBody.name,
+          email: requestBody.email,
+          password: requestBody.password,
+          representative_image: requestBody.representative_image,
+          created_at: getDate,
+          updated_at: getDate,
+          deleted_at: null,
+          token: accessToken,
         }
       })
     );
@@ -32,10 +49,8 @@ export const handlers = [
     );
   }),
   rest.get("/user", (req, res, ctx) => {
-    // Check if the user is authenticated in this session
     const isAuthenticated = sessionStorage.getItem("is-authenticated");
     if (!isAuthenticated) {
-      // If not authenticated, respond with a 403 error
       return res(
         ctx.status(403),
         ctx.json({
