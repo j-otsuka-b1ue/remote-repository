@@ -55,34 +55,42 @@ export const LoginForm = () => {
       }
       const response = await axios.post("http://localhost:3000/login", requestBody);
       const responseUserInfo = response.data.user;
+      const responseLoginInfo = response.data.loginResponseJSON;
       const convertResponseUserInfo = JSON.stringify(responseUserInfo);
       const accessToken = response.data.user.token;
-      // ローカルストレージにアクセストークンを設定
-      localStorage.setItem("access_token", accessToken);
-      // ローカルストレージにレスポンスデータを設定
-      localStorage.setItem("userInfo", convertResponseUserInfo);
-      // セッションストレージ内のキー "is-authenticated" を "true" に設定
-      sessionStorage.setItem("is-authenticated", "true");
 
-      dispatch(setLoggedIn(true));
+      console.log(responseLoginInfo);
+      // 入力したログイン情報と、会員登録時のログイン情報が合致した場合のみログイン処理を行う
+      if (registrationInfo.email === responseLoginInfo.email 
+          && registrationInfo.password === responseLoginInfo.password) {
+        // ローカルストレージにアクセストークンを設定
+        localStorage.setItem("access_token", accessToken);
+        // ローカルストレージにレスポンスデータを設定
+        localStorage.setItem("userInfo", convertResponseUserInfo);
+        // セッションストレージ内のキー "is-authenticated" を "true" に設定
+        sessionStorage.setItem("is-authenticated", "true");
 
-      // ログイン時のタイムスタンプを記録
-      const now = new Date();
-      const timeStamp = now.toLocaleString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
-      // ローカルストレージにタイムスタンプを記録
-      localStorage.setItem("last_login_timeStamp", timeStamp);
+        dispatch(setLoggedIn(true));
 
-      // マイページへ遷移時に遅延を発生させる
-      setTimeout(() => {
-      navigate("/general/Mypage");
-      }, 250);
+        // ログイン時のタイムスタンプを記録
+        const now = new Date();
+        const timeStamp = now.toLocaleString('ja-JP', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        // ローカルストレージにタイムスタンプを記録
+        localStorage.setItem("last_login_timeStamp", timeStamp);
+
+
+        // マイページへ遷移時に遅延を発生させる
+        setTimeout(() => {
+          navigate("/general/Mypage");
+        }, 250);
+      }
     } //ログイン失敗時
       catch(error) {
         if(axios.isAxiosError(error)) {

@@ -1,11 +1,14 @@
 import { rest } from "msw";
 import { v4 as uuidv4 } from 'uuid';
 
+let tempStorage = {
+  email: "",
+  password: "",
+}
 // https://mswjs.io/
 // ここにinterface仕様書のAPIを作っていく
 export const handlers = [
   rest.post("/login", (req, res, ctx) => {
-    // Persist user's authentication in the session
     sessionStorage.setItem("is-authenticated", "true");
     const requestBody = req.body as {
       name: string,
@@ -18,9 +21,14 @@ export const handlers = [
     const accessToken = uuidv4(), userId = uuidv4();
 
     const getDate = new Date();
+
+    const { email, password } = requestBody;
+
+    // クライアント側から送られてきたログインIDとパスワードを一時的に保持
+    tempStorage.email = email;
+    tempStorage.password = password;
     
     return res(
-      // Respond with a 200 status code
       ctx.status(200),
       ctx.status(400),
       ctx.status(401),
@@ -37,7 +45,11 @@ export const handlers = [
           updated_at: getDate,
           deleted_at: null,
           token: accessToken,
-        }
+        },
+        loginResponseJSON: {
+          email: tempStorage.email,
+          password: tempStorage.password,
+        },
       })
     );
   }),
