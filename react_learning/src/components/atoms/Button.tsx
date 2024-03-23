@@ -5,12 +5,14 @@ interface ButtonProps {
   className?: string;
   onClick?: () => void;
   isDisabled?: boolean;
-}
+  additionalClasses?: string;
+  onKeyDown?: string;
+};
 
-export const Button = ({ name, onClick, isDisabled = false }: ButtonProps) => {
-  const className = isDisabled
-    ? "text-white bg-blue-600 rounded w-full p-2 px-4 py-2 opacity-50"
-    : "text-white bg-blue-600 rounded w-full p-2 px-4 py-2";
+export const Button = ({ name, onClick, isDisabled = false, additionalClasses = ""}: ButtonProps) => {
+  const className = `${isDisabled
+    ? "rounded px-3 py-2 opacity-50"
+    : "rounded px-3 py-2"} ${additionalClasses}`;
 
   return (
     <button className = {className} onClick={onClick} disabled={isDisabled}>
