@@ -59,10 +59,12 @@ export const LoginForm = () => {
       const convertResponseUserInfo = JSON.stringify(responseUserInfo);
       const accessToken = response.data.user.token;
 
-      console.log(responseLoginInfo);
       // 入力したログイン情報と、会員登録時のログイン情報が合致した場合のみログイン処理を行う
       if (registrationInfo.email === responseLoginInfo.email 
           && registrationInfo.password === responseLoginInfo.password) {
+        // バリデーションエラーの初期化を行う。
+        setEmailError("");
+        setPasswordError("");
         // ローカルストレージにアクセストークンを設定
         localStorage.setItem("access_token", accessToken);
         // ローカルストレージにレスポンスデータを設定
@@ -90,8 +92,21 @@ export const LoginForm = () => {
         setTimeout(() => {
           navigate("/general/Mypage");
         }, 250);
+      } else {
+        // メールアドレスのチェック
+        if (registrationInfo.email !== responseLoginInfo.email) {
+          setEmailError("メールアドレスが正しくありません。入力内容を確認してください。");
+        } else {
+          setEmailError("");
+        }
       }
-    } //ログイン失敗時
+      if (registrationInfo.password !== responseLoginInfo.password) {
+        setPasswordError("パスワードが正しくありません。入力内容を確認してください。");
+      } else {
+        setPasswordError("");
+      }
+    } 
+      //ログイン失敗時
       catch(error) {
         if(axios.isAxiosError(error)) {
           const statusCode = error.response ? error.response.status : null;
@@ -127,32 +142,32 @@ export const LoginForm = () => {
   return (
     <>
     <div className = "form-group">
-    <LabelAndTextInput
-      labelTitle="ログインID(メールアドレス)"
-      placeholder=""
-      value={email}
-      onChange = {handleEmailChange}
-      errorMessage = {emailError}
-     />
+      <LabelAndTextInput
+        labelTitle="ログインID(メールアドレス)"
+        placeholder=""
+        value={email}
+        onChange = {handleEmailChange}
+        errorMessage = {emailError}
+      />
     </div>
     <div className = "form-group">
-    <LabelAndTextInput
-      labelTitle="パスワード"
-      placeholder=""
-      value={password}
-      onChange = {handlePasswordChange}
-      errorMessage = {passwordError}
-      type = "password"
-     />
-     </div>
-     <div className = "login-btn">
-     <Button 
-     name = "ログイン"
-     onClick = {handleLogin}
-     isDisabled = {isButtonDisabled}
-     additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
-     />
-     </div>
+      <LabelAndTextInput
+        labelTitle="パスワード"
+        placeholder=""
+        value={password}
+        onChange = {handlePasswordChange}
+        errorMessage = {passwordError}
+        type = "password"
+      />
+    </div>
+    <div className = "login-btn">
+      <Button 
+        name = "ログイン"
+        onClick = {handleLogin}
+        isDisabled = {isButtonDisabled}
+        additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
+      />
+    </div>
     </>
   )
 }

@@ -9,7 +9,6 @@ let tempStorage = {
 // ここにinterface仕様書のAPIを作っていく
 export const handlers = [
   rest.post("/login", (req, res, ctx) => {
-    sessionStorage.setItem("is-authenticated", "true");
     const requestBody = req.body as {
       name: string,
       email: string,
@@ -54,8 +53,6 @@ export const handlers = [
     );
   }),
   rest.post("/logout", (req, res, ctx) => {
-    // ユーザーの認証をセッションから削除
-    sessionStorage.setItem("is-authenticated", "false");
     return res(
       ctx.status(200)
     );
