@@ -7,7 +7,7 @@ export const Registration = () => {
   return (
     <>
       <Header />
-      <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20">
+      <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20 mt-6">
         <Title>会員登録</Title>
         <br></br>
         <MemberRegist />
