@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 let tempStorage = {
   email: "",
   password: "",
+  name: "",
+  representative_image: "",
+  userId: "",
 }
 // https://mswjs.io/
 // ここにinterface仕様書のAPIを作っていく
@@ -26,6 +29,14 @@ export const handlers = [
     // クライアント側から送られてきたログインIDとパスワードを一時的に保持
     tempStorage.email = email;
     tempStorage.password = password;
+
+    tempStorage = {
+      email: requestBody.email,
+      password: requestBody.password,
+      name: requestBody.name,
+      representative_image: requestBody.representative_image ?? "",
+      userId: userId,
+    }
     
     return res(
       ctx.status(200),
@@ -51,6 +62,28 @@ export const handlers = [
         },
       })
     );
+  }),
+  rest.get("/user/:userId", (req, res, ctx) => {
+    // URLからuserIdを抽出
+    const { userId } = req.params;
+
+    // tempStorageに保存されているuserIdと比較
+    if (tempStorage.userId === userId) {
+      // 一致する場合はuserIdと紐付いているメールアドレスと名前をレスポンスとして返す
+      return res(
+        ctx.status(200),
+        ctx.json({
+          userId: tempStorage.userId,
+          email: tempStorage.email,
+          name: tempStorage.name,
+          representative_image: tempStorage.representative_image,
+        })
+      );
+    } else {
+      return res(
+        ctx.status(404),
+      )
+    }
   }),
   rest.post("/logout", (req, res, ctx) => {
     return res(
