@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { login, logout } from "../../utils/authSlice";
 import unknownImg from "../../images/icons8-ブロガー-48.png"
 import { useNavigate } from "react-router-dom";
-import { CallImage } from "../atoms/callImage";
-import { FiMenu } from "react-icons/fi";
+import { CallImage } from "../atoms/CallImage";
+import { FiMenu, FiX } from "react-icons/fi";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -18,9 +18,9 @@ export const Header = () => {
   }
 
   // SP表示時のハンバーガーメニュー開閉ファンクション
-  const toggleMenu = useCallback(() => {
-    setIsSpMenuOpen(!isSpMenuOpen);
-  }, [isSpMenuOpen])
+  const toggleMenu = () => {
+    setIsSpMenuOpen(prevState => !prevState);
+  };
 
   const checkAuthentication = useCallback(() => {
     if (!isAuthenticated && !isLoggedIn) {
@@ -57,6 +57,7 @@ export const Header = () => {
       localStorage.removeItem("userInfo");
       sessionStorage.setItem("is-authenticated", "false");
       dispatch(logout());
+      setIsSpMenuOpen(false);
     } else {
       navigate("/general/Login");
     }
@@ -67,11 +68,13 @@ export const Header = () => {
     setTimeout(() => {
       navigate("/general/Mypage");
     }, 250);
+    setIsSpMenuOpen(false);
   }
 
   // ログアウト状態でヘッダーの会員登録ボタンをクリックした場合の挙動
   const handleRegistrationPageNavigate = () => {
     navigate("/general/Registration")
+    setIsSpMenuOpen(false);
   }
 
   useEffect(() => {
@@ -82,30 +85,77 @@ export const Header = () => {
   }, [checkPassedTime]);
 
   return (
-    <div className="flex mx-auto justify-between items-center p-4 bg-teal-300 lg:justify-center">
-      <div className="md:hidden">
-          <FiMenu className="text-2xl cursor-pointer" onClick={toggleMenu}/>
+    <nav className="bg-teal-300 p-4 fixed top-0 left-0 h-20 w-full z-30">
+      <div className="container mx-auto flex justify-between items-center h-full">
+        <div onClick={handleNavTop} className="cursor-pointer">
+          <CallImage src={unknownImg} alt="ブログアイコン"/>
+        </div>
+        <div className="z-40 md:hidden">
+          {isSpMenuOpen ? (
+            <FiX className="text-2xl cursor-pointer" onClick={toggleMenu} />
+          ) : (
+            <FiMenu className="text-2xl cursor-pointer" onClick={toggleMenu} />
+          )}
+        </div>
+        {/* PC表示時に表示されるナビゲーションメニュー */}
+        <div className="hidden md:flex items-center justify-center flex-grow-0">
+          {isLoggedIn ? (
+            <>
+              <button className="button my-5 mx-3">新規投稿画面</button>
+              <button className="button my-5 mx-3">投稿一覧画面</button>
+              <button className="button my-5 mx-3">会員情報登録画面</button>
+              <button className="button my-5 mx-3" onClick={handleMypageNavigate}>マイページ</button>
+              <button className="button my-5 mx-3" onClick={handleLoginLogout}>ログアウト</button>
+            </>
+          ) : (
+            <>
+              <button className="button my-5 mx-3" onClick={handleRegistrationPageNavigate}>会員登録</button>
+              <button className="button my-5 mx-3" onClick={handleLoginLogout}>ログイン</button>
+            </>
+          )}
+        </div>
       </div>
 
-    {/* メニュー内容。md:flex-row に修正し、PC表示で項目が横並びになるようにする */}
-    <div className={`${isSpMenuOpen ? 'flex' : 'hidden'} md:flex flex-col md:flex-row md:items-center md:justify-center w-full md:w-auto space-y-2 md:space-y-0 md:space-x-4`}>
-        {isLoggedIn ? 
-          <div className="rounded-full cursor-pointer" onClick={handleNavTop}>
-            <CallImage src={unknownImg} alt="ブログアイコン"/>
-          </div>
-          : 
-          <button className="button" onClick={handleRegistrationPageNavigate}>
-            会員登録
-          </button>
-        }
-        {isLoggedIn && <button className="button">新規投稿画面</button>}
-        {isLoggedIn && <button className="button">投稿一覧画面</button>}
-        {isLoggedIn && <button className="button">会員情報変更画面</button>}
-        {isLoggedIn && <button className="button" onClick={handleMypageNavigate}>マイページ</button>}
-        <button className="button" onClick={handleLoginLogout}>
-          {isAuthenticated ? "ログアウト" : "ログイン"}
-        </button>
-    </div>
-  </div>
+      {/* SP表示時のハンバーガーメニューのオーバーレイ */}
+      {isSpMenuOpen && (
+        <div className="fixed top-0 left-0 h-full w-full bg-opacity-90 z-20 flex flex-col items-center justify-start md:hidden bg-white pt-24">
+      {/*ログイン、もしくはログアウト状態の時に該当項目と罫線を表示させる*/}
+            {isLoggedIn && (
+              <>
+              <button className="button mt-16" onClick={handleMypageNavigate}>マイページ</button>
+              <hr className="border-t border-black w-full"></hr>              
+              </>
+            )}
+            {!isLoggedIn && (
+              <>
+              <button className="button my-2" onClick={handleRegistrationPageNavigate}>会員登録</button>
+              <hr className="border-t border-black w-full"></hr>              
+              </>
+            )}
+            {isLoggedIn && (
+              <>
+              <button className="button my-2">新規投稿画面</button>
+              <hr className="border-t border-black w-full"></hr>              
+              </>
+            )}
+            {isLoggedIn && (
+              <>
+              <button className="button my-2">投稿一覧画面</button>
+              <hr className="border-t border-black w-full"></hr>              
+              </>
+            )}
+            {isLoggedIn && (
+              <>
+              <button className="button my-2">会員情報変更画面</button>
+              <hr className="border-t border-black w-full"></hr>
+              </>
+            )}
+            <button className="button mt-2" onClick={handleLoginLogout}>
+              {isAuthenticated ? "ログアウト" : "ログイン"}
+            </button>
+          {/* 追加のSPメニュー項目があればここに配置 */}
+        </div>
+      )}
+    </nav>
   );
 };

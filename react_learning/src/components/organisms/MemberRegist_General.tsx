@@ -6,7 +6,7 @@ import { useState } from "react";
 import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
 import unknownImg from "../../images/img_1705691905.png"
-import { CallImage } from "../atoms/callImage";
+import { CallImage } from "../atoms/CallImage";
 import { useDispatch } from "react-redux";
 import { setRegisterInfo } from "../../utils/authSlice";
 
