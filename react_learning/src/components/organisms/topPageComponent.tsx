@@ -36,7 +36,7 @@ export const TopPage = () => {
 
   return (
     <>
-      <div className = "topPage-form">
+      <div className = "topPage-form mt-6">
         <Title>ブログサービス課題</Title>
       </div>
       <div className = "topPage-detail">

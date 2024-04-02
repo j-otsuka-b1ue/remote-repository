@@ -6,7 +6,7 @@ export const Login = () => {
   return (
     <>
       <Header />
-      <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20">
+      <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20 mt-6">
         <Title>ログイン</Title>
         <br></br>
         <LoginForm />
