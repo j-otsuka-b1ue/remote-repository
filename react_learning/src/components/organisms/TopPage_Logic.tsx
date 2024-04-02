@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { useDispatch } from 'react-redux';
-import { Title } from "../../components/organisms/Title";
-import { Button } from "../../components/atoms/Button";
+import { Title } from "./Title";
+import { Button } from "../atoms/Button";
 import { useNavigate } from "react-router-dom";
 import topImg from "../../images/kinemaPAR513702320_TP_V4.jpg"
 import { login, logout } from "../../utils/authSlice";
@@ -36,7 +36,7 @@ export const TopPage = () => {
 
   return (
     <>
-      <div className = "topPage-form">
+      <div className = "topPage-form mt-6">
         <Title>ブログサービス課題</Title>
       </div>
       <div className = "topPage-detail">
