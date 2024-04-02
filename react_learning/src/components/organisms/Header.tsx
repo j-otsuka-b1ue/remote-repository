@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { login, logout } from "../../utils/authSlice";
 import unknownImg from "../../images/icons8-ブロガー-48.png"
 import { useNavigate } from "react-router-dom";
-import { CallImage } from "../atoms/callImage";
+import { CallImage } from "../atoms/CallImage";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export const Header = () => {
