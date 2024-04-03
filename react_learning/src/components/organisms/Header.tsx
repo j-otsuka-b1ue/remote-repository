@@ -153,7 +153,6 @@ export const Header = () => {
             <button className="button mt-2" onClick={handleLoginLogout}>
               {isAuthenticated ? "ログアウト" : "ログイン"}
             </button>
-          {/* 追加のSPメニュー項目があればここに配置 */}
         </div>
       )}
     </nav>
