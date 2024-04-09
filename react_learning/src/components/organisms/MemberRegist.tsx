@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../atoms/index"
 import { LabelAndTextInput } from "../molecules";
 
-export const RegisterForm = () => {
+export const MemberRegist = () => {
   const [formData, setFormData] = useState({
     realName: '',
     userName: '',

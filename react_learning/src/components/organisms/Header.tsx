@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { login, logout } from "../../utils/authSlice";
 import unknownImg from "../../images/icons8-ブロガー-48.png"
 import { useNavigate } from "react-router-dom";
-import { CallImage } from "../atoms/CallImage";
+import { ImageDisplay } from "../atoms/ImageDisplay";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export const Header = () => {
@@ -88,7 +88,7 @@ export const Header = () => {
     <nav className="bg-teal-300 p-4 fixed top-0 left-0 h-20 w-full z-30">
       <div className="container mx-auto flex justify-between items-center h-full">
         <div onClick={handleNavTop} className="cursor-pointer">
-          <CallImage src={unknownImg} alt="ブログアイコン"/>
+          <ImageDisplay src={unknownImg} alt="ブログアイコン"/>
         </div>
         <div className="z-40 md:hidden">
           {isSpMenuOpen ? (

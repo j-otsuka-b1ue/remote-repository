@@ -5,7 +5,7 @@ import { Button } from "../atoms/Button";
 import { useNavigate } from "react-router-dom";
 import topImg from "../../images/kinemaPAR513702320_TP_V4.jpg"
 import { login, logout } from "../../utils/authSlice";
-import { CallImage } from "../atoms/CallImage";
+import { ImageDisplay } from "../atoms/ImageDisplay";
 
 export const TopPage = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ export const TopPage = () => {
       </div>
       )}
       <div className = "pointer-events-none flex justify-center mt-3 mb-3 opacity-75">
-        <CallImage src = {topImg} alt = "洋書を読む画像"/>
+        <ImageDisplay src = {topImg} alt = "洋書を読む画像"/>
       </div>
     </>
   )

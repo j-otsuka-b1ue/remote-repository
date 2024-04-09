@@ -1,6 +1,6 @@
 import React from "react";
 import DogImage from "../../../src/images/p330_resize.png"
-import { CallImage } from "../atoms/CallImage";
+import { ImageDisplay } from "../atoms/ImageDisplay";
 
 export const NotFoundMsg = () => {
   return (
@@ -18,7 +18,7 @@ export const NotFoundMsg = () => {
         </div>
       </div>
       <div className = "pointer-events-none">
-        <CallImage src = {DogImage} alt = "困った犬の画像"/>    
+        <ImageDisplay src = {DogImage} alt = "困った犬の画像"/>    
       </div>
     </div>
     </>
