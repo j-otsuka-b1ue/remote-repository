@@ -5,6 +5,6 @@ interface ImageProps {
   alt: string;
 }
 
-export const CallImage = ({ src, alt }:ImageProps) => {
+export const ImageDisplay = ({ src, alt }:ImageProps) => {
   return <img src={src} alt={alt} />;
 }

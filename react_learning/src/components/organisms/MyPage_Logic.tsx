@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../utils/store";
 import unknownImg from "../../images/img_1705691905.png"
-import { CallImage } from "../atoms/CallImage";
+import { ImageDisplay } from "../atoms/ImageDisplay";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -66,16 +66,11 @@ export const MyPageLogic = () => {
       }
   }, [userId, navigate]); 
 
-
-
-
-
-
   return (
     <>
     <div className="flex items-center">
       <div className="object-cover w-40 h-40">
-        <CallImage src={imageData || unknownImg} alt="会員登録時の登録した画像"></CallImage>
+        <ImageDisplay src={imageData || unknownImg} alt="会員登録時の画像" />
       </div>
       <div className="flex-grow">
         <p className="ml-32">{userData ? userData.email : null}</p>

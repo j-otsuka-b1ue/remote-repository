@@ -6,7 +6,7 @@ import { useState } from "react";
 import { LabelAndTextInput } from "../molecules";
 import { Button } from "../atoms/Button";
 import unknownImg from "../../images/img_1705691905.png"
-import { CallImage } from "../atoms/CallImage";
+import { ImageDisplay } from "../atoms/ImageDisplay";
 import { useDispatch } from "react-redux";
 import { setRegisterInfo } from "../../utils/authSlice";
 
@@ -214,7 +214,7 @@ export const MemberRegist = () => {
         onChange={handleFileChange}
       />
       <div className = "rounded-full cursor-pointer justify-center items-center flex" onClick = {handleImageClick}> 
-        <CallImage 
+        <ImageDisplay 
           src = {formState.selectedImage}
           alt = "ユーザーアイコン画像"
         />
