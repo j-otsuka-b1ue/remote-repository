@@ -12,6 +12,7 @@ export const Header = () => {
   const isLoggedIn = localStorage.getItem("access_token") !== null;
   const isAuthenticated = sessionStorage.getItem("is-authenticated") === "true";
   const [isSpMenuOpen, setIsSpMenuOpen] = useState(false);
+  
   //アイコン押下時にトップページに遷移
   const handleNavTop = () => {
     navigate("/general")
@@ -22,7 +23,7 @@ export const Header = () => {
     setIsSpMenuOpen(prevState => !prevState);
   };
 
-  const checkAuthentication = useCallback(() => {
+  const checkAuthentication = useCallback((): void => {
     if (!isAuthenticated && !isLoggedIn) {
       dispatch(login());
     } else if (isAuthenticated && isLoggedIn) {
@@ -31,30 +32,39 @@ export const Header = () => {
   }, [dispatch, isAuthenticated, isLoggedIn]); 
 
   // ログイン後の経過時間をチェック
-  const checkPassedTime = useCallback(() => {
+  const checkPassedTime = useCallback((): void => {
     const storedTimestamp = localStorage.getItem("last_login_timeStamp");
     const now = new Date();
     if (storedTimestamp) {
     const storedDate = new Date(storedTimestamp);
     const differenceTime = now.getTime() - storedDate.getTime();
-      if (differenceTime > 360000) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("last_login_timeStamp");
-        sessionStorage.removeItem("is-authenticated");
+      if (differenceTime > 60*60*1000) {
+      // アクセストークンを削除
+      localStorage.removeItem("access_token");
+      // ログイン時に記録したタイムスタンプを削除
+      localStorage.removeItem("last_login_timeStamp");
+      // ユーザー情報を削除
+      localStorage.removeItem("userInfo");
+      // 認証情報をfalseに設定
+      sessionStorage.setItem("is-authenticated", "false");
         dispatch(logout());
       }
     }
   }, [dispatch]); 
 
 
-  const handleLoginLogout = () => {
+  const handleLoginLogout = (): void => {
     if (isLoggedIn) {
       setTimeout(() => {
         navigate("/general");
       }, 250);
+      // アクセストークンを削除
       localStorage.removeItem("access_token");
+      // ログイン時に記録したタイムスタンプを削除
       localStorage.removeItem("last_login_timeStamp");
+      // ユーザー情報を削除
       localStorage.removeItem("userInfo");
+      // 認証情報をfalseに設定
       sessionStorage.setItem("is-authenticated", "false");
       dispatch(logout());
       setIsSpMenuOpen(false);
@@ -64,15 +74,23 @@ export const Header = () => {
   };
 
   // マイページ押下時の遷移処理
-  const handleMypageNavigate = () => {
+  const handleMypageNavigate = (): void => {
     setTimeout(() => {
       navigate("/general/Mypage");
     }, 250);
     setIsSpMenuOpen(false);
   }
 
+  // 会員情報変更画面の遷移処理
+  const handleUpdateMemberInfoNavigate = (): void => {
+    setTimeout(() => {
+      navigate("/general/UpdateMemberInfo");
+    }, 250);
+    setIsSpMenuOpen(false);
+  }
+
   // ログアウト状態でヘッダーの会員登録ボタンをクリックした場合の挙動
-  const handleRegistrationPageNavigate = () => {
+  const handleRegistrationPageNavigate = (): void => {
     navigate("/general/Registration")
     setIsSpMenuOpen(false);
   }
@@ -103,7 +121,7 @@ export const Header = () => {
             <>
               <button className="button my-5 mx-3">新規投稿画面</button>
               <button className="button my-5 mx-3">投稿一覧画面</button>
-              <button className="button my-5 mx-3">会員情報登録画面</button>
+              <button className="button my-5 mx-3" onClick={handleUpdateMemberInfoNavigate}>会員情報登録画面</button>
               <button className="button my-5 mx-3" onClick={handleMypageNavigate}>マイページ</button>
               <button className="button my-5 mx-3" onClick={handleLoginLogout}>ログアウト</button>
             </>

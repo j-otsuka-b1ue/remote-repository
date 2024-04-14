@@ -1,6 +1,5 @@
 import { ChangeEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useState } from "react";
 import { LabelAndTextInput } from "../molecules";
@@ -20,7 +19,7 @@ const nicknameRegex = /^[A-Za-z0-9\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]{8,}$/
 
 export const MemberRegist = () => {
 
-  const [formState, setFormState] = useState<{
+  interface RegistrationItem {
     email: string,
     password: string,
     matchPassword: string,
@@ -32,7 +31,9 @@ export const MemberRegist = () => {
     fileTypeError: string,
     selectedImage: string,
     base64String: string | null,
-  }>({
+  }
+
+  const [formState, setFormState] = useState<RegistrationItem>({
     email: "",
     password: "",
     matchPassword: "",
@@ -112,7 +113,7 @@ export const MemberRegist = () => {
   const handleSubmit = async () => {
     // リクエストボディーを設定
     const registerRequestBody = {
-      name: formState.nickname,
+      nickname: formState.nickname,
       email: formState.email,
       password: formState.password,
       password_confirm: formState.matchPassword,
@@ -173,7 +174,7 @@ export const MemberRegist = () => {
       value={formState.email}
       onChange = {handleEmailChange}
       errorMessage = {formState.emailError}
-     />
+    />
     </div>
     <div className = "my-5">
       <LabelAndTextInput
@@ -221,14 +222,14 @@ export const MemberRegist = () => {
       </div>
       {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
     </div>
-     <div className = "login-btn">
-     <Button 
-     name = "登録"
-     onClick = {handleSubmit}
-     isDisabled = {isButtonDisabled}
-     additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
-     />
-     </div>
+      <div className = "login-btn">
+      <Button 
+      name = "登録"
+      onClick = {handleSubmit}
+      isDisabled = {isButtonDisabled}
+      additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
+      />
+      </div>
     </>
   )
 }

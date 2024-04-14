@@ -14,6 +14,7 @@ import { General } from "./pages/general/general";
 import { Registration } from "./pages/general/articles/Registration";
 import { MyPage } from "./pages/general/articles/MyPage";
 import { Provider } from "react-redux";
+import { UpdateMemberInfoPage } from "./pages/general/articles/UpdateMemberInfoPage";
 import store from "./utils/store";
 
 ReactDOM.render(
@@ -30,6 +31,7 @@ ReactDOM.render(
         <Route path={"*"} element={<NotFound />} />
         <Route path={paths.articles.index + "/:id"} element={<Detail />} />
         <Route path={paths.mainRoutes.mypage} element={<MyPage/>} />
+        <Route path={paths.mainRoutes.updatememberinfo} element={<UpdateMemberInfoPage/>}/>
       </Routes>
       </BrowserRouter>
     </Provider>
