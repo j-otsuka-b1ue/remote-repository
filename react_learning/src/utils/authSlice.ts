@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface RegisterInitialState {
-  name: string;
-  email: string;
-  password: string;
-  password_confirm: string;
-  representative_image: string | null;
+  nickname?: string;
+  email?: string;
+  password?: string;
+  password_confirm?: string;
+  representative_image?: string | null;
 }
 
 interface RegistrationData {
   user_id: string;
-  name: string;
+  nickname: string;
   email: string;
   password: string;
   representative_image: string;
@@ -27,21 +27,23 @@ interface AuthState {
   registrationData: RegistrationData;
 }
 
+// 初期値設定
 const registerInitialState: RegisterInitialState = {
-  name: "",
+  nickname: "",
   email: "",
   password: "",
   password_confirm: "",
   representative_image: null,
 }
 
+// 初期値設定
 const initialState: AuthState = {
   isLoggedIn: false,
   token: null,
   registrationInfo: registerInitialState,
   registrationData: {
     user_id: "",
-    name: "",
+    nickname: "",
     email: "",
     password: "",
     representative_image: "",

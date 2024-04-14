@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 let tempStorage = {
   email: "",
   password: "",
-  name: "",
+  nickname: "",
   representative_image: "",
   userId: "",
 }
@@ -13,7 +13,7 @@ let tempStorage = {
 export const handlers = [
   rest.post("/login", (req, res, ctx) => {
     const requestBody = req.body as {
-      name: string,
+      nickname: string,
       email: string,
       password: string,
       password_confirmation: string,
@@ -33,7 +33,7 @@ export const handlers = [
     tempStorage = {
       email: requestBody.email,
       password: requestBody.password,
-      name: requestBody.name,
+      nickname: requestBody.nickname,
       representative_image: requestBody.representative_image ?? "",
       userId: userId,
     }
@@ -47,7 +47,7 @@ export const handlers = [
       ctx.json({
         user: {
           user_id: userId,
-          name: requestBody.name,
+          nickname: requestBody.nickname,
           email: requestBody.email,
           password: requestBody.password,
           representative_image: requestBody.representative_image,
@@ -75,7 +75,7 @@ export const handlers = [
         ctx.json({
           userId: tempStorage.userId,
           email: tempStorage.email,
-          name: tempStorage.name,
+          nickname: tempStorage.nickname,
           representative_image: tempStorage.representative_image,
         })
       );
@@ -113,4 +113,34 @@ export const handlers = [
       ctx.status(201),
     );
   }),
+
+  rest.put("/user/:userId", (req, res, ctx) => {
+    const requestBody = req.body as {
+      nickname: string | null,
+      email: string | null,
+      representative_image : string | null,
+    }
+
+    const { userId } = req.params;
+
+    // ストレージに保存されているuserIdと一致した場合のみ更新処理を行う
+    if(tempStorage.userId === userId) {
+      tempStorage.email = requestBody.email ?? "";
+      tempStorage.nickname = requestBody.nickname ?? "";
+      tempStorage.representative_image = requestBody.representative_image ?? "";
+
+      return res(
+        ctx.status(200),
+        ctx.json({
+          email: tempStorage.email,
+          nickname: tempStorage.nickname,
+          representative_image: tempStorage.representative_image,
+        })
+      );
+    } else {
+      return res(
+        ctx.status(500),
+      )
+    }
+  })
 ];

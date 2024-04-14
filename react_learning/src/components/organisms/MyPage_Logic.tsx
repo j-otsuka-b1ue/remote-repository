@@ -65,7 +65,7 @@ export const MyPageLogic = () => {
       fetchUserInfo();
       }
   }, [userId, navigate]); 
-
+  
   return (
     <>
     <div className="flex items-center">

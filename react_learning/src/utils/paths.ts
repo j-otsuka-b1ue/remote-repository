@@ -7,9 +7,10 @@ export const paths = {
   mainRoutes: {
     toppage: "/general",
     loginform: "/general/Login",
-    notfound: "/general/articles/NotFound",
+    notfound: "/general/NotFound",
     registration: "/general/Registration",
     mypage: "/general/MyPage",
+    updatememberinfo: "/general/UpdateMemberInfo"
     // 他のメインルート...
   },
   article: {
