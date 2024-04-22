@@ -97,6 +97,9 @@ export const UpdateMemberInfo = (): React.JSX.Element => {
         }));
       };
       reader.readAsDataURL(file);
+    } else {
+      // ファイルが選択されなかった場合、前の画像データを維持する
+      return;
     }
   };
 
@@ -125,11 +128,16 @@ export const UpdateMemberInfo = (): React.JSX.Element => {
     const userId = userInfo ? userInfo.user_id : null;
 
     try {
+      // base64Stringがnullの場合は、既存の画像データをそのまま使用する。
+      const imageToSave = formState.base64String !== null
+        ? formState.base64String
+        : registrationInfo.representative_image;
+
       // サーバーへ送信するリクエストボディーを設定。
       const updateMemberInfoRequestBody = {
         nickname: formState.nickname,
         email: formState.email,
-        representative_image: formState.base64String,
+        representative_image: imageToSave,
       }
       await axios.put(`http://localhost:3000/user/${userId}`, updateMemberInfoRequestBody, {
         headers: { 'Content-Type': 'application/json' },
@@ -151,7 +159,7 @@ export const UpdateMemberInfo = (): React.JSX.Element => {
         }
       }
     }
-  }, [formState.email, formState.nickname, formState.base64String, navigate, dispatch])
+  }, [formState.base64String, formState.nickname, formState.email, registrationInfo.representative_image, dispatch, navigate])
 
   /**
    * 「変更する」ボタン必須チェック
