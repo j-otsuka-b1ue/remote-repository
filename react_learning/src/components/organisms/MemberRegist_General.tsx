@@ -54,8 +54,8 @@ export const MemberRegist = () => {
   const handleEmailChange = (value: string) => {
     setFormState(prevState => ({
       ...prevState,
-    email: value,
-    emailError: !mailAddressRegex.test(value) ? "メールアドレスの形式で入力してください" : "",
+      email: value,
+      emailError: !mailAddressRegex.test(value) ? "メールアドレスの形式で入力してください" : "",
     }));
   }
 
@@ -63,7 +63,7 @@ export const MemberRegist = () => {
     setFormState(prevState => ({
       ...prevState,
       password: value,
-      passwordError: !passwordRegex.test(value) ? "8文字以上で入力してください" : "", 
+      passwordError: !passwordRegex.test(value) ? "8文字以上で入力してください" : "",
     }));
   }
 
@@ -74,7 +74,7 @@ export const MemberRegist = () => {
       passwordMatchError: value !== prevState.password ? "入力されたパスワードが一致しません" : "",
     }));
   };
-  
+
   const handleNickNameChange = (value: string) => {
     setFormState(prevState => ({
       ...prevState,
@@ -85,9 +85,9 @@ export const MemberRegist = () => {
 
   const handleImageClick = () => {
     if (fileInputRef.current)
-    fileInputRef.current.click();
+      fileInputRef.current.click();
   }
-  
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -107,7 +107,7 @@ export const MemberRegist = () => {
       reader.readAsDataURL(file);
     }
   };
-  
+
 
   // 「登録」ボタン押下時の処理
   const handleSubmit = async () => {
@@ -122,13 +122,13 @@ export const MemberRegist = () => {
     try {
       await axios.post('http://localhost:3000/user', registerRequestBody, {
         headers: { 'Content-Type': 'application/json' },
-      });  
+      });
       // ログインページに遷移
       navigate("/general/Login");
       // Reduxストアを更新
       dispatch(setRegisterInfo(registerRequestBody));
-    } catch(error) {
-      if(axios.isAxiosError(error)) {
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
         const statusCode = error.response ? error.response.status : null;
         switch (statusCode) {
           case 400:
@@ -153,17 +153,17 @@ export const MemberRegist = () => {
       } else {
         console.error("エラーが発生しました。", error);
       }
-  } 
+    }
   };
 
   // バリデーションエラーが発生している場合 もしくは 画像以外の項目が未入力の場合は「登録」ボタン非活性
-  const isButtonDisabled = formState.emailError !== "" 
-  || formState.passwordError !== "" 
-  || formState.nicknameError !== "" 
-  || formState.fileTypeError !== ""
-  || !formState.email 
-  || !formState.password
-  || !formState.nickname;
+  const isButtonDisabled = formState.emailError !== ""
+    || formState.passwordError !== ""
+    || formState.nicknameError !== ""
+    || formState.fileTypeError !== ""
+    || !formState.email
+    || !formState.password
+    || !formState.nickname;
 
   return (
     <>

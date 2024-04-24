@@ -14,7 +14,7 @@ export const paths = {
     // 他のメインルート...
   },
   article: {
-    add: "/general/articles/add",
+    post: "/general/article/post",
   },
   articles: {
     index: "/general/articles",
