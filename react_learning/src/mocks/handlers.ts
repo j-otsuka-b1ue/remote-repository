@@ -8,6 +8,9 @@ let tempStorage = {
   representative_image: "",
   userId: "",
 }
+
+let currentId = 0
+
 // https://mswjs.io/
 // ここにinterface仕様書のAPIを作っていく
 export const handlers = [
@@ -37,7 +40,7 @@ export const handlers = [
       representative_image: requestBody.representative_image ?? "",
       userId: userId,
     }
-    
+
     return res(
       ctx.status(200),
       ctx.status(400),
@@ -118,13 +121,13 @@ export const handlers = [
     const requestBody = req.body as {
       nickname: string | null,
       email: string | null,
-      representative_image : string | null,
+      representative_image: string | null,
     }
 
     const { userId } = req.params;
 
     // ストレージに保存されているuserIdと一致した場合のみ更新処理を行う
-    if(tempStorage.userId === userId) {
+    if (tempStorage.userId === userId) {
       tempStorage.email = requestBody.email ?? "";
       tempStorage.nickname = requestBody.nickname ?? "";
       tempStorage.representative_image = requestBody.representative_image ?? "";
@@ -142,5 +145,14 @@ export const handlers = [
         ctx.status(500),
       )
     }
+  }),
+  rest.post("/articles", (req, res, ctx) => {
+    currentId += 1;
+    return res(
+      ctx.status(200),
+      ctx.json({
+        article_id: currentId,
+      })
+    )
   })
 ];

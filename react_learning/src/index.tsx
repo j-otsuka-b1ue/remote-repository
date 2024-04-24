@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { paths } from "./utils/paths";
 import { FormPage } from "./pages/form/Form";
-import { ArticleAdd } from "./pages/general/articles/Add";
+import { ArticlePostPage } from "./pages/general/articles/ArticlePostPage";
 import { Detail } from "./pages/general/articles/Detail";
 import { NotFound } from "./pages/general/articles/NotFound";
 import { Login } from "./pages/general/articles/Login";
@@ -19,20 +19,20 @@ import store from "./utils/store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store = {store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path={paths.top} element={<App />} />
-        <Route path={paths.form} element={<FormPage />} />
-        <Route path={paths.article.add} element={<ArticleAdd />} />
-        <Route path={paths.mainRoutes.loginform} element={<Login />} />
-        <Route path={paths.mainRoutes.toppage} element={<General />} />
-        <Route path={paths.mainRoutes.registration} element={<Registration />} />
-        <Route path={"*"} element={<NotFound />} />
-        <Route path={paths.articles.index + "/:id"} element={<Detail />} />
-        <Route path={paths.mainRoutes.mypage} element={<MyPage/>} />
-        <Route path={paths.mainRoutes.updatememberinfo} element={<UpdateMemberInfoPage/>}/>
-      </Routes>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path={paths.top} element={<App />} />
+          <Route path={paths.form} element={<FormPage />} />
+          <Route path={paths.article.post} element={<ArticlePostPage />} />
+          <Route path={paths.mainRoutes.loginform} element={<Login />} />
+          <Route path={paths.mainRoutes.toppage} element={<General />} />
+          <Route path={paths.mainRoutes.registration} element={<Registration />} />
+          <Route path={"*"} element={<NotFound />} />
+          <Route path={paths.articles.index + "/:id"} element={<Detail />} />
+          <Route path={paths.mainRoutes.mypage} element={<MyPage />} />
+          <Route path={paths.mainRoutes.updatememberinfo} element={<UpdateMemberInfoPage />} />
+        </Routes>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

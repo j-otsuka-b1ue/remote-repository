@@ -12,7 +12,7 @@ export const Header = () => {
   const isLoggedIn = localStorage.getItem("access_token") !== null;
   const isAuthenticated = sessionStorage.getItem("is-authenticated") === "true";
   const [isSpMenuOpen, setIsSpMenuOpen] = useState(false);
-  
+
   //アイコン押下時にトップページに遷移
   const handleNavTop = () => {
     navigate("/general")
@@ -29,28 +29,28 @@ export const Header = () => {
     } else if (isAuthenticated && isLoggedIn) {
       dispatch(logout());
     }
-  }, [dispatch, isAuthenticated, isLoggedIn]); 
+  }, [dispatch, isAuthenticated, isLoggedIn]);
 
   // ログイン後の経過時間をチェック
   const checkPassedTime = useCallback((): void => {
     const storedTimestamp = localStorage.getItem("last_login_timeStamp");
     const now = new Date();
     if (storedTimestamp) {
-    const storedDate = new Date(storedTimestamp);
-    const differenceTime = now.getTime() - storedDate.getTime();
-      if (differenceTime > 60*60*1000) {
-      // アクセストークンを削除
-      localStorage.removeItem("access_token");
-      // ログイン時に記録したタイムスタンプを削除
-      localStorage.removeItem("last_login_timeStamp");
-      // ユーザー情報を削除
-      localStorage.removeItem("userInfo");
-      // 認証情報をfalseに設定
-      sessionStorage.setItem("is-authenticated", "false");
+      const storedDate = new Date(storedTimestamp);
+      const differenceTime = now.getTime() - storedDate.getTime();
+      if (differenceTime > 60 * 60 * 1000) {
+        // アクセストークンを削除
+        localStorage.removeItem("access_token");
+        // ログイン時に記録したタイムスタンプを削除
+        localStorage.removeItem("last_login_timeStamp");
+        // ユーザー情報を削除
+        localStorage.removeItem("userInfo");
+        // 認証情報をfalseに設定
+        sessionStorage.setItem("is-authenticated", "false");
         dispatch(logout());
       }
     }
-  }, [dispatch]); 
+  }, [dispatch]);
 
 
   const handleLoginLogout = (): void => {
@@ -77,7 +77,7 @@ export const Header = () => {
   const handleMypageNavigate = (): void => {
     setTimeout(() => {
       navigate("/general/Mypage");
-    }, 250);
+    }, 0.25 * 1000);
     setIsSpMenuOpen(false);
   }
 
@@ -85,8 +85,15 @@ export const Header = () => {
   const handleUpdateMemberInfoNavigate = (): void => {
     setTimeout(() => {
       navigate("/general/UpdateMemberInfo");
-    }, 250);
+    }, 0.25 * 1000);
     setIsSpMenuOpen(false);
+  }
+
+  // 新規投稿画面の遷移処理
+  const handleArticlePostNavigate = (): void => {
+    setTimeout(() => {
+      navigate("/general/article/post");
+    }, 0.25 * 1000);
   }
 
   // ログアウト状態でヘッダーの会員登録ボタンをクリックした場合の挙動
@@ -106,7 +113,7 @@ export const Header = () => {
     <nav className="bg-teal-300 p-4 fixed top-0 left-0 h-20 w-full z-30">
       <div className="container mx-auto flex justify-between items-center h-full">
         <div onClick={handleNavTop} className="cursor-pointer">
-          <ImageDisplay src={unknownImg} alt="ブログアイコン"/>
+          <ImageDisplay src={unknownImg} alt="ブログアイコン" />
         </div>
         <div className="z-40 md:hidden">
           {isSpMenuOpen ? (
@@ -119,9 +126,9 @@ export const Header = () => {
         <div className="hidden md:flex items-center justify-center flex-grow-0">
           {isLoggedIn ? (
             <>
-              <button className="button my-5 mx-3">新規投稿画面</button>
+              <button className="button my-5 mx-3" onClick={handleArticlePostNavigate}>新規投稿画面</button>
               <button className="button my-5 mx-3">投稿一覧画面</button>
-              <button className="button my-5 mx-3" onClick={handleUpdateMemberInfoNavigate}>会員情報登録画面</button>
+              <button className="button my-5 mx-3" onClick={handleUpdateMemberInfoNavigate}>会員情報変更画面</button>
               <button className="button my-5 mx-3" onClick={handleMypageNavigate}>マイページ</button>
               <button className="button my-5 mx-3" onClick={handleLoginLogout}>ログアウト</button>
             </>
@@ -137,40 +144,40 @@ export const Header = () => {
       {/* SP表示時のハンバーガーメニューのオーバーレイ */}
       {isSpMenuOpen && (
         <div className="fixed top-0 left-0 h-full w-full bg-opacity-90 z-20 flex flex-col items-center justify-start md:hidden bg-white pt-24">
-      {/*ログイン、もしくはログアウト状態の時に該当項目と罫線を表示させる*/}
-            {isLoggedIn && (
-              <>
+          {/*ログイン、もしくはログアウト状態の時に該当項目と罫線を表示させる*/}
+          {isLoggedIn && (
+            <>
               <button className="button mt-16" onClick={handleMypageNavigate}>マイページ</button>
-              <hr className="border-t border-black w-full"></hr>              
-              </>
-            )}
-            {!isLoggedIn && (
-              <>
+              <hr className="border-t border-black w-full"></hr>
+            </>
+          )}
+          {!isLoggedIn && (
+            <>
               <button className="button my-2" onClick={handleRegistrationPageNavigate}>会員登録</button>
-              <hr className="border-t border-black w-full"></hr>              
-              </>
-            )}
-            {isLoggedIn && (
-              <>
-              <button className="button my-2">新規投稿画面</button>
-              <hr className="border-t border-black w-full"></hr>              
-              </>
-            )}
-            {isLoggedIn && (
-              <>
+              <hr className="border-t border-black w-full"></hr>
+            </>
+          )}
+          {isLoggedIn && (
+            <>
+              <button className="button my-2" onClick={handleArticlePostNavigate}>新規投稿画面</button>
+              <hr className="border-t border-black w-full"></hr>
+            </>
+          )}
+          {isLoggedIn && (
+            <>
               <button className="button my-2">投稿一覧画面</button>
-              <hr className="border-t border-black w-full"></hr>              
-              </>
-            )}
-            {isLoggedIn && (
-              <>
+              <hr className="border-t border-black w-full"></hr>
+            </>
+          )}
+          {isLoggedIn && (
+            <>
               <button className="button my-2">会員情報変更画面</button>
               <hr className="border-t border-black w-full"></hr>
-              </>
-            )}
-            <button className="button mt-2" onClick={handleLoginLogout}>
-              {isAuthenticated ? "ログアウト" : "ログイン"}
-            </button>
+            </>
+          )}
+          <button className="button mt-2" onClick={handleLoginLogout}>
+            {isAuthenticated ? "ログアウト" : "ログイン"}
+          </button>
         </div>
       )}
     </nav>
