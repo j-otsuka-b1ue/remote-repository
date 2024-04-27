@@ -3,6 +3,8 @@ import { Button } from "../atoms";
 import { useCallback, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setArticleId } from "../../utils/authSlice";
 
 export const ArticlePost = (): React.JSX.Element => {
 
@@ -18,6 +20,9 @@ export const ArticlePost = (): React.JSX.Element => {
 
   /** ナビゲート関数利用フック */
   const navigate = useNavigate();
+
+  /** dispatch利用フック */
+  const dispatch = useDispatch();
 
   // 記事タイトル変更時の処理
   const handleArticleTitleOnChange = useCallback((value: string): void => {
@@ -43,9 +48,13 @@ export const ArticlePost = (): React.JSX.Element => {
       content: formState.content,
     }
     try {
-      await axios.post("http://localhost:3000/articles", articleRequestBody, {
+      const response = await axios.post("http://localhost:3000/articles", articleRequestBody, {
         headers: { 'Content-Type': 'application/json' },
-      })
+      });
+      const getArticleId = response.data;
+      const articleId = JSON.parse(getArticleId.article_id);
+      dispatch(setArticleId(articleId));
+      setTimeout(() => navigate(`/general/article/detail/${articleId}`), 250)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const responseStatusCode = error.response ? error.response.status : null;
@@ -73,9 +82,7 @@ export const ArticlePost = (): React.JSX.Element => {
         console.error("エラーが発生しました。", error);
       }
     }
-  }, [formState.content, formState.title, navigate]);
-
-  const errorMsg = "";
+  }, [dispatch, formState.content, formState.title, navigate]);
 
   // 記事タイトル もしくは 記事内容が未入力の場合はボタンを非活性にする
   const isPostButtonDisabled = formState.title === "" || formState.content === "";
@@ -88,7 +95,6 @@ export const ArticlePost = (): React.JSX.Element => {
           value={formState.title}
           placeholder="タイトル"
           onChange={handleArticleTitleOnChange}
-          errorMessage={errorMsg}
         />
       </div>
       <div className="my-5">
@@ -97,7 +103,6 @@ export const ArticlePost = (): React.JSX.Element => {
           value={formState.content}
           placeholder=""
           onChange={handleArticleContentOnChange}
-          errorMessage={errorMsg}
         />
       </div>
       <div className="login-btn">

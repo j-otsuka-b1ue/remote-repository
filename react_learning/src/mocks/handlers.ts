@@ -9,7 +9,18 @@ let tempStorage = {
   userId: "",
 }
 
-let currentId = 0
+// 記事が作成された時点での情報の型定義
+interface TempArticlePostStorage {
+  id?: number;
+  title: string;
+  content: string;
+  created_at: Date;
+  updated_at: Date;
+  nickname: string;
+}
+
+// 記事データを格納するための配列
+let articles: TempArticlePostStorage[] = [];
 
 // https://mswjs.io/
 // ここにinterface仕様書のAPIを作っていく
@@ -147,12 +158,48 @@ export const handlers = [
     }
   }),
   rest.post("/articles", (req, res, ctx) => {
-    currentId += 1;
+
+    const { title, content } = req.body as TempArticlePostStorage;
+
+    // 新しい記事オブジェクトを作成
+    const newArticle: TempArticlePostStorage = {
+      id: articles.length + 1,
+      title: title,
+      content: content,
+      created_at: new Date(),
+      updated_at: new Date(),
+      nickname: tempStorage.nickname,
+    }
+
+    // 記事を配列に追加
+    articles.push(newArticle);
+
+    // 生成されたidをレスポンスとしてクライアントに返す
     return res(
       ctx.status(200),
       ctx.json({
-        article_id: currentId,
+        article_id: newArticle.id,
       })
     )
+  }),
+  // 記事詳細取得API(指定されたidと合致する記事の情報をクライアント側に返す)
+  rest.get("/articles/:article_id", (req, res, ctx) => {
+    const articleId = parseInt(Array.isArray(req.params.article_id)
+      ? req.params.article_id[0]
+      : req.params.article_id, 10);
+
+    const article = articles.find((article: TempArticlePostStorage) => article.id === articleId)
+
+    if (article) {
+      // 記事が見つかった場合、その記事データをレスポンスとして返す
+      return res(
+        ctx.status(200),
+        ctx.json(article)
+      );
+    } else {
+      return res(
+        ctx.status(404),
+      )
+    }
   })
 ];

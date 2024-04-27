@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { paths } from "./utils/paths";
 import { FormPage } from "./pages/form/Form";
 import { ArticlePostPage } from "./pages/general/articles/ArticlePostPage";
-import { Detail } from "./pages/general/articles/Detail";
+import { ArticleDetailPage } from "./pages/general/articles/ArticleDetailPage";
 import { NotFound } from "./pages/general/articles/NotFound";
 import { Login } from "./pages/general/articles/Login";
 import { General } from "./pages/general/general";
@@ -29,7 +29,7 @@ ReactDOM.render(
           <Route path={paths.mainRoutes.toppage} element={<General />} />
           <Route path={paths.mainRoutes.registration} element={<Registration />} />
           <Route path={"*"} element={<NotFound />} />
-          <Route path={paths.articles.index + "/:id"} element={<Detail />} />
+          <Route path={paths.article.detail + "/:articleId"} element={<ArticleDetailPage />} />
           <Route path={paths.mainRoutes.mypage} element={<MyPage />} />
           <Route path={paths.mainRoutes.updatememberinfo} element={<UpdateMemberInfoPage />} />
         </Routes>

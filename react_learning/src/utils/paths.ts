@@ -15,6 +15,7 @@ export const paths = {
   },
   article: {
     post: "/general/article/post",
+    detail: "/general/article/detail",
   },
   articles: {
     index: "/general/articles",
