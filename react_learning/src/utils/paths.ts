@@ -20,5 +20,6 @@ export const paths = {
   articles: {
     index: "/general/articles",
     detail: (id: string) => `/general/articles/${id}`,
+    lists: "/general/articles/lists",
   },
 };

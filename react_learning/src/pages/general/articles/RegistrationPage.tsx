@@ -1,5 +1,5 @@
 import React from "react";
-import { MemberRegist } from "../../../components/organisms/MemberRegist_General"
+import { MemberRegist } from "../../../components/organisms/MemberRegistGeneral"
 import { Header } from "../../../components/organisms/Header";
 import { Title } from "../../../components/organisms/Title";
 

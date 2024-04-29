@@ -96,6 +96,13 @@ export const Header = () => {
     }, 0.25 * 1000);
   }
 
+  // 投稿一覧画面の遷移処理
+  const handleArticleListsNavigate = (): void => {
+    setTimeout(() => {
+      navigate("/general/articles/lists");
+    }, 0.25 * 1000);
+  }
+
   // ログアウト状態でヘッダーの会員登録ボタンをクリックした場合の挙動
   const handleRegistrationPageNavigate = (): void => {
     navigate("/general/Registration")
@@ -127,7 +134,7 @@ export const Header = () => {
           {isLoggedIn ? (
             <>
               <button className="button my-5 mx-3" onClick={handleArticlePostNavigate}>新規投稿画面</button>
-              <button className="button my-5 mx-3">投稿一覧画面</button>
+              <button className="button my-5 mx-3" onClick={handleArticleListsNavigate}>投稿一覧画面</button>
               <button className="button my-5 mx-3" onClick={handleUpdateMemberInfoNavigate}>会員情報変更画面</button>
               <button className="button my-5 mx-3" onClick={handleMypageNavigate}>マイページ</button>
               <button className="button my-5 mx-3" onClick={handleLoginLogout}>ログアウト</button>
@@ -165,13 +172,13 @@ export const Header = () => {
           )}
           {isLoggedIn && (
             <>
-              <button className="button my-2">投稿一覧画面</button>
+              <button className="button my-2" onClick={handleArticleListsNavigate}>投稿一覧画面</button>
               <hr className="border-t border-black w-full"></hr>
             </>
           )}
           {isLoggedIn && (
             <>
-              <button className="button my-2">会員情報変更画面</button>
+              <button className="button my-2" onClick={handleUpdateMemberInfoNavigate}>会員情報変更画面</button>
               <hr className="border-t border-black w-full"></hr>
             </>
           )}

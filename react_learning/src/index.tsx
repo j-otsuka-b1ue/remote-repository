@@ -5,16 +5,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { paths } from "./utils/paths";
-import { FormPage } from "./pages/form/Form";
+import { FormPage } from "./pages/form/FormPage";
 import { ArticlePostPage } from "./pages/general/articles/ArticlePostPage";
 import { ArticleDetailPage } from "./pages/general/articles/ArticleDetailPage";
-import { NotFound } from "./pages/general/articles/NotFound";
-import { Login } from "./pages/general/articles/Login";
+import { NotFound } from "./pages/general/articles/NotFoundPage";
+import { Login } from "./pages/general/articles/LoginPage";
 import { General } from "./pages/general/general";
-import { Registration } from "./pages/general/articles/Registration";
+import { Registration } from "./pages/general/articles/RegistrationPage";
 import { MyPage } from "./pages/general/articles/MyPage";
 import { Provider } from "react-redux";
 import { UpdateMemberInfoPage } from "./pages/general/articles/UpdateMemberInfoPage";
+import { ArticleShowListsPage } from "./pages/general/articles/ArticleShowListsPage";
+
 import store from "./utils/store";
 
 ReactDOM.render(
@@ -32,6 +34,7 @@ ReactDOM.render(
           <Route path={paths.article.detail + "/:articleId"} element={<ArticleDetailPage />} />
           <Route path={paths.mainRoutes.mypage} element={<MyPage />} />
           <Route path={paths.mainRoutes.updatememberinfo} element={<UpdateMemberInfoPage />} />
+          <Route path={paths.articles.lists} element={<ArticleShowListsPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>

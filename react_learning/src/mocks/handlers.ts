@@ -11,7 +11,7 @@ let tempStorage = {
 
 // 記事が作成された時点での情報の型定義
 interface TempArticlePostStorage {
-  id?: number;
+  id: number;
   title: string;
   content: string;
   created_at: Date;
@@ -21,6 +21,29 @@ interface TempArticlePostStorage {
 
 // 記事データを格納するための配列
 let articles: TempArticlePostStorage[] = [];
+
+// 記事一覧ページへのレスポンスデータの型定義
+interface ArticleResponseData {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  first_page_url: string;
+  last_page_url: string;
+  next_page_url: string | null;
+  prev_page_url: string | null;
+  path: string;
+  from: number;
+  to: number;
+  data:
+  {
+    article_id: number;
+    title: string;
+    content: string;
+    created_at: Date;
+    updated_at: Date;
+  }[];
+}
 
 // https://mswjs.io/
 // ここにinterface仕様書のAPIを作っていく
@@ -201,5 +224,45 @@ export const handlers = [
         ctx.status(404),
       )
     }
+  }),
+  // 記事一覧取得API
+  rest.get("/general/articles/lists", (req, res, ctx) => {
+    // ページネーションのパラメータを取得
+    const page = parseInt(req.url.searchParams.get("page") || "1", 10);
+    const perPage = parseInt(req.url.searchParams.get("perPage") || "10", 10);
+
+    // データの抽出とページネーションの処理を行う
+    const startIndex = (page - 1) * perPage;
+    const endIndex = Math.min(startIndex + perPage, articles.length);
+    const paginatedArticles = articles.slice(startIndex, endIndex);
+
+    const totalArticles = articles.length;
+    const lastPage = Math.ceil(totalArticles / perPage);
+
+    return res(
+      ctx.status(200),
+      ctx.json<ArticleResponseData>({
+        total: articles.length,
+        per_page: perPage,
+        current_page: page,
+        last_page: lastPage,
+        first_page_url: `/articles?page=1`,
+        last_page_url: `articles?page=${Math.ceil(articles.length / perPage)}`,
+        next_page_url: page < Math.ceil(articles.length / perPage)
+          ? `/articles?page=${page + 1}`
+          : null,
+        prev_page_url: page > 1 ? `/articles?page=${page - 1}` : null,
+        path: "http://localhost:3000/general/articles/lists",
+        from: startIndex + 1,
+        to: endIndex,
+        data: paginatedArticles.map(article => ({
+          article_id: article.id,
+          title: article.title,
+          content: article.content,
+          created_at: article.created_at,
+          updated_at: article.updated_at,
+        }))
+      })
+    )
   })
 ];

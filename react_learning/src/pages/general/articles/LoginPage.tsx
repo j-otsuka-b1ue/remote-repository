@@ -1,16 +1,15 @@
 import { Header } from "../../../components/organisms/Header";
 import { Title } from "../../../components/organisms/Title";
-import { MyPageLogic } from "../../../components/organisms/MyPage";
+import { LoginForm } from "../../../components/organisms/Login";
 
-export const MyPage = () => {
+export const Login = () => {
   return (
     <>
       <Header />
       <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20 mt-6">
-        <Title>マイページ</Title>
+        <Title>ログイン</Title>
         <br></br>
-        <br></br>
-        <MyPageLogic />
+        <LoginForm />
       </div>
     </>
   )

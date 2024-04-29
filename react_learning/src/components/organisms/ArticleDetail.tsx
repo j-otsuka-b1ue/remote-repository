@@ -51,7 +51,7 @@ export const ShowArticleDetail = (): React.JSX.Element => {
       fetchArticleDetail();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [article_id]);
 
 
   return (

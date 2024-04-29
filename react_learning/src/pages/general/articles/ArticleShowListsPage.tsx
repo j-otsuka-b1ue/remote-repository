@@ -1,15 +1,15 @@
 import { Header } from "../../../components/organisms/Header";
 import { Title } from "../../../components/organisms/Title";
-import { LoginForm } from "../../../components/organisms/Login_Logic";
+import { ShowArticleLists } from "../../../components/organisms/ArticleLists";
 
-export const Login = () => {
+export const ArticleShowListsPage = (): React.JSX.Element => {
   return (
     <>
-      <Header />
+      <Header></Header>
       <div className="justify-center items-center mx-6 max-w-md md:mx-auto text-gray-500 py-20 mt-6">
-        <Title>ログイン</Title>
+        <Title>投稿一覧画面</Title>
         <br></br>
-        <LoginForm />
+        <ShowArticleLists></ShowArticleLists>
       </div>
     </>
   )
