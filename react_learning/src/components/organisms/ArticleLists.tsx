@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TableLists } from "../molecules/Table";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 export const ShowArticleLists = (): React.JSX.Element => {
+
+  const { page: pageParam } = useParams<{ page?: string }>();
+  const initialPage = parseInt(pageParam ?? '1', 10);
+  const isMounted = useRef(true);
 
   interface Post {
     id: number;
@@ -15,58 +19,64 @@ export const ShowArticleLists = (): React.JSX.Element => {
   // TableListコンポーネントのProps定義
   interface TableListProps<Post> {
     data: Post[];
-    colums: Array<{
+    columns: Array<{
       Header: string;
       accessor: keyof Post | ((instance: Post) => JSX.Element)
     }>;
+    id?: string;
   }
 
-  const columns: TableListProps<Post>['colums'] = [
+  const columns: TableListProps<Post>['columns'] = [
     {
       Header: "タイトル",
       accessor: "title",
     },
     {
       Header: "投稿内容",
-      accessor: (post: Post) => (
+      accessor: (post: Post) =>
         <Link
           to={`/general/article/detail/${post.id}`}
-          style={{ textDecoration: 'underline' }}
+          style={{
+            textDecoration: 'underline',
+            color: 'blue',
+          }}
         >
           {post.content}
-        </Link>
-      ),
+        </Link>,
     }
   ];
 
   // 現在のページ番号と最大ページ数を管理するステート
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [pageCount, setPageCount] = useState(5);
 
   // 記事データを管理するステート
   const [post, setPost] = useState<Post[]>([]);
 
-  /**
-   * ページ変更時の処理
-   */
-  const handlePageOnChange = (selectedItem: { selected: number }) => {
-    setCurrentPage(selectedItem.selected);
-    // ページ番号が変更されたら新しいページのデータを取得する
-    fetchArticleLists(selectedItem.selected + 1);
-  }
+  const navigate = useNavigate();
+
 
   /**
    * 初期表示処理
    */
   const fetchArticleLists = async (page: number): Promise<void> => {
     try {
-      const response = await axios.get(`http://localhost:3000/general/articles/lists?page=${page}`);
-      // APIから取得したページ数に更新する
-      setPageCount(response.data.last_page);
-      // APIから取得した記事データを更新する
-      setPost(response.data.data);
+      if (isNaN(page)) {
+        navigate(`/general/articles/lists/page=1`,
+          { replace: true });
+        setCurrentPage(1);
+        return;
+      }
+      const url = `http://localhost:3000/general/articles/lists?page=${page}`;
+      const response = await axios.get(url);
+      if (isMounted.current) {
+        // APIから取得したページ数に更新する
+        setPageCount(response.data.last_page);
+        // APIから取得した記事データを更新する
+        setPost(response.data.data);
+      }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (axios.isAxiosError(error) && isMounted.current) {
         const statusCode = error.response ? error.response.status : null;
         switch (statusCode) {
           case (400):
@@ -76,18 +86,54 @@ export const ShowArticleLists = (): React.JSX.Element => {
           default:
             console.error("予期せぬエラーが発生しました。");
         }
-      } else {
+      } else if (isMounted.current) {
         console.error("エラーが発生しました。", error);
       }
     }
   }
 
   /**
-   * 初期表示処理を実行する
+   * 初期表示処理
+   * ページパラメータ変更時にデータを取得
+   */
+
+  useEffect(() => {
+    fetchArticleLists(currentPage);
+
+    if (!pageParam) {
+      navigate(`/general/articles/lists/page=${currentPage}`, { replace: true });
+    }
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, [currentPage, navigate, pageParam]);
+
+
+  /**
+   * ページ番号の変更処理
    */
   useEffect(() => {
-    fetchArticleLists(1);
-  }, [])
+    if (pageParam) {
+      const newPage = parseInt(pageParam, 10);
+      if (!isNaN(newPage) && newPage !== currentPage) {
+        setCurrentPage(newPage);
+      }
+    }
+  }, [pageParam])
+
+  /**
+   * ページ変更時の処理
+   */
+  const handlePageOnChange = (selectedItem: { selected: number }) => {
+    const newPage = selectedItem.selected + 1;
+    setCurrentPage(newPage);
+    // ページ番号が変更されたら新しいページのデータを取得する
+    fetchArticleLists(selectedItem.selected + 1);
+
+    navigate(`/general/articles/lists/page=${newPage}`, { replace: true });
+  }
+
 
   return (
     <>
@@ -119,7 +165,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
             : ""},
         `}
         breakLinkClassName={"mx-1 px-3 py-1 border rounded hover:bg-gray-200"}
-        activeClassName={"text-blue-600 text-bold"}
+        activeClassName={"text-blue-600 text-bold "}
       />
     </>
   )

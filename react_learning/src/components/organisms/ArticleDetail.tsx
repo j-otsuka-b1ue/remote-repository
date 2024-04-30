@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { RootState } from "../../utils/store";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export const ShowArticleDetail = (): React.JSX.Element => {
 
@@ -14,29 +15,46 @@ export const ShowArticleDetail = (): React.JSX.Element => {
   const [articleContent, setArticleContent] = useState<String>("");
   const [articleNickName, setArticleNickName] = useState<String>("");
 
+
   /**
    * 初期表示処理
    */
   // 前画面で発行されたarticle_idを取得する
   const article_id = useSelector((state: RootState) => state.article.article_id);
+
+  // useParamsフックを使ってURLのパラメータを取得する
+  const { articleId } = useParams();
+
   // 記事詳細取得APIを実行する
   const fetchArticleDetail = async (): Promise<void> => {
     try {
-      const response = await axios.get(`http://localhost:3000/articles/${article_id}`);
+      const response = await axios.get(`http://localhost:3000/articles/${articleId}`);
       console.log(response.data);
 
-      // レスポンスデータの中からタイトルを取得する
-      const articleTitleData = response.data.title;
-      setArticleTitle(articleTitleData);
+      const articleIdFromResponse = response.data.id;
 
-      // レスポンスデータの中から内容を取得する
-      const articleContentData = response.data.content;
-      setArticleContent(articleContentData);
+      console.log(articleIdFromResponse);
+      console.log(articleId);
 
-      // レスポンスデータの中からユーザネームを取得する
-      const articleUserNameData = response.data.nickname;
-      setArticleNickName(articleUserNameData);
 
+      if (articleId !== undefined) {
+
+        if (parseInt(articleId) === articleIdFromResponse) {
+          // レスポンスデータの中からタイトルを取得する
+          const articleTitleData = response.data.title;
+          setArticleTitle(articleTitleData);
+
+          // レスポンスデータの中から内容を取得する
+          const articleContentData = response.data.content;
+          setArticleContent(articleContentData);
+
+          // レスポンスデータの中からユーザネームを取得する
+          const articleUserNameData = response.data.nickname;
+          setArticleNickName(articleUserNameData);
+        } else {
+          console.error("記事が見つかりませんでした");
+        }
+      }
     } catch (error) {
       console.log(error);
     }
