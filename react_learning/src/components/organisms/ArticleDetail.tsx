@@ -2,28 +2,24 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
-import { RootState } from "../../utils/store";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 export const ShowArticleDetail = (): React.JSX.Element => {
 
   /** 記事タイトル、記事内容のstate */
-  const [articleTitle, setArticleTitle] = useState<String>("");
-  const [articleContent, setArticleContent] = useState<String>("");
-  const [articleNickName, setArticleNickName] = useState<String>("");
+  const [articleTitle, setArticleTitle] = useState<string>("");
+  const [articleContent, setArticleContent] = useState<string>("");
+  const [articleNickName, setArticleNickName] = useState<string>("");
 
 
   /**
    * 初期表示処理
    */
-  // 前画面で発行されたarticle_idを取得する
-  const article_id = useSelector((state: RootState) => state.article.article_id);
 
   // useParamsフックを使ってURLのパラメータを取得する
-  const { articleId } = useParams();
+  const { articleId } = useParams<{ articleId?: string }>();
 
   // 記事詳細取得APIを実行する
   const fetchArticleDetail = async (): Promise<void> => {
@@ -35,10 +31,7 @@ export const ShowArticleDetail = (): React.JSX.Element => {
 
       console.log(articleIdFromResponse);
       console.log(articleId);
-
-
       if (articleId !== undefined) {
-
         if (parseInt(articleId) === articleIdFromResponse) {
           // レスポンスデータの中からタイトルを取得する
           const articleTitleData = response.data.title;
@@ -65,11 +58,12 @@ export const ShowArticleDetail = (): React.JSX.Element => {
    */
 
   useEffect(() => {
-    if (article_id) {
+    if (articleId) {
       fetchArticleDetail();
+    } else {
+      console.log("No article ID provided");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [article_id]);
+  }, [articleId]);
 
 
   return (

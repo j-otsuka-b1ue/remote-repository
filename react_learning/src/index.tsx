@@ -30,11 +30,11 @@ ReactDOM.render(
           <Route path={paths.mainRoutes.loginform} element={<Login />} />
           <Route path={paths.mainRoutes.toppage} element={<General />} />
           <Route path={paths.mainRoutes.registration} element={<Registration />} />
-          <Route path={"*"} element={<NotFound />} />
           <Route path={paths.article.detail + "/:articleId"} element={<ArticleDetailPage />} />
           <Route path={paths.mainRoutes.mypage} element={<MyPage />} />
           <Route path={paths.mainRoutes.updatememberinfo} element={<UpdateMemberInfoPage />} />
-          <Route path={paths.articles.lists} element={<ArticleShowListsPage />} />
+          <Route path={paths.articles.lists + "/:page"} element={<ArticleShowListsPage />} />
+          <Route path={"*"} element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </Provider>

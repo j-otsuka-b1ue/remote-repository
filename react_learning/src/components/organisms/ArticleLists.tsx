@@ -11,7 +11,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
   const isMounted = useRef(true);
 
   interface Post {
-    id: number;
+    article_id: number;
     title: string;
     content: string;
   }
@@ -35,7 +35,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
       Header: "投稿内容",
       accessor: (post: Post) =>
         <Link
-          to={`/general/article/detail/${post.id}`}
+          to={`/general/article/detail/${post.article_id}`}
           style={{
             textDecoration: 'underline',
             color: 'blue',
@@ -69,14 +69,14 @@ export const ShowArticleLists = (): React.JSX.Element => {
       }
       const url = `http://localhost:3000/general/articles/lists?page=${page}`;
       const response = await axios.get(url);
-      if (isMounted.current) {
-        // APIから取得したページ数に更新する
-        setPageCount(response.data.last_page);
-        // APIから取得した記事データを更新する
-        setPost(response.data.data);
-      }
+      console.log(response.data)
+      // APIから取得したページ数に更新する
+      setPageCount(response.data.last_page);
+      // APIから取得した記事データを更新する
+      setPost(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
-      if (axios.isAxiosError(error) && isMounted.current) {
+      if (axios.isAxiosError(error)) {
         const statusCode = error.response ? error.response.status : null;
         switch (statusCode) {
           case (400):
@@ -134,6 +134,8 @@ export const ShowArticleLists = (): React.JSX.Element => {
     navigate(`/general/articles/lists/page=${newPage}`, { replace: true });
   }
 
+  console.log(currentPage);
+
 
   return (
     <>
@@ -154,13 +156,13 @@ export const ShowArticleLists = (): React.JSX.Element => {
         pageLinkClassName={"mx-3 px-3 py-1 border rounded hover:bg-gray-200"}
         previousLinkClassName=
         {`mx-3 px-3 py-1 border rounded hover:bg-gray-200 
-          ${currentPage === 0
+          ${currentPage === 1
             ? "opacity-50 cursor-not-allowed"
             : ""},
           `}
         nextLinkClassName=
         {`mx-3 px-3 py-1 border rounded hover:bg-gray-200
-          ${currentPage === pageCount - 1
+          ${currentPage === pageCount
             ? "opacity-50 cursor-not-allowed"
             : ""},
         `}

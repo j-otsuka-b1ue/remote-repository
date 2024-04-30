@@ -242,16 +242,16 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json<ArticleResponseData>({
-        total: articles.length,
+        total: totalArticles,
         per_page: perPage,
         current_page: page,
         last_page: lastPage,
-        first_page_url: `/articles?page=1`,
-        last_page_url: `articles?page=${Math.ceil(articles.length / perPage)}`,
+        first_page_url: `/articles/lists?page=1`,
+        last_page_url: `/articles/lists?page=${Math.ceil(articles.length / perPage)}`,
         next_page_url: page < Math.ceil(articles.length / perPage)
-          ? `/articles?page=${page + 1}`
+          ? `/articles/lists?page=${page + 1}`
           : null,
-        prev_page_url: page > 1 ? `/articles?page=${page - 1}` : null,
+        prev_page_url: page > 1 ? `/articles/lists?page=${page - 1}` : null,
         path: "http://localhost:3000/general/articles/lists",
         from: startIndex + 1,
         to: endIndex,

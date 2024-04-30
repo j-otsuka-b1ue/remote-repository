@@ -6,7 +6,7 @@ type Props<T extends object> = {
 }
 
 interface Post {
-  id: number;
+  article_id: number;
   title: string;
   content: string;
 }

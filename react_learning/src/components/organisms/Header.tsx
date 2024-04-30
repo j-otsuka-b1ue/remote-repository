@@ -99,7 +99,7 @@ export const Header = () => {
   // 投稿一覧画面の遷移処理
   const handleArticleListsNavigate = (): void => {
     setTimeout(() => {
-      navigate("/general/articles/lists");
+      navigate("/general/articles/lists/page=1");
     }, 0.25 * 1000);
   }
 
