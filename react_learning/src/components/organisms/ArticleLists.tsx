@@ -70,7 +70,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
       const url = `http://localhost:3000/general/articles/lists?page=${page}`;
       const response = await axios.get(url);
       // レスポンスからページ数と記事データを更新
-      // setPageCount(response.data.last_page);
+      setPageCount(response.data.last_page);
       setPost(response.data.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -143,7 +143,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
         previousLabel={"◀︎"}
         nextLabel={"▶︎"}
         breakLabel={"..."}
-        pageCount={5}
+        pageCount={pageCount}
         onPageChange={handlePageOnChange}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
