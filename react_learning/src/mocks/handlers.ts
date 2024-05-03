@@ -229,29 +229,44 @@ export const handlers = [
   rest.get("/general/articles/lists", (req, res, ctx) => {
     // ページネーションのパラメータを取得
     const page = parseInt(req.url.searchParams.get("page") || "1", 10);
-    const perPage = parseInt(req.url.searchParams.get("perPage") || "10", 10);
+    const perPage = 10;
+    const totalArticles = articles.length;
 
-    // データの抽出とページネーションの処理を行う
-    const startIndex = (page - 1) * perPage;
-    const endIndex = Math.min(startIndex + perPage, articles.length);
+    let lastPage: number;
+    if (totalArticles <= 50) {
+      // 記事数が50件以下の場合は最大5ページまで
+      lastPage = 5;
+    } else {
+      // 記事数が51件以上の場合はそれに応じたページ数を計算
+      lastPage = Math.ceil(totalArticles / perPage);
+    }
+
+    // 現在のページ番号が最大ページ番号を超えないように制限
+    const currentPage = Math.min(page, lastPage);
+
+    // ページネーションのためのインデックスを計算
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = Math.min(startIndex + perPage, totalArticles);
+
+    // 現在のページに表示する記事を検出
     const paginatedArticles = articles.slice(startIndex, endIndex);
 
-    const totalArticles = articles.length;
-    const lastPage = Math.ceil(totalArticles / perPage);
+
+
 
     return res(
       ctx.status(200),
       ctx.json<ArticleResponseData>({
         total: totalArticles,
         per_page: perPage,
-        current_page: page,
+        current_page: currentPage,
         last_page: lastPage,
         first_page_url: `/articles/lists?page=1`,
-        last_page_url: `/articles/lists?page=${Math.ceil(articles.length / perPage)}`,
-        next_page_url: page < Math.ceil(articles.length / perPage)
-          ? `/articles/lists?page=${page + 1}`
+        last_page_url: `/articles/lists?page=${lastPage}`,
+        next_page_url: currentPage < lastPage
+          ? `/articles/lists?page=${currentPage + 1}`
           : null,
-        prev_page_url: page > 1 ? `/articles/lists?page=${page - 1}` : null,
+        prev_page_url: currentPage > 1 ? `/articles/lists?page=${currentPage - 1}` : null,
         path: "http://localhost:3000/general/articles/lists",
         from: startIndex + 1,
         to: endIndex,

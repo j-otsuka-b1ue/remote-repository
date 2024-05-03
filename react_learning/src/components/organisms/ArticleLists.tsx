@@ -69,7 +69,8 @@ export const ShowArticleLists = (): React.JSX.Element => {
       }
       const url = `http://localhost:3000/general/articles/lists?page=${page}`;
       const response = await axios.get(url);
-      // APIから取得した記事データを更新する
+      // レスポンスからページ数と記事データを更新
+      // setPageCount(response.data.last_page);
       setPost(response.data.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -151,13 +152,13 @@ export const ShowArticleLists = (): React.JSX.Element => {
         previousLinkClassName=
         {`mx-3 px-3 py-1 border rounded hover:bg-gray-200 
           ${currentPage === 1
-            ? "opacity-50 cursor-not-allowed"
+            ? "opacity-50 cursor-not-allowed select-none"
             : ""},
           `}
         nextLinkClassName=
         {`mx-3 px-3 py-1 border rounded hover:bg-gray-200
           ${currentPage === pageCount
-            ? "opacity-50 cursor-not-allowed"
+            ? "opacity-50 cursor-not-allowed select-none"
             : ""},
         `}
         breakLinkClassName={"mx-1 px-3 py-1 border rounded hover:bg-gray-200"}
