@@ -69,12 +69,8 @@ export const ShowArticleLists = (): React.JSX.Element => {
       }
       const url = `http://localhost:3000/general/articles/lists?page=${page}`;
       const response = await axios.get(url);
-      console.log(response.data)
-      // APIから取得したページ数に更新する
-      setPageCount(response.data.last_page);
       // APIから取得した記事データを更新する
       setPost(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const statusCode = error.response ? error.response.status : null;
@@ -133,8 +129,6 @@ export const ShowArticleLists = (): React.JSX.Element => {
 
     navigate(`/general/articles/lists/page=${newPage}`, { replace: true });
   }
-
-  console.log(currentPage);
 
 
   return (

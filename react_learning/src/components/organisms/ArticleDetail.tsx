@@ -25,12 +25,9 @@ export const ShowArticleDetail = (): React.JSX.Element => {
   const fetchArticleDetail = async (): Promise<void> => {
     try {
       const response = await axios.get(`http://localhost:3000/articles/${articleId}`);
-      console.log(response.data);
 
       const articleIdFromResponse = response.data.id;
 
-      console.log(articleIdFromResponse);
-      console.log(articleId);
       if (articleId !== undefined) {
         if (parseInt(articleId) === articleIdFromResponse) {
           // レスポンスデータの中からタイトルを取得する
