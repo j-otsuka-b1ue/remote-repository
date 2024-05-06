@@ -10,6 +10,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
   const initialPage = parseInt(pageParam ?? '1', 10);
   const isMounted = useRef(true);
 
+  // 記事データの情報型定義
   interface Post {
     article_id: number;
     title: string;
@@ -53,6 +54,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
   // 記事データを管理するステート
   const [post, setPost] = useState<Post[]>([]);
 
+  // Navigate関数利用フック
   const navigate = useNavigate();
 
 
@@ -61,6 +63,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
    */
   const fetchArticleLists = async (page: number): Promise<void> => {
     try {
+      // ページ番号がNaNの場合は、1ページ目に移動する
       if (isNaN(page)) {
         navigate(`/general/articles/lists/page=1`,
           { replace: true });
@@ -104,30 +107,33 @@ export const ShowArticleLists = (): React.JSX.Element => {
     return () => {
       isMounted.current = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, navigate, pageParam]);
 
 
   /**
    * ページ番号の変更処理
    */
-  useEffect(() => {
+  useEffect((): void => {
     if (pageParam) {
       const newPage = parseInt(pageParam, 10);
       if (!isNaN(newPage) && newPage !== currentPage) {
         setCurrentPage(newPage);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageParam])
 
   /**
    * ページ変更時の処理
    */
-  const handlePageOnChange = (selectedItem: { selected: number }) => {
+  const handlePageOnChange = (selectedItem: { selected: number }): void => {
     const newPage = selectedItem.selected + 1;
     setCurrentPage(newPage);
     // ページ番号が変更されたら新しいページのデータを取得する
     fetchArticleLists(selectedItem.selected + 1);
 
+    // 現在のページからページ数を1足したページに移動する
     navigate(`/general/articles/lists/page=${newPage}`, { replace: true });
   }
 
