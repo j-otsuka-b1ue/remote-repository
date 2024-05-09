@@ -74,7 +74,13 @@ export const ShowArticleLists = (): React.JSX.Element => {
       const response = await axios.get(url);
       // レスポンスからページ数と記事データを更新
       setPageCount(response.data.last_page);
-      setPost(response.data.data);
+
+      // 記事データを取得し、データが存在しない箇所は空のデータを表示させる
+      const filledPosts = [...response.data.data];
+      while (filledPosts.length < 10) {
+        filledPosts.push({ artcile_id: 0, title: "", content: "" });
+      }
+      setPost(filledPosts);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const statusCode = error.response ? error.response.status : null;
@@ -141,7 +147,7 @@ export const ShowArticleLists = (): React.JSX.Element => {
   return (
     <>
       <TableLists
-        data={post}
+        data={post.length > 0 ? post : []}
         columns={columns}
       />
       <br></br>

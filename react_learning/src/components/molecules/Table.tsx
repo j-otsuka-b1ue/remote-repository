@@ -1,10 +1,5 @@
 import { Column, useTable, Accessor, UseTableOptions } from "react-table";
 
-type Props<T extends object> = {
-  data: T[];
-  columns: Column<T>[];
-}
-
 interface Post {
   article_id: number;
   title: string;
@@ -45,21 +40,30 @@ export const TableLists = ({ data, columns }: TableListProps): React.JSX.Element
         ))}
       </thead>
       <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
-        {rows.map(row => {
-          prepareRow(row);
-          return (
-            // 各ボディの行にborderを適用
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => (
-                // 各ボディセルにpaddingとborderを適用
-                <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap">
-                  {cell.render('Cell')}
-                </td>
-              ))}
-            </tr>
-          );
-        })}
+        {rows.length === 0 ? (
+          // データが0件の場合は空の行を表示する
+          <tr>
+            {columns.map((_, index) => (
+              <td key={index} className="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+            ))}
+          </tr>
+        ) : (
+          rows.map(row => {
+            prepareRow(row);
+            return (
+              // 各ボディの行にborderを適用
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => (
+                  // 各ボディセルにpaddingとborderを適用
+                  <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap">
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })
+        )}
       </tbody>
     </table>
-  );
-}
+  )
+};
