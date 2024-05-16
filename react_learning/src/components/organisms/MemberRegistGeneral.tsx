@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { LabelAndTextInput } from "../molecules";
-import { Button } from "../atoms/Button";
+import { CommonButton } from "../atoms/Button";
 import unknownImg from "../../images/img_1705691905.png"
 import { ImageDisplay } from "../atoms/ImageDisplay";
 import { useDispatch } from "react-redux";
 import { setRegisterInfo } from "../../utils/authSlice";
-
+import useDspErrorMessage from "../atoms/DspErrorMessage";
+import { Modal, Box, Button, Typography, Fade } from "@mui/material";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 //メールアドレスの形式を確認する。
 const mailAddressRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -17,7 +19,11 @@ const passwordRegex = /^[A-Za-z0-9]{8,}$/;
 //ニックネームの形式を確認する
 const nicknameRegex = /^[A-Za-z0-9\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]{8,}$/;
 
+
 export const MemberRegist = () => {
+
+  // エラーメッセージ利用フック
+  const getErrorMessage = useDspErrorMessage();
 
   interface RegistrationItem {
     email: string,
@@ -47,6 +53,18 @@ export const MemberRegist = () => {
     base64String: null,
   });
 
+  // モーダルウィンドウ開閉状態
+  const [open, setOpen] = useState(false);
+  // モーダルを開く
+  const handleModalOpen = () => setOpen(true);
+  // モーダルを閉じる
+  const hadnleModalClose = () => {
+    // 開閉状態の更新
+    setOpen(false);
+    // ログインページへ遷移
+    navigate("/general/Login");
+  }
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -55,7 +73,9 @@ export const MemberRegist = () => {
     setFormState(prevState => ({
       ...prevState,
       email: value,
-      emailError: !mailAddressRegex.test(value) ? "メールアドレスの形式で入力してください" : "",
+      emailError: !mailAddressRegex.test(value)
+        ? getErrorMessage({ messageID: "m02E", firstReplaceElement: "メールアドレス" })
+        : "",
     }));
   }
 
@@ -63,7 +83,9 @@ export const MemberRegist = () => {
     setFormState(prevState => ({
       ...prevState,
       password: value,
-      passwordError: !passwordRegex.test(value) ? "8文字以上で入力してください" : "",
+      passwordError: !passwordRegex.test(value)
+        ? getErrorMessage({ messageID: "m03E", firstReplaceElement: "8" })
+        : "",
     }));
   }
 
@@ -71,7 +93,9 @@ export const MemberRegist = () => {
     setFormState(prevState => ({
       ...prevState,
       matchPassword: value,
-      passwordMatchError: value !== prevState.password ? "入力されたパスワードが一致しません" : "",
+      passwordMatchError: value !== prevState.password
+        ? getErrorMessage({ messageID: "m04E", firstReplaceElement: "パスワード" })
+        : "",
     }));
   };
 
@@ -79,7 +103,13 @@ export const MemberRegist = () => {
     setFormState(prevState => ({
       ...prevState,
       nickname: value,
-      nicknameError: !nicknameRegex.test(value) ? "ニックネームは8文字以上で入力してください" : "",
+      nicknameError: !nicknameRegex.test(value)
+        ? getErrorMessage({
+          messageID: "m05E",
+          firstReplaceElement: "ニックネーム",
+          secondReplaceElement: "8"
+        })
+        : "",
     }));
   };
 
@@ -123,8 +153,8 @@ export const MemberRegist = () => {
       await axios.post('http://localhost:3000/user', registerRequestBody, {
         headers: { 'Content-Type': 'application/json' },
       });
-      // ログインページに遷移
-      navigate("/general/Login");
+      // モーダルウィンドウを開く
+      handleModalOpen();
       // Reduxストアを更新
       dispatch(setRegisterInfo(registerRequestBody));
     } catch (error) {
@@ -167,69 +197,109 @@ export const MemberRegist = () => {
 
   return (
     <>
-    <div className = "my-5">
-    <LabelAndTextInput
-      labelTitle="ログインID(メールアドレス)"
-      placeholder=""
-      value={formState.email}
-      onChange = {handleEmailChange}
-      errorMessage = {formState.emailError}
-    />
-    </div>
-    <div className = "my-5">
-      <LabelAndTextInput
-        labelTitle="パスワード(英数字8文字以上)"
-        placeholder=""
-        value={formState.password}
-        onChange = {handlePasswordChange}
-        errorMessage = {formState.passwordError}
-        type = "password"
-      />
-    </div>
-    <div className = "my-5">
-      <LabelAndTextInput
-      labelTitle="パスワード(確認)"
-      placeholder=""
-      value={formState.matchPassword}
-      onChange = {handlePasswordMatchChange}
-      errorMessage = {formState.passwordMatchError}
-      type = "password"
-      />
-    </div>
-    <div className = "my-5">
-      <LabelAndTextInput
-      labelTitle="ニックネーム(8文字以上)"
-      placeholder=""
-      value={formState.nickname}
-      onChange = {handleNickNameChange}
-      errorMessage = {formState.nicknameError}
-      type = "password"
-      />
-    </div>
-    <div className = "my-5">
-      <label>ユーザーアイコン画像</label>
-      <input
-        type="file"
-        style={{ display: 'none' }}
-        ref={fileInputRef}
-        onChange={handleFileChange}
-      />
-      <div className = "rounded-full cursor-pointer justify-center items-center flex" onClick = {handleImageClick}> 
-        <ImageDisplay 
-          src = {formState.selectedImage}
-          alt = "ユーザーアイコン画像"
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="ログインID(メールアドレス)"
+          placeholder=""
+          value={formState.email}
+          onChange={handleEmailChange}
+          errorMessage={formState.emailError}
         />
       </div>
-      {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
-    </div>
-      <div className = "login-btn">
-      <Button 
-      name = "登録"
-      onClick = {handleSubmit}
-      isDisabled = {isButtonDisabled}
-      additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
-      />
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="パスワード(英数字8文字以上)"
+          placeholder=""
+          value={formState.password}
+          onChange={handlePasswordChange}
+          errorMessage={formState.passwordError}
+          type="password"
+        />
       </div>
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="パスワード(確認)"
+          placeholder=""
+          value={formState.matchPassword}
+          onChange={handlePasswordMatchChange}
+          errorMessage={formState.passwordMatchError}
+          type="password"
+        />
+      </div>
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="ニックネーム(8文字以上)"
+          placeholder=""
+          value={formState.nickname}
+          onChange={handleNickNameChange}
+          errorMessage={formState.nicknameError}
+          type="password"
+        />
+      </div>
+      <div className="my-5">
+        <label>ユーザーアイコン画像</label>
+        <input
+          type="file"
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+        <div className="rounded-full cursor-pointer justify-center items-center flex" onClick={handleImageClick}>
+          <ImageDisplay
+            src={formState.selectedImage}
+            alt="ユーザーアイコン画像"
+          />
+        </div>
+        {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
+      </div>
+      <div className="login-btn">
+        <CommonButton
+          name="登録"
+          onClick={handleSubmit}
+          isDisabled={isButtonDisabled}
+          additionalClasses="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
+        />
+      </div>
+      <Modal
+        open={open}
+        onClose={hadnleModalClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2 }}>
+              <CheckCircleIcon color="success" sx={{ fontSize: 40 }} />
+              <Typography id="modal-title" variant="h6" component="h2" sx={{ ml: 1 }}>
+                Registration Successfully
+              </Typography>
+            </Box>
+            <Typography id="modal-description" sx={{ mt: 3, textAlign: "center" }}>
+              会員登録に成功しました。<br></br>
+              ログイン画面に遷移します。
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+              <Button variant="contained" color="primary" onClick={hadnleModalClose}>
+                閉じる
+              </Button>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   )
 }
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  right: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #1976d2',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '5px',
+};

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button } from "../atoms/index"
+import { CommonButton } from "../atoms/index"
 import { LabelAndTextInput } from "../molecules";
 
 export const RegisterForm = () => {
@@ -269,7 +269,7 @@ export const RegisterForm = () => {
                   onChange={handleInputChange('zipcode')}
                 />
                 <div>
-                  <Button
+                  <CommonButton
                     name="検索"
                     onClick={handleSearch}
                     isDisabled={!isZipcodeFormValid(formErrors)}
@@ -307,7 +307,7 @@ export const RegisterForm = () => {
                 onChange={handleInputChange('houseNumber')}
               />
               <div className="btn-field">
-                <Button
+                <CommonButton
                   name="登録"
                   isDisabled={!isFormValid()}
                 />

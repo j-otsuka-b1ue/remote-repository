@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../../../utils/paths";
-import { Button } from "../../../atoms";
+import { CommonButton } from "../../../atoms";
 import { LabelAndTextInput, LabelAndTextArea } from "../../../molecules";
 import { reducer } from "./modules/reducer";
 import type { InputForm, RequestBody } from "./modules/types";
@@ -9,29 +9,29 @@ import type { InputForm, RequestBody } from "./modules/types";
 
 export const requiredError = "入力が必須の項目です。";
 export const initialState: InputForm = {
-    shouldShowError: false,
-    title: {
-        value: "",
-        errorMessage: requiredError,
-    },
-    description: {
-        value: "",
-        errorMessage: requiredError,
-    },
+  shouldShowError: false,
+  title: {
+    value: "",
+    errorMessage: requiredError,
+  },
+  description: {
+    value: "",
+    errorMessage: requiredError,
+  },
 };
 export const PostForm: React.FC = () => {
   const navigate = useNavigate();
   const [formState, dispatch] = useReducer(reducer, initialState);
 
-  const { shouldShowError,title, description } = formState;
+  const { shouldShowError, title, description } = formState;
 
   const clickPostButton = async () => {
-      if(!shouldShowError){
-          dispatch({
-              type:'showErrorMessage'
-          })
-      }
-      if(title.errorMessage !==undefined || description.errorMessage !== undefined) return;
+    if (!shouldShowError) {
+      dispatch({
+        type: 'showErrorMessage'
+      })
+    }
+    if (title.errorMessage !== undefined || description.errorMessage !== undefined) return;
 
     const body: RequestBody = {
       user_id: "hoge", // TODO ログイン機能仕込んだらuserId指定してあげてね
@@ -75,8 +75,8 @@ export const PostForm: React.FC = () => {
                 title: value,
               },
             });
-          } }
-          errorMessage={shouldShowError ? title.errorMessage : undefined}       />
+          }}
+          errorMessage={shouldShowError ? title.errorMessage : undefined} />
       </div>
 
       <div className="mb-5">
@@ -97,7 +97,7 @@ export const PostForm: React.FC = () => {
       </div>
 
       <div className="submit-btn">
-        <Button
+        <CommonButton
           name="投稿する"
           onClick={clickPostButton}
         />

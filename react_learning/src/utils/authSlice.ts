@@ -27,6 +27,10 @@ interface AuthState {
   registrationData: RegistrationData;
 }
 
+interface ArticleIdData {
+  article_id: number | null;
+}
+
 // 初期値設定
 const registerInitialState: RegisterInitialState = {
   nickname: "",
@@ -51,7 +55,12 @@ const initialState: AuthState = {
     created_at: null,
     updated_at: null,
     deleted_at: null,
-  }
+  },
+}
+
+// 初期値設定
+const articleIdInitialState: ArticleIdData = {
+  article_id: null,
 }
 
 export const authSlice = createSlice({
@@ -75,9 +84,21 @@ export const authSlice = createSlice({
     },
     setRegisterInfo: (state, action: PayloadAction<RegisterInitialState>) => {
       state.registrationInfo = action.payload;
-    }
+    },
   },
-});
+},);
+
+export const articleSlice = createSlice({
+  name: "article",
+  initialState: articleIdInitialState,
+  reducers: {
+    setArticleId: (state, action: PayloadAction<number | null>) => {
+      state.article_id = action.payload;
+    }
+  }
+})
 
 export const { login, logout, setLoggedIn, setRegisterInfo } = authSlice.actions;
+export const { setArticleId } = articleSlice.actions;
+export const articleReducer = articleSlice.reducer;
 export default authSlice.reducer;

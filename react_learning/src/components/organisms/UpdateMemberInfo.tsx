@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import unknownImg from "../../images/unknown.png";
 import { setRegisterInfo } from "../../utils/authSlice";
 import { RootState } from "../../utils/store";
-import { Button } from "../atoms";
+import { CommonButton } from "../atoms";
 import { ImageDisplay } from "../atoms/ImageDisplay";
 import { LabelAndTextInput } from "../molecules";
 
@@ -208,7 +208,7 @@ export const UpdateMemberInfo = (): React.JSX.Element => {
         {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
       </div>
       <div className="login-btn">
-        <Button
+        <CommonButton
           name="変更する"
           onClick={updateMemberInfo}
           isDisabled={isButtonDisabled}
