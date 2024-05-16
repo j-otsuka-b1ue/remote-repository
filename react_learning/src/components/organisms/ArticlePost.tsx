@@ -1,5 +1,5 @@
 import { LabelAndTextArea, LabelAndTextInput } from "../molecules";
-import { Button } from "../atoms";
+import { CommonButton } from "../atoms";
 import { useCallback, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -106,7 +106,7 @@ export const ArticlePost = (): React.JSX.Element => {
         />
       </div>
       <div className="login-btn">
-        <Button
+        <CommonButton
           name="投稿する"
           onClick={createArticlePost}
           isDisabled={isPostButtonDisabled}

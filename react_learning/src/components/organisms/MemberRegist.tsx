@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button } from "../atoms/index"
+import { CommonButton } from "../atoms/index"
 import { LabelAndTextInput } from "../molecules";
 
 export const MemberRegist = () => {
@@ -50,7 +50,7 @@ export const MemberRegist = () => {
       city: '',
       houseNumber: ''
     }
-  
+
     //郵便番号検索ボタンのバリデーション
     if (name === 'realName' && value === '') {
       newErrors.realName = '入力してください';
@@ -184,108 +184,108 @@ export const MemberRegist = () => {
         <div className="formContainer">
           <div className="uiForm">
             <div className="form-field">
-              <LabelAndTextInput 
-               labelTitle = "名前"
-               errorMessage = {formErrors.realName}
-               placeholder = "名前"
-               value = {formData.realName}
-               name = "realName"
-               onChange={handleInputChange('realName')}
+              <LabelAndTextInput
+                labelTitle="名前"
+                errorMessage={formErrors.realName}
+                placeholder="名前"
+                value={formData.realName}
+                name="realName"
+                onChange={handleInputChange('realName')}
               />
             </div>
             <div className="form-field">
-              <LabelAndTextInput 
-               labelTitle = "ユーザー名(任意)"
-               errorMessage = {formErrors.userName}
-               placeholder = "ユーザー名(任意)"
-               value = {formData.userName}
-               name = "userName"
-               onChange={handleInputChange('userName')}
+              <LabelAndTextInput
+                labelTitle="ユーザー名(任意)"
+                errorMessage={formErrors.userName}
+                placeholder="ユーザー名(任意)"
+                value={formData.userName}
+                name="userName"
+                onChange={handleInputChange('userName')}
               />
             </div>
             <div className="form-field">
-              <LabelAndTextInput 
-               labelTitle = "メールアドレス"
-               errorMessage = {formErrors.mailAddress}
-               placeholder = "sample@example.com"
-               value = {formData.mailAddress}
-               name = "userName"
-               onChange={handleInputChange('mailAddress')}
+              <LabelAndTextInput
+                labelTitle="メールアドレス"
+                errorMessage={formErrors.mailAddress}
+                placeholder="sample@example.com"
+                value={formData.mailAddress}
+                name="userName"
+                onChange={handleInputChange('mailAddress')}
               />
             </div>
             <div className="form-field">
-               <LabelAndTextInput 
-               labelTitle = "パスワード"
-               errorMessage = {formErrors.password}
-               placeholder = "パスワード"
-               value = {formData.password}
-               name = "password"
-               onChange={handleInputChange('password')}
+              <LabelAndTextInput
+                labelTitle="パスワード"
+                errorMessage={formErrors.password}
+                placeholder="パスワード"
+                value={formData.password}
+                name="password"
+                onChange={handleInputChange('password')}
               />
             </div>
             <div className="form-field">
-            <LabelAndTextInput 
-               labelTitle = "パスワード(確認)"
-               errorMessage = {formErrors.passwordConfirm}
-               placeholder = "パスワード(確認)"
-               value = {formData.passwordConfirm}
-               name = "password"
-               onChange={handleInputChange('passwordConfirm')}
+              <LabelAndTextInput
+                labelTitle="パスワード(確認)"
+                errorMessage={formErrors.passwordConfirm}
+                placeholder="パスワード(確認)"
+                value={formData.passwordConfirm}
+                name="password"
+                onChange={handleInputChange('passwordConfirm')}
               />
             </div>
             <div className="form-field">
-              <div className = "zip-parts">
-              <LabelAndTextInput 
-                labelTitle = "郵便番号"
-                errorMessage = {formErrors.zipcode}
-                placeholder = "0123456"
-                value = {formData.zipcode}
-                name = "zipcode"
-                onChange={handleInputChange('zipcode')}
-              />
-               <div>
-                 <Button 
-                   name = "検索" 
-                   onClick = {handleSearch} 
-                   isDisabled = {!isZipcodeFormValid(formErrors)}
-                 />
-               </div>
+              <div className="zip-parts">
+                <LabelAndTextInput
+                  labelTitle="郵便番号"
+                  errorMessage={formErrors.zipcode}
+                  placeholder="0123456"
+                  value={formData.zipcode}
+                  name="zipcode"
+                  onChange={handleInputChange('zipcode')}
+                />
+                <div>
+                  <CommonButton
+                    name="検索"
+                    onClick={handleSearch}
+                    isDisabled={!isZipcodeFormValid(formErrors)}
+                  />
+                </div>
               </div>
             </div>
             <div className="form-field">
-              <LabelAndTextInput 
-               labelTitle = "都道府県"
-               errorMessage = {formErrors.prefectures}
-               placeholder = "都道府県"
-               value = {formData.prefectures}
-               name = "prefectures"
-               onChange={handleInputChange('prefectures')}
+              <LabelAndTextInput
+                labelTitle="都道府県"
+                errorMessage={formErrors.prefectures}
+                placeholder="都道府県"
+                value={formData.prefectures}
+                name="prefectures"
+                onChange={handleInputChange('prefectures')}
               />
             </div>
             <div className="form-field">
-            <LabelAndTextInput 
-               labelTitle = "市区町村"
-               errorMessage = {formErrors.city}
-               placeholder = "市区町村"
-               value = {formData.city}
-               name = "city"
-               onChange={handleInputChange('city')}
+              <LabelAndTextInput
+                labelTitle="市区町村"
+                errorMessage={formErrors.city}
+                placeholder="市区町村"
+                value={formData.city}
+                name="city"
+                onChange={handleInputChange('city')}
               />
             </div>
             <div className="form-field">
-              <LabelAndTextInput 
-               labelTitle = "番地"
-               errorMessage = {formErrors.houseNumber}
-               placeholder = "番地"
-               value = {formData.houseNumber}
-               name = "houseNumber"
-               onChange={handleInputChange('houseNumber')}
+              <LabelAndTextInput
+                labelTitle="番地"
+                errorMessage={formErrors.houseNumber}
+                placeholder="番地"
+                value={formData.houseNumber}
+                name="houseNumber"
+                onChange={handleInputChange('houseNumber')}
               />
               <div className="btn-field">
-               <Button 
-                name = "登録" 
-                isDisabled = {!isFormValid()}
-               />
+                <CommonButton
+                  name="登録"
+                  isDisabled={!isFormValid()}
+                />
               </div>
             </div>
           </div>

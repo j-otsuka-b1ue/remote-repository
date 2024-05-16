@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../../../utils/paths";
-import { Button } from "../../../atoms";
+import { CommonButton } from "../../../atoms";
 import { LabelAndTextInput, LabelAndTextArea } from "../../../molecules";
 import { reducer } from "./modules/reducer";
 import type { InputForm, RequestBody } from "./modules/types";
@@ -97,7 +97,7 @@ export const PostForm: React.FC = () => {
       </div>
 
       <div className="submit-btn">
-        <Button
+        <CommonButton
           name="投稿する"
           onClick={clickPostButton}
         />
