@@ -167,68 +167,68 @@ export const MemberRegist = () => {
 
   return (
     <>
-    <div className = "my-5">
-    <LabelAndTextInput
-      labelTitle="ログインID(メールアドレス)"
-      placeholder=""
-      value={formState.email}
-      onChange = {handleEmailChange}
-      errorMessage = {formState.emailError}
-    />
-    </div>
-    <div className = "my-5">
-      <LabelAndTextInput
-        labelTitle="パスワード(英数字8文字以上)"
-        placeholder=""
-        value={formState.password}
-        onChange = {handlePasswordChange}
-        errorMessage = {formState.passwordError}
-        type = "password"
-      />
-    </div>
-    <div className = "my-5">
-      <LabelAndTextInput
-      labelTitle="パスワード(確認)"
-      placeholder=""
-      value={formState.matchPassword}
-      onChange = {handlePasswordMatchChange}
-      errorMessage = {formState.passwordMatchError}
-      type = "password"
-      />
-    </div>
-    <div className = "my-5">
-      <LabelAndTextInput
-      labelTitle="ニックネーム(8文字以上)"
-      placeholder=""
-      value={formState.nickname}
-      onChange = {handleNickNameChange}
-      errorMessage = {formState.nicknameError}
-      type = "password"
-      />
-    </div>
-    <div className = "my-5">
-      <label>ユーザーアイコン画像</label>
-      <input
-        type="file"
-        style={{ display: 'none' }}
-        ref={fileInputRef}
-        onChange={handleFileChange}
-      />
-      <div className = "rounded-full cursor-pointer justify-center items-center flex" onClick = {handleImageClick}> 
-        <ImageDisplay 
-          src = {formState.selectedImage}
-          alt = "ユーザーアイコン画像"
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="ログインID(メールアドレス)"
+          placeholder=""
+          value={formState.email}
+          onChange={handleEmailChange}
+          errorMessage={formState.emailError}
         />
       </div>
-      {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
-    </div>
-      <div className = "login-btn">
-      <Button 
-      name = "登録"
-      onClick = {handleSubmit}
-      isDisabled = {isButtonDisabled}
-      additionalClasses = "bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
-      />
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="パスワード(英数字8文字以上)"
+          placeholder=""
+          value={formState.password}
+          onChange={handlePasswordChange}
+          errorMessage={formState.passwordError}
+          type="password"
+        />
+      </div>
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="パスワード(確認)"
+          placeholder=""
+          value={formState.matchPassword}
+          onChange={handlePasswordMatchChange}
+          errorMessage={formState.passwordMatchError}
+          type="password"
+        />
+      </div>
+      <div className="my-5">
+        <LabelAndTextInput
+          labelTitle="ニックネーム(8文字以上)"
+          placeholder=""
+          value={formState.nickname}
+          onChange={handleNickNameChange}
+          errorMessage={formState.nicknameError}
+          type="password"
+        />
+      </div>
+      <div className="my-5">
+        <label>ユーザーアイコン画像</label>
+        <input
+          type="file"
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+        <div className="rounded-full cursor-pointer justify-center items-center flex" onClick={handleImageClick}>
+          <ImageDisplay
+            src={formState.selectedImage}
+            alt="ユーザーアイコン画像"
+          />
+        </div>
+        {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
+      </div>
+      <div className="login-btn">
+        <Button
+          name="登録"
+          onClick={handleSubmit}
+          isDisabled={isButtonDisabled}
+          additionalClasses="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded mx-2"
+        />
       </div>
     </>
   )

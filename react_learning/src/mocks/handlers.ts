@@ -8,6 +8,43 @@ let tempStorage = {
   representative_image: "",
   userId: "",
 }
+
+// 記事が作成された時点での情報の型定義
+interface TempArticlePostStorage {
+  id: number;
+  title: string;
+  content: string;
+  created_at: Date;
+  updated_at: Date;
+  nickname: string;
+}
+
+// 記事データを格納するための配列
+let articles: TempArticlePostStorage[] = [];
+
+// 記事一覧ページへのレスポンスデータの型定義
+interface ArticleResponseData {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  first_page_url: string;
+  last_page_url: string;
+  next_page_url: string | null;
+  prev_page_url: string | null;
+  path: string;
+  from: number;
+  to: number;
+  data:
+  {
+    article_id: number;
+    title: string;
+    content: string;
+    created_at: Date;
+    updated_at: Date;
+  }[];
+}
+
 // https://mswjs.io/
 // ここにinterface仕様書のAPIを作っていく
 export const handlers = [
@@ -37,7 +74,7 @@ export const handlers = [
       representative_image: requestBody.representative_image ?? "",
       userId: userId,
     }
-    
+
     return res(
       ctx.status(200),
       ctx.status(400),
@@ -118,13 +155,13 @@ export const handlers = [
     const requestBody = req.body as {
       nickname: string | null,
       email: string | null,
-      representative_image : string | null,
+      representative_image: string | null,
     }
 
     const { userId } = req.params;
 
     // ストレージに保存されているuserIdと一致した場合のみ更新処理を行う
-    if(tempStorage.userId === userId) {
+    if (tempStorage.userId === userId) {
       tempStorage.email = requestBody.email ?? "";
       tempStorage.nickname = requestBody.nickname ?? "";
       tempStorage.representative_image = requestBody.representative_image ?? "";
@@ -142,5 +179,105 @@ export const handlers = [
         ctx.status(500),
       )
     }
+  }),
+  rest.post("/articles", (req, res, ctx) => {
+
+    const { title, content } = req.body as TempArticlePostStorage;
+
+    // 新しい記事オブジェクトを作成
+    const newArticle: TempArticlePostStorage = {
+      id: articles.length + 1,
+      title: title,
+      content: content,
+      created_at: new Date(),
+      updated_at: new Date(),
+      nickname: tempStorage.nickname,
+    }
+
+    // 記事を配列に追加
+    articles.push(newArticle);
+
+    // 生成されたidをレスポンスとしてクライアントに返す
+    return res(
+      ctx.status(200),
+      ctx.json({
+        article_id: newArticle.id,
+      })
+    )
+  }),
+  // 記事詳細取得API(指定されたidと合致する記事の情報をクライアント側に返す)
+  rest.get("/articles/:article_id", (req, res, ctx) => {
+    const articleId = parseInt(Array.isArray(req.params.article_id)
+      ? req.params.article_id[0]
+      : req.params.article_id, 10);
+
+    const article = articles.find((article: TempArticlePostStorage) => article.id === articleId)
+
+    if (article) {
+      // 記事が見つかった場合、その記事データをレスポンスとして返す
+      return res(
+        ctx.status(200),
+        ctx.json(article)
+      );
+    } else {
+      return res(
+        ctx.status(404),
+      )
+    }
+  }),
+  // 記事一覧取得API
+  rest.get("/general/articles/lists", (req, res, ctx) => {
+    // ページネーションのパラメータを取得
+    const page = parseInt(req.url.searchParams.get("page") || "1", 10);
+    const perPage = 10;
+    const totalArticles = articles.length;
+
+    let lastPage: number;
+    if (totalArticles <= 50) {
+      // 記事数が50件以下の場合は最大5ページまで
+      lastPage = 5;
+    } else {
+      // 記事数が51件以上の場合はそれに応じたページ数を計算
+      lastPage = Math.ceil(totalArticles / perPage);
+    }
+
+    // 現在のページ番号が最大ページ番号を超えないように制限
+    const currentPage = Math.min(page, lastPage);
+
+    // ページネーションのためのインデックスを計算
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = Math.min(startIndex + perPage, totalArticles);
+
+    // 現在のページに表示する記事を検出
+    const paginatedArticles = articles.slice(startIndex, endIndex);
+
+
+
+
+    return res(
+      ctx.status(200),
+      ctx.json<ArticleResponseData>({
+        total: totalArticles,
+        per_page: perPage,
+        current_page: currentPage,
+        last_page: lastPage,
+        first_page_url: `/articles/lists?page=1`,
+        last_page_url: `/articles/lists?page=${lastPage}`,
+        next_page_url: currentPage < lastPage
+          ? `/articles/lists?page=${currentPage + 1}`
+          : null,
+        prev_page_url: currentPage > 1 ? `/articles/lists?page=${currentPage - 1}` : null,
+        path: "http://localhost:3000/general/articles/lists",
+        from: startIndex + 1,
+        to: endIndex,
+        data: paginatedArticles.map(article => ({
+          article_id: article.id,
+          title: article.title,
+          content: article.content,
+          created_at: article.created_at,
+          updated_at: article.updated_at,
+        }))
+      })
+    )
   })
 ];

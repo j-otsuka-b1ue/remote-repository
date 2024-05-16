@@ -1,4 +1,3 @@
-import React from "react";
 import { Title } from "../../../components/organisms/Title";
 import { Header } from "../../../components/organisms/Header";
 import { ArticlePost } from "../../../components/organisms/ArticlePost";

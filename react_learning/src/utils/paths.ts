@@ -15,9 +15,11 @@ export const paths = {
   },
   article: {
     post: "/general/article/post",
+    detail: "/general/article/detail",
   },
   articles: {
     index: "/general/articles",
     detail: (id: string) => `/general/articles/${id}`,
+    lists: "/general/articles/lists",
   },
 };
