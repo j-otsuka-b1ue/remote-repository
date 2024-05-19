@@ -1,16 +1,21 @@
-import { ChangeEvent, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
-import { LabelAndTextInput } from "../molecules";
-import { CommonButton } from "../atoms/Button";
-import unknownImg from "../../images/img_1705691905.png"
-import { ImageDisplay } from "../atoms/ImageDisplay";
-import { useDispatch } from "react-redux";
-import { setRegisterInfo } from "../../utils/authSlice";
-import useDspErrorMessage from "../atoms/DspErrorMessage";
-import { Modal, Box, Button, Typography, Fade } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Box, Button, Fade, Modal, Typography } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
+import { ChangeEvent, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import unknownImg from "../../images/img_1705691905.png";
+import { setRegisterInfo } from "../../utils/authSlice";
+import { CommonButton } from "../atoms/Button";
+import { ComboboxOptionsOfGender } from "../atoms/ComboboxOptions";
+import useDspErrorMessage from "../atoms/DspErrorMessage";
+import { ImageDisplay } from "../atoms/ImageDisplay";
+import { TextLabel } from "../atoms/TextLabel";
+import { LabelAndTextInput } from "../molecules";
+import { LabelAndCheckBox } from "../molecules/LabelAndCheckBox";
+
 
 //メールアドレスの形式を確認する。
 const mailAddressRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,6 +29,8 @@ export const MemberRegist = () => {
 
   // エラーメッセージ利用フック
   const getErrorMessage = useDspErrorMessage();
+
+  // 
 
   interface RegistrationItem {
     email: string,
@@ -233,7 +240,16 @@ export const MemberRegist = () => {
           value={formState.nickname}
           onChange={handleNickNameChange}
           errorMessage={formState.nicknameError}
-          type="password"
+        />
+      </div>
+      <div className="my-5">
+        <TextLabel
+          labelTitle="性別"
+        />
+        <Autocomplete
+          options={ComboboxOptionsOfGender}
+          sx={{ width: 450, height: 50 }}
+          renderInput={(params) => <TextField {...params} label="" />}
         />
       </div>
       <div className="my-5">
@@ -251,6 +267,16 @@ export const MemberRegist = () => {
           />
         </div>
         {formState.fileTypeError && <span className="text-sm text-red-400 mt-1">{formState.fileTypeError}</span>}
+      </div>
+      <div>
+        <LabelAndCheckBox
+          labelTitle="新機能やアップデートに関するお知らせを受け取る。"
+        />
+      </div>
+      <div>
+        <LabelAndCheckBox
+          labelTitle="投稿が完了した際に通知を受け取る。"
+        />
       </div>
       <div className="login-btn">
         <CommonButton

@@ -60,6 +60,7 @@ export const ShowArticleDetail = (): React.JSX.Element => {
     } else {
       console.log("No article ID provided");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [articleId]);
 
 
