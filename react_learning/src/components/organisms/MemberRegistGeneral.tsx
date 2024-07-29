@@ -16,7 +16,6 @@ import { TextLabel } from "../atoms/TextLabel";
 import { LabelAndTextInput } from "../molecules";
 import { LabelAndCheckBox } from "../molecules/LabelAndCheckBox";
 
-
 //メールアドレスの形式を確認する。
 const mailAddressRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 //パスワードの形式を確認する
@@ -25,12 +24,13 @@ const passwordRegex = /^[A-Za-z0-9]{8,}$/;
 const nicknameRegex = /^[A-Za-z0-9\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]{8,}$/;
 
 
-export const MemberRegist = () => {
+export const MemberRegist = (): React.JSX.Element => {
 
   // エラーメッセージ利用フック
   const getErrorMessage = useDspErrorMessage();
 
-  // 
+  // デートピッカー状態管理
+  const [selectDate, setSelectDate] = useState<Date | null>(null);
 
   interface RegistrationItem {
     email: string,
@@ -41,6 +41,9 @@ export const MemberRegist = () => {
     passwordError: string,
     passwordMatchError: string,
     nicknameError: string,
+    birthYear: string,
+    birthMonth: string,
+    birthDay: string,
     fileTypeError: string,
     selectedImage: string,
     base64String: string | null,
@@ -51,6 +54,9 @@ export const MemberRegist = () => {
     password: "",
     matchPassword: "",
     nickname: "",
+    birthYear: "",
+    birthMonth: "",
+    birthDay: "",
     emailError: "",
     passwordError: "",
     passwordMatchError: "",
@@ -120,6 +126,30 @@ export const MemberRegist = () => {
     }));
   };
 
+  const handleBirthYearOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFormState(prevState => ({
+      ...prevState,
+      birthYear: value,
+    }))
+  }
+
+  const handleBirthMonthOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value;
+    setFormState(prevState => ({
+      ...prevState,
+      birthMonth: value,
+    }))
+  }
+
+  const handleBirthDayOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value;
+    setFormState(prevState => ({
+      ...prevState,
+      birthDay: value,
+    }))
+  }
+
   const handleImageClick = () => {
     if (fileInputRef.current)
       fileInputRef.current.click();
@@ -154,6 +184,9 @@ export const MemberRegist = () => {
       email: formState.email,
       password: formState.password,
       password_confirm: formState.matchPassword,
+      birthYear: formState.birthYear,
+      birthMonth: formState.birthMonth,
+      birthDay: formState.birthDay,
       representative_image: formState.base64String?.replace(/^data:image\/jpeg;base64,/, "") ?? null
     };
     try {
@@ -205,6 +238,7 @@ export const MemberRegist = () => {
   return (
     <>
       <div className="my-5">
+        <span style={{ color: "red" }}>*</span>
         <LabelAndTextInput
           labelTitle="ログインID(メールアドレス)"
           placeholder=""
@@ -214,6 +248,7 @@ export const MemberRegist = () => {
         />
       </div>
       <div className="my-5">
+        <span style={{ color: "red" }}>*</span>
         <LabelAndTextInput
           labelTitle="パスワード(英数字8文字以上)"
           placeholder=""
@@ -224,6 +259,7 @@ export const MemberRegist = () => {
         />
       </div>
       <div className="my-5">
+        <span style={{ color: "red" }}>*</span>
         <LabelAndTextInput
           labelTitle="パスワード(確認)"
           placeholder=""
@@ -234,6 +270,7 @@ export const MemberRegist = () => {
         />
       </div>
       <div className="my-5">
+        <span style={{ color: "red" }}>*</span>
         <LabelAndTextInput
           labelTitle="ニックネーム(8文字以上)"
           placeholder=""
@@ -243,15 +280,63 @@ export const MemberRegist = () => {
         />
       </div>
       <div className="my-5">
-        <TextLabel
-          labelTitle="性別"
-        />
-        <Autocomplete
-          options={ComboboxOptionsOfGender}
-          sx={{ width: 450, height: 50 }}
-          renderInput={(params) => <TextField {...params} label="" />}
-        />
+        <div>
+          <TextLabel
+            labelTitle="生年月日 ※公開されません"
+          />
+        </div>
+        <Box display="flex" alignItems="center">
+          <TextField
+            type='number'
+            value={formState.birthYear}
+            InputProps={{
+              style: {
+                width: 100,
+                height: 40,
+                textAlign: "center",
+              }
+            }}
+            inputProps={{
+              textAlign: "center",
+            }}
+            onChange={handleBirthYearOnChange}
+          />
+          <label style={{ margin: "0 10px", alignSelf: "center" }}>年</label>
+          <TextField
+            type='number'
+            value={formState.birthMonth}
+            InputProps={{
+              style: {
+                width: 65,
+                height: 40,
+                textAlign: "center",
+              }
+            }}
+            inputProps={{
+              textAlign: "center",
+            }}
+            onChange={handleBirthMonthOnChange}
+          />
+          <label style={{ margin: "0 10px", alignSelf: "center" }}>月</label>
+          <TextField
+            type='number'
+            value={formState.birthDay}
+            InputProps={{
+              style: {
+                width: 65,
+                height: 40,
+                textAlign: "center",
+              }
+            }}
+            inputProps={{
+              textAlign: "center",
+            }}
+            onChange={handleBirthDayOnChange}
+          />
+          <label style={{ margin: "0 10px", alignSelf: "center" }}>日</label>
+        </Box>
       </div>
+
       <div className="my-5">
         <label>ユーザーアイコン画像</label>
         <input

@@ -34,21 +34,22 @@ export const LabelAndTextInput = ({ labelTitle, errorMessage, name, type = "text
           <TextInput
             type={isPasswordVisibled ? "text" : type}
             {...props}
-            InputProps={
-              type === "password" ?
-                {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {isPasswordVisibled ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                } : undefined}
+            InputProps={{
+              style: {
+                height: "40px",
+              },
+              endAdornment: type === "password" && (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {isPasswordVisibled ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </div>
       </label>

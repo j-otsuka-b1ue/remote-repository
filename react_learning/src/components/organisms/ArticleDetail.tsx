@@ -53,7 +53,6 @@ export const ShowArticleDetail = (): React.JSX.Element => {
   /** 
    * 初期処理を実行する
    */
-
   useEffect(() => {
     if (articleId) {
       fetchArticleDetail();
